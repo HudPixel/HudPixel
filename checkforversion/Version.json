@@ -1,6 +1,6 @@
 {
-  "Version": "3.2.2",
-  "DownloadLink": "http://www.mediafire.com/file/jmyffeqmfexza2z/HudPixelReloaded-1.8.9-v3-3.2.2.jar",
+  "Version": "3.2.3",
+  "DownloadLink": "http://www.mediafire.com/file/7aoommqjl9s71rh/HudPixelReloaded-1.8.9-v3-3.2.3.jar",
   "UpdateMessages":{
     "1": "- new codename_b designed, codename_b approved, codename_b awesomed game detector that's faster and a lot more reliable. honestly i don't know why i didn't do this before",
     "2": "- new config system, all commented, all fast, using the power of KOTLIN. you might want to delete your existing config file. for now the config gui is absent.",
