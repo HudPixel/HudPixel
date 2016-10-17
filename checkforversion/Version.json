@@ -1,6 +1,6 @@
 {
-  "Version": "3.2",
-  "DownloadLink": "http://www.mediafire.com/file/xw79oo1r74a19wg/HudPixelReloaded-1.8.9-v3-3.2.1.jar",
+  "Version": "3.2.2",
+  "DownloadLink": "http://www.mediafire.com/file/jmyffeqmfexza2z/HudPixelReloaded-1.8.9-v3-3.2.2.jar",
   "UpdateMessages":{
     "1": "- new codename_b designed, codename_b approved, codename_b awesomed game detector that's faster and a lot more reliable. honestly i don't know why i didn't do this before",
     "2": "- new config system, all commented, all fast, using the power of KOTLIN. you might want to delete your existing config file. for now the config gui is absent.",
@@ -9,6 +9,7 @@
     "5": "- began work on a skyclash system that is cool",
     "6": "- removed palechip's game system. with the new game detector and config system, there is no longer a need for the pain in the butt that system was. you will notice a significant decrease in the amount of caps you use and probably an improvement in performance, too.",
     "7": "- honestly probably a lot more but i'm not looking through 150+ files of diff just so you can be grateful lolk"
+    "8": "§l- important EGO bug fix"
   }
 }
 
