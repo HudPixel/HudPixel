@@ -2,7 +2,7 @@
   "Version": "3.2.3",
   "DownloadLink": "http://hudpixel.unaussprechlich.net/",
   "UpdateMessages":{
-    "1": "[fixed] booster & friend display"
+    "1": "[fixed] booster & friend display",
     "2": "[fixed] display stats in the lobby",
     "3": "[fixed] '[HudAdmin]' & '[HudHelper]' tag",
     "4": "[fixed] DatabaseIDs (boosters will now display in the right gametype)",
