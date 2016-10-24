@@ -1,15 +1,13 @@
 {
   "Version": "3.2.3",
-  "DownloadLink": "http://www.mediafire.com/file/7aoommqjl9s71rh/HudPixelReloaded-1.8.9-v3-3.2.3.jar",
+  "DownloadLink": "http://hudpixel.unaussprechlich.net/",
   "UpdateMessages":{
-    "1": "- new codename_b designed, codename_b approved, codename_b awesomed game detector that's faster and a lot more reliable. honestly i don't know why i didn't do this before",
-    "2": "- new config system, all commented, all fast, using the power of KOTLIN. you might want to delete your existing config file. for now the config gui is absent.",
-    "3": "- so, here's the deal. java is cool, but everyone writes mods in java. there's this cool new language called KOTLIN that does a lot of cool things. eventually me and @unaussprechlich want to convert the entire mod to KOTLIN but for now the new config system is kotlin",
-    "4": "- work on @unaussprechlich's managed gui lib",
-    "5": "- began work on a skyclash system that is cool",
-    "6": "- removed palechip's game system. with the new game detector and config system, there is no longer a need for the pain in the butt that system was. you will notice a significant decrease in the amount of caps you use and probably an improvement in performance, too.",
-    "7": "- honestly probably a lot more but i'm not looking through 150+ files of diff just so you can be grateful lolk",
-    "8": "- important EGO bug fix"
+    "1": "[fixed] booster & friend display"
+    "2": "[fixed] display stats in the lobby",
+    "3": "[fixed] '[HudAdmin]' & '[HudHelper]' tag",
+    "4": "[fixed] DatabaseIDs (boosters will now display in the right gametype)",
+    "5": "[fixed] tip button",
+    "6": "[updated] license header"
   }
 }
 
