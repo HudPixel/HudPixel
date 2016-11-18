@@ -43,35 +43,50 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.skyclash;
+package com.palechip.hudpixelmod.skyclash
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
+import com.google.common.collect.Lists
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.NBTTagList
+import net.minecraftforge.common.util.INBTSerializable
 
-import java.io.Serializable;
+import java.io.Serializable
 
-public class Perk implements INBTSerializable<NBTTagCompound>, Serializable {
-    private static final long serialVersionUID = 14145145122L;
-    public String name;
-    public EnumType type;
+class SkyClashClass : INBTSerializable<NBTTagCompound>, Serializable {
+    internal var perks: List<Perk> = Lists.newArrayList<Perk>()
+    internal var name: String? = null
+    internal var kit: SkyClashKit? = null
 
-    @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("name", name);
-        tag.setInteger("type", type.ordinal());
-        return tag;
+    override fun serializeNBT(): NBTTagCompound {
+        val tag = NBTTagCompound()
+        val list = NBTTagList()
+        for (perk in perks)
+            list.appendTag(perk.serializeNBT())
+        tag.setTag("list", list)
+        tag.setString("name", name)
+        return tag
     }
 
-    @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
-        name = nbt.getString("name");
-        type = EnumType.values()[nbt.getInteger("type")];
+    override fun deserializeNBT(nbt: NBTTagCompound) {
+        val list = nbt.getTagList("list", nbt.getTagId("list").toInt())
+        val arrayList = Lists.newArrayList<Perk>()
+        for (i in 0..list.tagCount() - 1) {
+            val perk = Perk()
+            perk.deserializeNBT(list.getCompoundTagAt(i))
+            arrayList.add(perk)
+        }
+        perks = arrayList
+        name = nbt.getString("name")
+
+
     }
 
-    public enum EnumType {
-        LV1,
-        LV2,
-        LV3
+    companion object {
+        private val serialVersionUID = 14145142L
+
+        fun of(): SkyClashClass? {
+            return null
+        }
     }
 }
+

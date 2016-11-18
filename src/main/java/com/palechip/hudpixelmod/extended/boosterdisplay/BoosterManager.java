@@ -222,7 +222,7 @@ public class BoosterManager extends FancyListManager implements BoosterResponseC
                     return;
                 } else {
                     be.setCurrentBooster(b);
-                    LoggerHelper.logInfo("[BoosterDisplay]: stored booster with ID " + b.getGameType().getName() + "[" + b.getGameType().getDatabaseID() + "]"
+                    LoggerHelper.logInfo("[BoosterDisplay]: stored booster with ID " + b.getGameType().getNm() + "[" + b.getGameType().getDatabaseID() + "]"
                             + " and owner " + b.getOwner() + " in the boosterdisplay!");
                     return;
                 }

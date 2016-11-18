@@ -43,38 +43,31 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.command;
+package com.palechip.hudpixelmod.util
 
-import com.palechip.hudpixelmod.util.ChatMessageComposer;
-import com.palechip.hudpixelmod.util.ScoreboardReader;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
-import static com.palechip.hudpixelmod.GameDetector.stripColor;
-
-@SideOnly(Side.CLIENT)
-public class ScoreboardCommand extends CommandBase {
-
-    @Override
-    public String getCommandName() {
-        return "sb";
-    }
-
-    @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/sb";
-    }
-
-    @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        ScoreboardReader.resetCache();
-        String title = ScoreboardReader.getScoreboardTitle();
-        title = stripColor(title).toLowerCase();
-        System.out.println(title);
-        new ChatMessageComposer("\"" + title + "\"").send();
+object WebUtil {
+    @Throws(Exception::class)
+    @JvmStatic
+    fun sendGet(userAgent: String, url: String): String {
+        val obj = URL(url)
+        val con = obj.openConnection() as HttpURLConnection
+        con.requestMethod = "GET"
+        con.setRequestProperty("User-Agent", userAgent)
+        val responseCode = con.responseCode
+        val `in` = BufferedReader(InputStreamReader(con.inputStream))
+        var inputLine: String?
+        val response = StringBuilder()
+        inputLine = `in`.readLine()
+        while (inputLine != null) {
+            response.append(inputLine)
+            inputLine = `in`.readLine()
+        }
+        `in`.close()
+        return response.toString()
     }
 }

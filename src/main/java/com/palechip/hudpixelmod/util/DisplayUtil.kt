@@ -43,61 +43,29 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.command;
+package com.palechip.hudpixelmod.util
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import com.palechip.hudpixelmod.util.HudPixelMethodHandles;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreenBook;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
 
-@SideOnly(Side.CLIENT)
-public class BookVerboseInfoCommand extends CommandBase {
+object DisplayUtil {
 
-    @Override
-    public String getCommandName() {
-        return "bookverboseinfo";
-    }
-
-    @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/bookverboseinfo";
-    }
-
-    @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        sender.addChatMessage(new TextComponentString(BookVerboseInfo.showVerboseBookInfo ? ChatFormatting.RED +
-                "Disabling verbose info!" : ChatFormatting.GREEN + "Enabling verbose info!"));
-        BookVerboseInfo.showVerboseBookInfo = !BookVerboseInfo.showVerboseBookInfo;
-    }
-
-    public static class BookVerboseInfo {
-        public static boolean showVerboseBookInfo;
-
-        static {
-            MinecraftForge.EVENT_BUS.register(new BookVerboseInfo());
-        }
-
-        @SubscribeEvent
-        public void onGuiOpen(GuiOpenEvent event) {
-            if (event.getGui() instanceof GuiScreenBook) {
-                GuiScreenBook book = (GuiScreenBook) event.getGui();
-                NBTTagList tags = HudPixelMethodHandles.getBookPages(book);
-                if (tags == null || !showVerboseBookInfo) return;
-                for (int i = 0; i < tags.tagCount(); i++)
-                    Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(tags.getStringTagAt(i)));
-
+    val mcScale: Int
+        get() {
+            val mc = Minecraft.getMinecraft()
+            var scale = 1
+            if (mc.gameSettings.guiScale == 0) {
+                val res = ScaledResolution(mc)
+                scale = res.scaleFactor
+            } else {
+                scale = mc.gameSettings.guiScale
             }
+            return scale
         }
-    }
+
+    @JvmStatic
+    fun getScaledMcWidth() = Minecraft.getMinecraft().displayWidth / mcScale
+
+    @JvmStatic
+    fun  caledMcHeight(): Int = Minecraft.getMinecraft().displayHeight / mcScale
 }

@@ -43,27 +43,42 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.util;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+package com.palechip.hudpixelmod.extended
 
-public class WebUtil {
-    public static String sendGet(String userAgent, String url) throws Exception {
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", userAgent);
-        int responseCode = con.getResponseCode();
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-        return response.toString();
+import com.palechip.hudpixelmod.api.interaction.ApiManager
+import com.palechip.hudpixelmod.extended.boosterdisplay.BoosterManager
+import com.palechip.hudpixelmod.extended.cooldowndisplay.CooldownDisplayManager
+import com.palechip.hudpixelmod.extended.gui.ArmorHud
+import com.palechip.hudpixelmod.extended.staff.StaffManager
+import net.minecraft.client.Minecraft
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
+import java.util.*
+
+@SideOnly(Side.CLIENT)
+object HudPixelExtended {
+
+    lateinit var UUID: UUID
+    lateinit var boosterManager: BoosterManager
+    lateinit var staffManager: StaffManager
+    private var hudPixelExtendedInstance: HudPixelExtended? = null
+    private val hudPixelExtendedEventHandler = HudPixelExtendedEventHandler
+
+    init {
+        MinecraftForge.EVENT_BUS.register(hudPixelExtendedEventHandler)
+
+        UUID = Minecraft.getMinecraft().session.profile.id
+        boosterManager = BoosterManager()
+        staffManager = StaffManager()
+        ApiManager.getINSTANCE().setup()
+
+        CooldownDisplayManager.getInstance()
+        ArmorHud
     }
+
+
+
+
 }

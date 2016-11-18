@@ -116,7 +116,7 @@ public class TimerModularGuiProvider extends HudPixelModularGuiProvider {
 
     @Override
     public boolean showElement() {
-        //return doesMatchForGame(HudPixelMod.instance().gameDetector.getCurrentGame());
+        //return doesMatchForGame(HudPixelMod.INSTANCE.gameDetector.getCurrentGame());
         return doesMatchForGame() && !GameDetector.isLobby() && enabled;
     }
 

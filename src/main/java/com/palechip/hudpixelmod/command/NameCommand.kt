@@ -1,27 +1,22 @@
 package com.palechip.hudpixelmod.command
 
+import com.mojang.realmsclient.gui.ChatFormatting
+import com.palechip.hudpixelmod.HudPixelMod
+import com.palechip.hudpixelmod.util.plus
+import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentString
+import org.apache.commons.lang3.StringUtils
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.regex.Pattern
 
 object NameCommand : CommandBase() {
-    override fun getCommandName(): String {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getCommandUsage(sender: ICommandSender?): String {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun execute(server: MinecraftServer?, sender: ICommandSender?, args: Array<out String>?) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-    /*
-    private fun isOp(sender: ICommandSender): Boolean {
-        return MinecraftServer.getServer().isSinglePlayer
-                || sender !is EntityPlayerMP
-                || MinecraftServer.getServer().configurationManager.canSendCommands(sender.gameProfile)
-    }
 
     val name: String
         get() = "names"
@@ -55,18 +50,18 @@ object NameCommand : CommandBase() {
             return aliases
         }
 
-    override fun processCommand(sender: ICommandSender, args: Array<String>) {
-        if (HudPixelMod.isHypixelNetwork() || Minecraft.getMinecraft().currentServerData == null) {
+    override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
+        if (HudPixelMod.isHypixelNetwork || Minecraft.getMinecraft().currentServerData == null) {
             try {
                 val cSender = sender
                 if (args.size == 0) {
-                    cSender.addChatMessage(ChatComponentText("${ChatFormatting.GOLD}Usage: /names <playername>"))
-                    cSender.addChatMessage(ChatComponentText("${ChatFormatting.GOLD}Example: /names Eladkay"))
+                    cSender.addChatMessage(TextComponentString("${ChatFormatting.GOLD}Usage: /names <playername>"))
+                    cSender.addChatMessage(TextComponentString("${ChatFormatting.GOLD}Example: /names Eladkay"))
                 } else if (args.size == 1) {
                     val playername = args[0].toString()
                     if (playername.length < 3) {
-                        cSender.addChatMessage(ChatComponentText("${ChatFormatting.GOLD}Usage: /names <playername>"))
-                        cSender.addChatMessage(ChatComponentText("${ChatFormatting.GOLD}Example: /names Eladkay"))
+                        cSender.addChatMessage(TextComponentString("${ChatFormatting.GOLD}Usage: /names <playername>"))
+                        cSender.addChatMessage(TextComponentString("${ChatFormatting.GOLD}Example: /names Eladkay"))
                     } else {
                         object : Thread() {
                             override fun run() {
@@ -83,16 +78,16 @@ object NameCommand : CommandBase() {
                                         webnames = br2.readLine()
                                         if (webnames != null) {
                                             if (webnames.substring(10, webnames.length - 3 - playername.length).length <= 0) {
-                                                cSender.addChatMessage(ChatComponentText(""))
-                                                cSender.addChatMessage(ChatComponentText(StringUtils.center("" + ChatFormatting.LIGHT_PURPLE + ChatFormatting.BOLD + playername, 65)))
-                                                cSender.addChatMessage(ChatComponentText(""))
-                                                cSender.addChatMessage(ChatComponentText(StringUtils.center(ChatFormatting.YELLOW + "Player has never changed their name.", 65)))
-                                                cSender.addChatMessage(ChatComponentText(""))
+                                                cSender.addChatMessage(TextComponentString(""))
+                                                cSender.addChatMessage(TextComponentString(StringUtils.center("" + ChatFormatting.LIGHT_PURPLE + ChatFormatting.BOLD + playername, 65)))
+                                                cSender.addChatMessage(TextComponentString(""))
+                                                cSender.addChatMessage(TextComponentString(StringUtils.center(ChatFormatting.YELLOW + "Player has never changed their name.", 65)))
+                                                cSender.addChatMessage(TextComponentString(""))
                                             } else {
                                                 webnames = webnames.replace("{", "").replace("}", "").replace(",".toRegex(), ".").replace('"', ' ').replace(" ", "").replace("[", "").replace("]", "").replace(".c", "-c").replace(".", ",")
                                                 val split = webnames.split(Pattern.quote(",").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-                                                cSender.addChatMessage(ChatComponentText(""))
+                                                cSender.addChatMessage(TextComponentString(""))
                                                 for (s in split) {
                                                     if (s.startsWith("name") && s.contains("changed")) {
                                                         val names = s.split(Pattern.quote("-").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -111,22 +106,22 @@ object NameCommand : CommandBase() {
                                                                 p2 = ChatFormatting.GRAY + "(Changed on " + formattedDate + ")"
                                                             }
                                                         }
-                                                        cSender.addChatMessage(ChatComponentText("" + p1 + p2))
+                                                        cSender.addChatMessage(TextComponentString("" + p1 + p2))
                                                     } else if (s.startsWith("name") && !s.contains("changed")) {
-                                                        cSender.addChatMessage(ChatComponentText(StringUtils.center("" + ChatFormatting.LIGHT_PURPLE + ChatFormatting.BOLD + s.replace("name:", ""), 65)))
-                                                        cSender.addChatMessage(ChatComponentText(""))
+                                                        cSender.addChatMessage(TextComponentString(StringUtils.center("" + ChatFormatting.LIGHT_PURPLE + ChatFormatting.BOLD + s.replace("name:", ""), 65)))
+                                                        cSender.addChatMessage(TextComponentString(""))
                                                     }
                                                 }
-                                                cSender.addChatMessage(ChatComponentText(""))
+                                                cSender.addChatMessage(TextComponentString(""))
                                             }
                                         } else {
-                                            cSender.addChatMessage(ChatComponentText("${ChatFormatting.DARK_RED}ERROR: Could not find player '" + playername + "'."))
-                                            cSender.addChatMessage(ChatComponentText("${ChatFormatting.DARK_RED}This person changed their name or never existed."))
+                                            cSender.addChatMessage(TextComponentString("${ChatFormatting.DARK_RED}ERROR: Could not find player '" + playername + "'."))
+                                            cSender.addChatMessage(TextComponentString("${ChatFormatting.DARK_RED}This person changed their name or never existed."))
                                         }
                                         br2.close()
                                     } else {
-                                        cSender.addChatMessage(ChatComponentText("${ChatFormatting.DARK_RED}ERROR: Could not find player '" + playername + "'."))
-                                        cSender.addChatMessage(ChatComponentText("${ChatFormatting.DARK_RED}This person changed their name or never existed."))
+                                        cSender.addChatMessage(TextComponentString("${ChatFormatting.DARK_RED}ERROR: Could not find player '" + playername + "'."))
+                                        cSender.addChatMessage(TextComponentString("${ChatFormatting.DARK_RED}This person changed their name or never existed."))
                                     }
                                     br1.close()
                                 } catch (e: Throwable) {
@@ -137,13 +132,13 @@ object NameCommand : CommandBase() {
                         }.start()
                     }
                 } else if (args.size > 1) {
-                    cSender.addChatMessage(ChatComponentText(ChatFormatting.GOLD + "Usage: /names <playername>"))
-                    cSender.addChatMessage(ChatComponentText(ChatFormatting.GOLD + "Example: /names Kevy"))
+                    cSender.addChatMessage(TextComponentString(ChatFormatting.GOLD + "Usage: /names <playername>"))
+                    cSender.addChatMessage(TextComponentString(ChatFormatting.GOLD + "Example: /names Kevy"))
                 }
             } catch (e: Throwable) {
                 e.printStackTrace()
             }
 
         }
-    }*/
+    }
 }

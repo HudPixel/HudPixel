@@ -2,10 +2,10 @@ package net.hypixel.api.reply;
 
 import net.hypixel.api.request.RequestType;
 import net.hypixel.api.util.GameType;
-import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.UUID;
+import org.joda.time.DateTime;
 
 @SuppressWarnings("unused")
 public class BoostersReply extends AbstractReply {

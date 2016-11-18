@@ -43,30 +43,35 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.util;
+package com.palechip.hudpixelmod.command
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
+import com.palechip.hudpixelmod.GameDetector
+import com.palechip.hudpixelmod.util.ChatMessageComposer
+import com.palechip.hudpixelmod.util.ScoreboardReader
+import net.minecraft.command.CommandBase
+import net.minecraft.command.CommandException
+import net.minecraft.command.ICommandSender
+import net.minecraft.server.MinecraftServer
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
-public class DisplayUtil {
+@SideOnly(Side.CLIENT)
+class ScoreboardCommand : CommandBase() {
 
-    public static int getMcScale() {
-        Minecraft mc = Minecraft.getMinecraft();
-        int scale = 1;
-        if (mc.gameSettings.guiScale == 0) {
-            ScaledResolution res = new ScaledResolution(mc);
-            scale = res.getScaleFactor();
-        } else {
-            scale = mc.gameSettings.guiScale;
-        }
-        return scale;
+    override fun getCommandName(): String {
+        return "sb"
     }
 
-    public static int getScaledMcWidth() {
-        return Minecraft.getMinecraft().displayWidth / getMcScale();
+    override fun getCommandUsage(sender: ICommandSender): String {
+        return "/sb"
     }
 
-    public static int getScaledMcHeight() {
-        return Minecraft.getMinecraft().displayHeight / getMcScale();
+    @Throws(CommandException::class)
+    override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
+        ScoreboardReader.resetCache()
+        var title = ScoreboardReader.getScoreboardTitle()
+        title = GameDetector.stripColor(title)!!.toLowerCase()
+        println(title)
+        ChatMessageComposer("\"" + title + "\"").send()
     }
 }

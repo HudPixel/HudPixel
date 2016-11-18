@@ -19,6 +19,13 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'kotlin'
 
 
+repositories {
+    maven {
+        url "http://mvn.rx14.co.uk/shadowfacts/"
+    }
+}
+
+
 version = "3.2.7dev MC1.9.4"
 group= "" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "HudPixelReloaded-1.9.4-v3"
@@ -46,6 +53,8 @@ dependencies {
     required 'joda-time:joda-time:2.9.6'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     required "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "net.shadowfacts:Forgelin:1.1.0"
+
 }
 
 apply plugin: 'java'

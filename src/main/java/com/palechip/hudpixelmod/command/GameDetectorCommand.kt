@@ -43,33 +43,31 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.command;
+package com.palechip.hudpixelmod.command
 
-import com.palechip.hudpixelmod.GameDetector;
-import com.palechip.hudpixelmod.util.ChatMessageComposer;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.palechip.hudpixelmod.GameDetector
+import com.palechip.hudpixelmod.util.ChatMessageComposer
+import net.minecraft.command.CommandBase
+import net.minecraft.command.CommandException
+import net.minecraft.command.ICommandSender
+import net.minecraft.server.MinecraftServer
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
 @SideOnly(Side.CLIENT)
-public class GameDetectorCommand extends CommandBase {
+class GameDetectorCommand : CommandBase() {
 
-    @Override
-    public String getCommandName() {
-        return "gd";
+    override fun getCommandName(): String {
+        return "gd"
     }
 
-    @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/gd";
+    override fun getCommandUsage(sender: ICommandSender): String {
+        return "/gd"
     }
 
-    @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        new ChatMessageComposer(GameDetector.getCurrentGameType().toString()).send();
+    @Throws(CommandException::class)
+    override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
+        ChatMessageComposer(GameDetector.currentGameType.toString()).send()
     }
 
 }

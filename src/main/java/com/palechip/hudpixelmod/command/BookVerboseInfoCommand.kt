@@ -43,78 +43,64 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.util;
+package com.palechip.hudpixelmod.command
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.mojang.realmsclient.gui.ChatFormatting
+import com.palechip.hudpixelmod.util.HudPixelMethodHandles
+import com.palechip.hudpixelmod.util.plus
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiScreenBook
+import net.minecraft.command.CommandBase
+import net.minecraft.command.CommandException
+import net.minecraft.command.ICommandSender
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentString
+import net.minecraftforge.client.event.GuiOpenEvent
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
-/**
- * Provides basic functionality in order to parse complex command outputs like /booster queue and /friend list
- *
- * @author palechip
- */
-public abstract class MultiLineCommandParser {
-    protected final String startMessage;
-    protected final Pattern messagePattern;
-    private boolean isMessageOngoing = false;
+@SideOnly(Side.CLIENT)
+class BookVerboseInfoCommand : CommandBase() {
 
-    /**
-     * Creates a new MultiLineCommandParser.
-     *
-     * @param startMessage   The message which starts the command output. i.e. the command title.
-     * @param messagePattern A regex which matches all messages which belong to the command.
-     */
-    public MultiLineCommandParser(String startMessage, String messagePattern) {
-        this.startMessage = startMessage;
-        this.messagePattern = Pattern.compile(messagePattern);
+    override fun getCommandName(): String {
+        return "bookverboseinfo"
     }
 
-    /**
-     * Has to be called with every chat message.
-     *
-     * @param message The chat message without formatting.
-     */
-    public void onChat(String message) {
-        // if there is no command output in progress
-        if (!this.isMessageOngoing) {
-            // isHypixelNetwork if the message contains the start message
-            if (message.contains(this.startMessage)) {
-                // save that the command has started
-                this.isMessageOngoing = true;
-                // start event
-                this.onCommandStart();
+    override fun getCommandUsage(sender: ICommandSender): String {
+        return "/bookverboseinfo"
+    }
+
+    @Throws(CommandException::class)
+    override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
+        sender.addChatMessage(TextComponentString(if (BookVerboseInfo.showVerboseBookInfo)
+            ChatFormatting.RED + "Disabling verbose info!"
+        else
+            ChatFormatting.GREEN + "Enabling verbose info!"))
+        BookVerboseInfo.showVerboseBookInfo = !BookVerboseInfo.showVerboseBookInfo
+    }
+
+    class BookVerboseInfo {
+
+        @SubscribeEvent
+        fun onGuiOpen(event: GuiOpenEvent) {
+            if (event.gui is GuiScreenBook) {
+                val book = event.gui as GuiScreenBook
+                val tags = HudPixelMethodHandles.getBookPages(book)
+                if (tags == null || !showVerboseBookInfo) return
+                for (i in 0..tags.tagCount() - 1)
+                    Minecraft.getMinecraft().thePlayer.addChatMessage(TextComponentString(tags.getStringTagAt(i)))
+
             }
-        } else {
-            // isHypixelNetwork if the message matches our messagePattern
-            Matcher matcher = this.messagePattern.matcher(message);
-            if (matcher.matches()) {
-                // call onCommandReceived
-                this.onCommandReceived(message);
-            } else if (!message.isEmpty()) {
-                // seems like the command output is over, stop trying to match the messages
-                this.isMessageOngoing = false;
-                // stop event
-                this.onCommandEnd();
+        }
+
+        companion object {
+            var showVerboseBookInfo: Boolean = false
+
+            init {
+                MinecraftForge.EVENT_BUS.register(BookVerboseInfo())
             }
         }
     }
-
-    /**
-     * Gets called when a chat message arrives which belongs to the the listened command.
-     *
-     * @param commandMessage The message which matches the messagePattern.
-     */
-    protected abstract void onCommandReceived(String commandMessage);
-
-    /**
-     * Gets called when the command starts and before the first message is received.
-     * Can be used to create collection arrays.
-     */
-    protected abstract void onCommandStart();
-
-    /**
-     * Gets called when the command is finished.
-     * Can be used to process collected information.
-     */
-    protected abstract void onCommandEnd();
 }

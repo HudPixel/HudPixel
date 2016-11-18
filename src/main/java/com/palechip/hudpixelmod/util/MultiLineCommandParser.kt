@@ -43,50 +43,78 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.skyclash;
+package com.palechip.hudpixelmod.util
 
-import com.google.common.collect.Lists;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.INBTSerializable;
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
-import java.io.Serializable;
-import java.util.List;
+/**
+ * Provides basic functionality in order to parse complex command outputs like /booster queue and /friend list
 
-public class SkyClashClass implements INBTSerializable<NBTTagCompound>, Serializable {
-    private static final long serialVersionUID = 14145142L;
-    List<Perk> perks = Lists.newArrayList();
-    String name;
-    SkyClashKit kit;
+ * @author palechip
+ */
+abstract class MultiLineCommandParser
+/**
+ * Creates a new MultiLineCommandParser.
 
-    public static SkyClashClass of() {
-        return null;
+ * @param startMessage   The message which starts the command output. i.e. the command title.
+ * *
+ * @param messagePattern A regex which matches all messages which belong to the command.
+ */
+(protected val startMessage: String, messagePattern: String) {
+    protected val messagePattern: Pattern
+    private var isMessageOngoing = false
+
+    init {
+        this.messagePattern = Pattern.compile(messagePattern)
     }
 
-    @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-        NBTTagList list = new NBTTagList();
-        for (Perk perk : perks)
-            list.appendTag(perk.serializeNBT());
-        tag.setTag("list", list);
-        tag.setString("name", name);
-        return tag;
-    }
+    /**
+     * Has to be called with every chat message.
 
-    @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
-        NBTTagList list = nbt.getTagList("list", nbt.getTagId("list"));
-        List<Perk> arrayList = Lists.newArrayList();
-        for (int i = 0; i < list.tagCount(); i++) {
-            Perk perk = new Perk();
-            perk.deserializeNBT(list.getCompoundTagAt(i));
-            arrayList.add(perk);
+     * @param message The chat message without formatting.
+     */
+    fun onChat(message: String) {
+        // if there is no command output in progress
+        if (!this.isMessageOngoing) {
+            // isHypixelNetwork if the message contains the start message
+            if (message.contains(this.startMessage)) {
+                // save that the command has started
+                this.isMessageOngoing = true
+                // start event
+                this.onCommandStart()
+            }
+        } else {
+            // isHypixelNetwork if the message matches our messagePattern
+            val matcher = this.messagePattern.matcher(message)
+            if (matcher.matches()) {
+                // call onCommandReceived
+                this.onCommandReceived(message)
+            } else if (!message.isEmpty()) {
+                // seems like the command output is over, stop trying to match the messages
+                this.isMessageOngoing = false
+                // stop event
+                this.onCommandEnd()
+            }
         }
-        perks = arrayList;
-        name = nbt.getString("name");
-
-
     }
-}
 
+    /**
+     * Gets called when a chat message arrives which belongs to the the listened command.
+
+     * @param commandMessage The message which matches the messagePattern.
+     */
+    protected abstract fun onCommandReceived(commandMessage: String)
+
+    /**
+     * Gets called when the command starts and before the first message is received.
+     * Can be used to create collection arrays.
+     */
+    protected abstract fun onCommandStart()
+
+    /**
+     * Gets called when the command is finished.
+     * Can be used to process collected information.
+     */
+    protected abstract fun onCommandEnd()
+}

@@ -43,40 +43,83 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.command;
+package com.palechip.hudpixelmod.util
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import com.palechip.hudpixelmod.modulargui.modules.PlayGameModularGuiProvider;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
-import org.jetbrains.annotations.NotNull;
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.mojang.authlib.GameProfile
+import com.mojang.util.UUIDTypeAdapter
+import com.palechip.hudpixelmod.HudPixelMod
+import net.minecraft.client.Minecraft
+import java.io.InputStreamReader
+import java.net.URL
+import java.util.*
+import javax.net.ssl.HttpsURLConnection
 
-public class GameCommand extends CommandBase {
+/**
+ * A little helper to get the username of a given UUID.
 
+ * @author palechip
+ */
+/**
+ * generates a "uuid to name" request
 
-    @NotNull
-    @Override
-    public String getCommandName() {
-        return "game";
+ * @param uuid     the payers uuid
+ * *
+ * @param callback the callback class
+ */
+class UuidHelper(uuid: String, internal var callback: UuidCallback) : Thread() {
+
+    init {
+        getUsernameFormUUID(uuid)
     }
 
-    @NotNull
-    @Override
-    public String getCommandUsage(@NotNull ICommandSender sender) {
-        return "/game <Game ID>";
-    }
+    /**
+     * This should only be called asynchronously since it takes about 150ms to complete on my computer.
 
-    @Override
-    public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, @NotNull String[] args) throws CommandException {
-        if (args.length != 1) {
-            sender.addChatMessage(new TextComponentString(getCommandUsage(sender)));
-        } else {
-            PlayGameModularGuiProvider.content = args[0];
-            sender.addChatMessage(new TextComponentString(ChatFormatting.GREEN + "Game set!"));
+     * @param uuid the UUID to lookup
+     * *
+     * @return the username or null if it failed
+     */
+    private fun getUsernameFormUUID(uuid: String) {
+        // Check the cache first
+        if (cache.containsKey(uuid)) {
+            callback.onUuidCallback(cache[uuid])
+            return
         }
+
+        // For MC 1.7.10 getSessionService is called func_152347_ac()
+        var name: String? = Minecraft.getMinecraft().sessionService.fillProfileProperties(GameProfile(UUIDTypeAdapter.fromString(uuid), null), false).name
+
+        // Did it fail?
+        if (name == null) {
+            HudPixelMod.logWarn("Failed to the username for the UUID. Using fallback API...")
+            try {
+                // make a request to the fallback API
+                val url = URL(FALLBACK_API + uuid)
+                val connection = url.openConnection() as HttpsURLConnection
+                // convert the result to json
+                val content = gson.fromJson(InputStreamReader(connection.inputStream), JsonObject::class.java)
+                // get the name
+                name = content.get("username").asString
+            } catch (e: Exception) {
+                HudPixelMod.logWarn("Failed to use the fallback API for $uuid @ $FALLBACK_API$uuid")
+                name = "!ERROR!"
+            }
+
+        }
+
+        // cache the result
+        if (name != null) {
+            cache.put(uuid, name)
+        }
+        // and return the result
+        callback.onUuidCallback(name)
     }
 
+    companion object {
+        private val FALLBACK_API = "https://api.razex.de/user/username/"
+        private val gson = Gson()
+        private val cache = HashMap<String, String>()
+    }
 }

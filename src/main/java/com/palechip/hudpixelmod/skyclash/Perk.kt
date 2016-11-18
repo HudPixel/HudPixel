@@ -43,12 +43,36 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.skyclash;
+package com.palechip.hudpixelmod.skyclash
 
-import java.io.Serializable;
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.INBTSerializable
 
-public enum SkyClashKit implements Serializable {
-    SWORDSMAN;
-    private static final long serialVersionUID = 14145142L;
+import java.io.Serializable
 
+class Perk : INBTSerializable<NBTTagCompound>, Serializable {
+    var name: String? = null
+    var type: EnumType? = null
+
+    override fun serializeNBT(): NBTTagCompound {
+        val tag = NBTTagCompound()
+        tag.setString("name", name)
+        tag.setInteger("type", type?.ordinal ?: 0)
+        return tag
+    }
+
+    override fun deserializeNBT(nbt: NBTTagCompound) {
+        name = nbt.getString("name")
+        type = EnumType.values()[nbt.getInteger("type")]
+    }
+
+    enum class EnumType {
+        LV1,
+        LV2,
+        LV3
+    }
+
+    companion object {
+        private val serialVersionUID = 14145145122L
+    }
 }

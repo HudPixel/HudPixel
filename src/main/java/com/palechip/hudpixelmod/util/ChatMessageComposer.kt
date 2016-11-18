@@ -43,225 +43,225 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.util;
+package com.palechip.hudpixelmod.util
 
-import com.palechip.hudpixelmod.HudPixelMod;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.palechip.hudpixelmod.HudPixelMod
+import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.Style
+import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.event.ClickEvent
+import net.minecraft.util.text.event.HoverEvent
+import net.minecraftforge.fml.client.FMLClientHandler
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
-import java.util.ArrayList;
+import java.util.ArrayList
 
 /**
  * A mighty chat message manager. His nickname is Skype. ;)
- *
+
  * @author palechip
  */
 @SideOnly(Side.CLIENT)
-public class ChatMessageComposer {
-    public static String SEPARATION_MESSAGE = "\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC";
-    private static ITextComponent CHAT_PREFIX;
+class ChatMessageComposer
+/**
+ * Creates a new ChatMessageComposer.
 
-    // Builds the chat prefix
-    static {
-        ITextComponent name1 = new TextComponentString("Hud");
-        ITextComponent name2 = new TextComponentString("Pixel");
-        name1.getStyle().setColor(TextFormatting.GOLD);
-        name2.getStyle().setColor(TextFormatting.YELLOW);
+ * @param text Text of the chat message.
+ */
+(text: String) {
 
-        CHAT_PREFIX = new TextComponentString("[").appendSibling(name1).appendSibling(name2).appendSibling(new TextComponentString("] "));
-    }
+    private val chatComponent: ITextComponent
+    private var appendedMessages: ArrayList<ChatMessageComposer>? = null
 
-    private ITextComponent chatComponent;
-    private ArrayList<ChatMessageComposer> appendedMessages;
-
-    /**
-     * Creates a new ChatMessageComposer.
-     *
-     * @param text Text of the chat message.
-     */
-    public ChatMessageComposer(String text) {
-        this.chatComponent = new TextComponentString(text);
+    init {
+        this.chatComponent = TextComponentString(text)
     }
 
     /**
      * Creates a new ChatMessageComposer.
-     *
+
      * @param text  Text of the chat message.
+     * *
      * @param color Color of the chat message.
      */
-    public ChatMessageComposer(String text, TextFormatting color) {
-        this(text);
-        this.addFormatting(color);
-    }
-
-    /**
-     * Prints a Hypixel style separaton message using the provided color.
-     */
-    public static void printSeparationMessage(TextFormatting color) {
-        new ChatMessageComposer(SEPARATION_MESSAGE, color).addFormatting(TextFormatting.BOLD).send(false);
+    constructor(text: String, color: TextFormatting) : this(text) {
+        this.addFormatting(color)
     }
 
     /**
      * Adds a formatting to the text message. The ChatMessageComposer used is modified.
-     *
+
      * @return The ChatMessageComposer instance in order to make code more compact.
      */
-    public ChatMessageComposer addFormatting(TextFormatting formatting) {
-        Style style = this.chatComponent.getStyle();
-        switch (formatting) {
-            case ITALIC:
-                style.setItalic(true);
-                break;
-            case BOLD:
-                style.setBold(true);
-                break;
-            case UNDERLINE:
-                style.setUnderlined(true);
-                break;
-            case OBFUSCATED:
-                style.setObfuscated(true);
-                break;
-            case STRIKETHROUGH:
-                style.setStrikethrough(true);
-                break;
-            default:
-                style.setColor(formatting);
-                break;
+    fun addFormatting(formatting: TextFormatting): ChatMessageComposer {
+        val style = this.chatComponent.style
+        when (formatting) {
+            TextFormatting.ITALIC -> style.setItalic(true)
+            TextFormatting.BOLD -> style.setBold(true)
+            TextFormatting.UNDERLINE -> style.setUnderlined(true)
+            TextFormatting.OBFUSCATED -> style.setObfuscated(true)
+            TextFormatting.STRIKETHROUGH -> style.setStrikethrough(true)
+            else -> style.setColor(formatting)
         }
-        this.chatComponent.setStyle(style);
+        this.chatComponent.style = style
 
-        return this;
+        return this
     }
 
     /**
      * Append a message to the an existing message. This is used to achieve multiple colors in one line.
-     *
+
      * @param message message to append
+     * *
      * @return The ChatMessageComposer instance in order to make code more compact.
      */
-    public ChatMessageComposer appendMessage(ChatMessageComposer message) {
+    fun appendMessage(message: ChatMessageComposer): ChatMessageComposer {
         // Make sure appendedMessages gets created
         if (this.appendedMessages == null) {
-            this.appendedMessages = new ArrayList<ChatMessageComposer>();
+            this.appendedMessages = ArrayList<ChatMessageComposer>()
         }
         // Add the message
-        this.appendedMessages.add(message);
+        this.appendedMessages!!.add(message)
         // And add messages which were added to the message
         if (message.appendedMessages != null) {
-            this.appendedMessages.addAll(message.appendedMessages);
+            this.appendedMessages!!.addAll(message.appendedMessages!!)
         }
 
-        return this;
+        return this
     }
 
     /**
      * Makes the chat message clickable.
-     *
+
      * @param action      Action performed by clicking
+     * *
      * @param execute     URL or command to execute
+     * *
      * @param description Shown message when hovering over the clickable chat.
+     * *
      * @return The ChatMessageComposer instance in order to make code more compact.
      */
-    public ChatMessageComposer makeClickable(ClickEvent.Action action, String execute, ChatMessageComposer description) {
-        Style style = this.chatComponent.getStyle();
+    fun makeClickable(action: ClickEvent.Action, execute: String, description: ChatMessageComposer): ChatMessageComposer {
+        val style = this.chatComponent.style
 
-        style.setClickEvent(new ClickEvent(action, execute));
-        style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description.assembleMessage(false)));
+        style.clickEvent = ClickEvent(action, execute)
+        style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, description.assembleMessage(false))
 
-        this.chatComponent.setStyle(style);
+        this.chatComponent.style = style
 
-        return this;
+        return this
     }
 
     /**
      * Makes the chat message link to a given url.
-     *
+
      * @param url The linked URL. MAKE SURE IT STARTS WITH HTTP:// or HTTPS://!
+     * *
      * @return The ChatMessageComposer instance in order to make code more compact.
      */
-    public ChatMessageComposer makeLink(String url) {
+    fun makeLink(url: String): ChatMessageComposer {
         // Compose a generic description
-        ChatMessageComposer description = new ChatMessageComposer("Click to visit ", TextFormatting.GRAY);
-        description.appendMessage(new ChatMessageComposer(url, TextFormatting.AQUA).addFormatting(TextFormatting.UNDERLINE));
+        val description = ChatMessageComposer("Click to visit ", TextFormatting.GRAY)
+        description.appendMessage(ChatMessageComposer(url, TextFormatting.AQUA).addFormatting(TextFormatting.UNDERLINE))
         // and make it clickable
-        this.makeClickable(ClickEvent.Action.OPEN_URL, url, description);
+        this.makeClickable(ClickEvent.Action.OPEN_URL, url, description)
 
-        return this;
+        return this
     }
 
     /**
      * Creates a tooltip like hover text.
-     *
+
      * @param text the message shown then hovering
+     * *
      * @return The ChatMessageComposer instance in order to make code more compact.
      */
-    public ChatMessageComposer makeHover(ChatMessageComposer text) {
-        Style style = this.chatComponent.getStyle();
+    fun makeHover(text: ChatMessageComposer): ChatMessageComposer {
+        val style = this.chatComponent.style
 
-        style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, text.assembleMessage(false)));
+        style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, text.assembleMessage(false))
 
-        this.chatComponent.setStyle(style);
+        this.chatComponent.style = style
 
-        return this;
+        return this
     }
 
     /**
      * Send this message to the player. (with [HudPixel] prefix)
      */
-    public void send() {
-        this.send(true);
+    fun send() {
+        this.send(true)
     }
 
     /**
      * Send this message to the player.
-     *
+
      * @param prefix Send the [HudPixel] prefix?
      */
-    public void send(boolean prefix) {
+    fun send(prefix: Boolean) {
         try {
             // send the assebled message to the player
-            FMLClientHandler.instance().getClientPlayerEntity().addChatMessage(this.assembleMessage(prefix));
-        } catch (Exception e) {
-            HudPixelMod.instance().logError("Failed to send chat message");
-            e.printStackTrace();
+            FMLClientHandler.instance().clientPlayerEntity.addChatMessage(this.assembleMessage(prefix))
+        } catch (e: Exception) {
+            HudPixelMod.logError("Failed to send chat message")
+            e.printStackTrace()
         }
+
     }
 
     /**
      * Builds an ITextComponent including all appended messages.
-     *
+
      * @param prefix should [HudPixel] be added as chat prefix?
+     * *
      * @return the ITextComponent containing all appended messages
      */
-    protected ITextComponent assembleMessage(boolean prefix) {
-        ITextComponent result;
+    protected fun assembleMessage(prefix: Boolean): ITextComponent {
+        val result: ITextComponent
         if (prefix) {
             // Copy the prefix
-            result = CHAT_PREFIX.createCopy();
+            result = CHAT_PREFIX!!.createCopy()
         } else if (this.appendedMessages == null) {
             // Nothing to append
-            return this.chatComponent;
+            return this.chatComponent
         } else {
             // this step is important so that the appended messages don't inherit the style
-            result = new TextComponentString("");
+            result = TextComponentString("")
         }
 
         // add the main message
-        result.appendSibling(this.chatComponent);
+        result.appendSibling(this.chatComponent)
         // and add all appended messages
         if (this.appendedMessages != null) {
-            for (ChatMessageComposer m : this.appendedMessages) {
-                result.appendSibling(m.chatComponent);
+            for (m in this.appendedMessages!!) {
+                result.appendSibling(m.chatComponent)
             }
         }
 
-        return result;
+        return result
+    }
+
+    companion object {
+        var SEPARATION_MESSAGE = "\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC"
+        private var CHAT_PREFIX: ITextComponent? = null
+
+        // Builds the chat prefix
+        init {
+            val name1 = TextComponentString("Hud")
+            val name2 = TextComponentString("Pixel")
+            name1.style.color = TextFormatting.GOLD
+            name2.style.color = TextFormatting.YELLOW
+
+            CHAT_PREFIX = TextComponentString("[").appendSibling(name1).appendSibling(name2).appendSibling(TextComponentString("] "))
+        }
+
+        /**
+         * Prints a Hypixel style separaton message using the provided color.
+         */
+        fun printSeparationMessage(color: TextFormatting) {
+            ChatMessageComposer(SEPARATION_MESSAGE, color).addFormatting(TextFormatting.BOLD).send(false)
+        }
     }
 }

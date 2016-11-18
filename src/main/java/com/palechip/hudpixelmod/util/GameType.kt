@@ -43,12 +43,12 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.util;
+package com.palechip.hudpixelmod.util
 
 /**
  * Replaces GameType and only holds the modID. It can be used to statically reference a certain game without storing any information which may be changed.
  */
-public enum GameType {
+enum class GameType private constructor(val modID: Int, val databaseID: Int, val nm: String, val tipName: String, val scoreboardName: String, val statsName: String) {
     UNKNOWN(-1, -1, "UNKNOWN", "", "none", ""),
     ALL_GAMES(0, -1, "ALL GAMES", "", "any", ""),
     QUAKECRAFT(1, 2, "Quakecraft", "quakecraft", "QUAKECRAFT", "Quake"),
@@ -95,60 +95,32 @@ public enum GameType {
     SKYCLASH(35, 55, "SkyClash", "SkyClash", "SKYCLASH", "SkyClash"),
 
     ANY_ARCADE(16, -1, ARCADE_GAMES.name, ARCADE_GAMES.tipName, ARCADE_GAMES.scoreboardName, "Arcade");
-    public final String scoreboardName;
-    public final int databaseID;
-    private final int modID;
-    private final String name;
-    private final String tipName;
-    private final String statsName;
 
-    GameType(int modID, int databaseID, String name, String tipName, String scoreboardName, String statsName) {
-        this.tipName = tipName;
-        this.modID = modID;
-        this.name = name;
-        this.scoreboardName = scoreboardName;
-        this.databaseID = databaseID;
-        this.statsName = statsName;
-    }
 
-    public String getStatsName() {
-        return statsName;
-    }
+    companion object {
 
-    public static GameType getTypeByDatabaseID(int ID) {
-        for (GameType type : GameType.values())
-            if (type.databaseID == ID)
-                return type;
-        return GameType.UNKNOWN;
-    }
+        @JvmStatic
+        fun getTypeByDatabaseID(ID: Int): GameType {
+            for (type in GameType.values())
+                if (type.databaseID == ID)
+                    return type
+            return GameType.UNKNOWN
+        }
 
-    public static GameType getTypeByName(String name) {
-        for (GameType type : GameType.values())
-            if (type.name.equalsIgnoreCase(name))
-                return type;
-        return GameType.UNKNOWN;
-    }
+        @JvmStatic
+        fun getTypeByName(name: String): GameType {
+            for (type in GameType.values())
+                if (type.name.equals(name, ignoreCase = true))
+                    return type
+            return GameType.UNKNOWN
+        }
 
-    public static GameType getTypeByID(int modid) {
-        for (GameType type : GameType.values())
-            if (type.modID == modid)
-                return type;
-        return GameType.UNKNOWN;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTipName() {
-        return tipName;
-    }
-
-    public int getDatabaseID() {
-        return databaseID;
-    }
-
-    public int getModID() {
-        return modID;
+        @JvmStatic
+        fun getTypeByID(modid: Int): GameType {
+            for (type in GameType.values())
+                if (type.modID == modid)
+                    return type
+            return GameType.UNKNOWN
+        }
     }
 }

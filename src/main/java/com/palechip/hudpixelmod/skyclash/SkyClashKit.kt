@@ -43,48 +43,16 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
+package com.palechip.hudpixelmod.skyclash
 
-package com.palechip.hudpixelmod.extended;
+import java.io.Serializable
 
-import com.palechip.hudpixelmod.api.interaction.ApiManager;
-import com.palechip.hudpixelmod.extended.boosterdisplay.BoosterManager;
-import com.palechip.hudpixelmod.extended.cooldowndisplay.CooldownDisplayManager;
-import com.palechip.hudpixelmod.extended.gui.ArmorHud;
-import com.palechip.hudpixelmod.extended.staff.StaffManager;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+enum class SkyClashKit : Serializable {
+    SWORDSMAN;
 
-import java.util.UUID;
 
-@SideOnly(Side.CLIENT)
-public class HudPixelExtended {
-
-    public static UUID UUID;
-    public static BoosterManager boosterManager;
-    public static StaffManager staffManager;
-    private static HudPixelExtended hudPixelExtendedInstance = null;
-    private static HudPixelExtendedEventHandler hudPixelExtendedEventHandler = new HudPixelExtendedEventHandler();
-
-    private HudPixelExtended() {
+    companion object {
+        private val serialVersionUID = 14145142L
     }
 
-    public static HudPixelExtended getInstance() {
-        return hudPixelExtendedInstance == null ? hudPixelExtendedInstance = new HudPixelExtended() : hudPixelExtendedInstance;
-    }
-
-    public void setup() {
-        MinecraftForge.EVENT_BUS.register(hudPixelExtendedEventHandler);
-
-        UUID = Minecraft.getMinecraft().getSession().getProfile().getId();
-        boosterManager = new BoosterManager();
-        staffManager = new StaffManager();
-        ApiManager.getINSTANCE().setup();
-
-
-
-        CooldownDisplayManager.getInstance();
-        ArmorHud.INSTANCE.init();
-    }
 }

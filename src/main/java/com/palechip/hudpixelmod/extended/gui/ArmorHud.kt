@@ -57,7 +57,7 @@ related files.
 reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
-object ArmorHud : IEventHandler{
+object ArmorHud : IEventHandler {
 
     @ConfigPropertyBoolean(CCategory.ARMOR_HUD, "disableArmorHud", "Disables the ArmorHud", false) @JvmStatic var disable_ArmorHud: Boolean = false
     @ConfigPropertyBoolean(CCategory.ARMOR_HUD, "renderRightArmorHud", "Renders the ArmorHud on the right side", false) @JvmStatic var renderRight_ArmorHud: Boolean = false
@@ -71,7 +71,7 @@ object ArmorHud : IEventHandler{
 
     private val size:Int = 18
 
-    fun init(){
+    init {
         HudPixelExtendedEventHandler.registerIEvent(this)
     }
 
@@ -97,7 +97,7 @@ object ArmorHud : IEventHandler{
 
 
     override fun onClientTick() {
-        val dHeight = DisplayUtil.getScaledMcHeight()
+        val dHeight = DisplayUtil.getScaledMcWidth()
         val dWidth = DisplayUtil.getScaledMcWidth()
 
 

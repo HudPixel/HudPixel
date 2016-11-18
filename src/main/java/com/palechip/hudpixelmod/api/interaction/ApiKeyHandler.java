@@ -79,7 +79,7 @@ public class ApiKeyHandler implements IEventHandler{
             // a file called hypixel_api_key.txt
             API_KEY_STORAGE_FILE = API_KEY_STORAGE_PATH + "hypixel_api_key.txt";
         } catch (IOException e) {
-            HudPixelMod.instance().logError("Critical error when finding the api key file: ");
+            HudPixelMod.INSTANCE.logError("Critical error when finding the api key file: ");
             e.printStackTrace();
         }
     }
@@ -180,7 +180,7 @@ public class ApiKeyHandler implements IEventHandler{
             loadingFailed = false;
             callback.ApiKeyLoaded(false, apiKey);
         } catch (Exception e) {
-            HudPixelMod.instance().logError("Critical error when reading the api key file: ");
+            HudPixelMod.INSTANCE.logError("Critical error when reading the api key file: ");
             e.printStackTrace();
         }
     }
@@ -196,7 +196,7 @@ public class ApiKeyHandler implements IEventHandler{
             writer.write(this.apiKey);
             writer.close();
         } catch (Exception e) {
-            HudPixelMod.instance().logError("Critical error when storing the api key file: ");
+            HudPixelMod.INSTANCE.logError("Critical error when storing the api key file: ");
             e.printStackTrace();
         }
     }

@@ -130,7 +130,7 @@ public class StaffManager implements IEventHandler, McColorHelper {
                     load(props);
                 }
             } catch (IOException e) {
-                HudPixelMod.instance().getLOGGER().info("Could not load contributors list. Either you're offline or github is down. Nothing to worry about, carry on~");
+                HudPixelMod.getLogger().info("Could not load contributors list. Either you're offline or github is down. Nothing to worry about, carry on~");
             }
         }
     }

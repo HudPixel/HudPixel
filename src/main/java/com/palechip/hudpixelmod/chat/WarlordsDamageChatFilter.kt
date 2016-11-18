@@ -43,127 +43,125 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.chat;
+package com.palechip.hudpixelmod.chat
 
-import com.palechip.hudpixelmod.GameDetector;
-import com.palechip.hudpixelmod.HudPixelMod;
-import com.palechip.hudpixelmod.config.CCategory;
-import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
-import com.palechip.hudpixelmod.config.ConfigPropertyInt;
-import com.palechip.hudpixelmod.util.GameType;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.palechip.hudpixelmod.GameDetector
+import com.palechip.hudpixelmod.HudPixelMod
+import com.palechip.hudpixelmod.config.CCategory
+import com.palechip.hudpixelmod.config.ConfigPropertyBoolean
+import com.palechip.hudpixelmod.config.ConfigPropertyInt
+import com.palechip.hudpixelmod.util.GameType
+import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
+import java.util.regex.Pattern
 
 @SideOnly(Side.CLIENT)
-public class WarlordsDamageChatFilter {
-    public static final String take = "\u00AB";
-    public static final String give = "\u00BB";
-    public static final String healing = " healed ";
-    public static final String absorption = " absorbed ";
-    public static final String wounded1 = "You are now wounded.";
-    public static final String wounded2 = "You are wounded.";
-    public static final String noLongerWounded = "You are no longer wounded.";
-    @ConfigPropertyBoolean(category = CCategory.WARLORDS, id = "warlordsFilterWounded", comment = "Warlords Filter Wounded", def = true)
-    public static boolean warlordsFilterWounded = false;
-    @ConfigPropertyBoolean(category = CCategory.WARLORDS, id = "warlordsFilterAbsorbtion", comment = "Warlords Filter Absorbtion", def = true)
-    public static boolean warlordsFilterAbsorbtion = false;
-    @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterDamageDone", comment = "Warlords Filter Damage Done", def = 0)
-    public static int warlordsFilterDamageDone = 0;
-    @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterHealingDone", comment = "Warlords Filter Healing Done", def = 0)
-    public static int warlordsFilterHealingDone = 0;
-    @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterDamageTaken", comment = "Warlords Filter Damage Taken", def = 0)
-    public static int warlordsFilterDamageTaken = 0;
-    @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterHealingReceived", comment = "Warlords Filter Healing Received", def = 0)
-    public static int warlordsFilterHealingReceived = 0;
+class WarlordsDamageChatFilter {
 
-    public WarlordsDamageChatFilter() {
-    }
-
-    /**
-     * @return The damage or health. Int.MAX_VALUE in case of failure.
-     */
-    public static int getDamageOrHealthValue(String message) {
-        try {
-            // filter !, which highlights critical damage/health
-            message = message.replace("!", "");
-
-            // do some regex magic
-            Pattern p = Pattern.compile("\\s[0-9]+\\s");
-            Matcher m = p.matcher(message);
-            if (!m.find()) {
-                // We failed :(
-                return Integer.MAX_VALUE;
-            }
-            // Get the last occurrence in order to sort out party poopers with all number names
-            String result = m.group(m.groupCount());
-            // and cast it into an integer (without whitespace)
-            return Integer.valueOf(result.replace(" ", ""));
-        } catch (Exception e) {
-            HudPixelMod.instance().logDebug("Failed to extract damage from this message: " + message);
-        }
-        // We failed :(
-        return Integer.MAX_VALUE;
-    }
-
-    public void onChat(ClientChatReceivedEvent e) {
+    fun onChat(e: ClientChatReceivedEvent) {
         // only if we are in a Warlords game
-        if (GameDetector.getCurrentGameType().equals(GameType.WARLORDS)) {
+        if (GameDetector.currentGameType == GameType.WARLORDS) {
             // isHypixelNetwork if the filter is enabled
             if (warlordsFilterDamageDone > 0 || warlordsFilterDamageTaken > 0 || warlordsFilterHealingDone > 0 || warlordsFilterHealingReceived > 0 || warlordsFilterAbsorbtion || warlordsFilterWounded) {
-                String message = e.getMessage().getUnformattedText();
+                val message = e.message.unformattedText
                 // incoming
                 if (message.startsWith(take)) {
                     // healing
                     if (message.contains(healing)) {
                         if (warlordsFilterHealingReceived > getDamageOrHealthValue(message)) {
-                            e.setCanceled(true);
+                            e.isCanceled = true
                         }
-                    }
-                    // absorption
-                    else if (message.contains(absorption)) {
+                    } else if (message.contains(absorption)) {
                         if (warlordsFilterAbsorbtion) {
-                            e.setCanceled(true);
+                            e.isCanceled = true
                         }
-                    }
-                    // damage
-                    else {
+                    } else {
                         if (warlordsFilterDamageTaken > getDamageOrHealthValue(message)) {
-                            e.setCanceled(true);
+                            e.isCanceled = true
                         }
-                    }
-                }
-                // outgoing
-                else if (message.startsWith(give)) {
+                    }// damage
+                    // absorption
+                } else if (message.startsWith(give)) {
                     // healing
                     if (message.contains(healing)) {
                         if (warlordsFilterHealingDone > getDamageOrHealthValue(message)) {
-                            e.setCanceled(true);
+                            e.isCanceled = true
                         }
-                    }
-                    // absorption
-                    else if (message.contains(absorption)) {
+                    } else if (message.contains(absorption)) {
                         if (warlordsFilterAbsorbtion) {
-                            e.setCanceled(true);
+                            e.isCanceled = true
                         }
-                    }
-                    // damage
-                    else {
+                    } else {
                         if (warlordsFilterDamageDone > getDamageOrHealthValue(message)) {
-                            e.setCanceled(true);
+                            e.isCanceled = true
                         }
-                    }
-                }
+                    }// damage
+                    // absorption
+                }// outgoing
                 //Filter wounded messages
                 if (warlordsFilterWounded) {
-                    if (message.equals(wounded1) || message.equals(wounded2) || message.equals(noLongerWounded)) {
-                        e.setCanceled(true);
+                    if (message == wounded1 || message == wounded2 || message == noLongerWounded) {
+                        e.isCanceled = true
                     }
                 }
             }
+        }
+    }
+
+    companion object {
+        val take = "\u00AB"
+        val give = "\u00BB"
+        val healing = " healed "
+        val absorption = " absorbed "
+        val wounded1 = "You are now wounded."
+        val wounded2 = "You are wounded."
+        val noLongerWounded = "You are no longer wounded."
+        @ConfigPropertyBoolean(category = CCategory.WARLORDS, id = "warlordsFilterWounded", comment = "Warlords Filter Wounded", def = true)
+        @JvmStatic
+        var warlordsFilterWounded = false
+        @ConfigPropertyBoolean(category = CCategory.WARLORDS, id = "warlordsFilterAbsorbtion", comment = "Warlords Filter Absorbtion", def = true)
+        @JvmStatic
+        var warlordsFilterAbsorbtion = false
+        @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterDamageDone", comment = "Warlords Filter Damage Done", def = 0)
+        @JvmStatic
+        var warlordsFilterDamageDone = 0
+        @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterHealingDone", comment = "Warlords Filter Healing Done", def = 0)
+        @JvmStatic
+        var warlordsFilterHealingDone = 0
+        @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterDamageTaken", comment = "Warlords Filter Damage Taken", def = 0)
+        @JvmStatic
+        var warlordsFilterDamageTaken = 0
+        @ConfigPropertyInt(category = CCategory.WARLORDS, id = "warlordsFilterHealingReceived", comment = "Warlords Filter Healing Received", def = 0)
+        @JvmStatic
+        var warlordsFilterHealingReceived = 0
+
+        /**
+         * @return The damage or health. Int.MAX_VALUE in case of failure.
+         */
+        fun getDamageOrHealthValue(message: String): Int {
+            var message = message
+            try {
+                // filter !, which highlights critical damage/health
+                message = message.replace("!", "")
+
+                // do some regex magic
+                val p = Pattern.compile("\\s[0-9]+\\s")
+                val m = p.matcher(message)
+                if (!m.find()) {
+                    // We failed :(
+                    return Integer.MAX_VALUE
+                }
+                // Get the last occurrence in order to sort out party poopers with all number names
+                val result = m.group(m.groupCount())
+                // and cast it into an integer (without whitespace)
+                return Integer.valueOf(result.replace(" ", ""))!!
+            } catch (e: Exception) {
+                HudPixelMod.logDebug("Failed to extract damage from this message: " + message)
+            }
+
+            // We failed :(
+            return Integer.MAX_VALUE
         }
     }
 

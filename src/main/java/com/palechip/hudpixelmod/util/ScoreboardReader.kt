@@ -43,99 +43,94 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.util;
+package com.palechip.hudpixelmod.util
 
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraftforge.fml.client.FMLClientHandler;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import net.minecraft.scoreboard.Score
+import net.minecraft.scoreboard.ScorePlayerTeam
+import net.minecraftforge.fml.client.FMLClientHandler
+import java.util.*
 
 /**
  * A helper which reads the scoreboard.
- *
+
  * @author palechip
  */
-public class ScoreboardReader {
-    private static boolean needsUpdate = true;
-    private static ArrayList<String> scoreboardNames;
-    private static String scoreboardTitle;
+object ScoreboardReader {
+    private var needsUpdate = true
+    private var scoreboardNames = mutableListOf<String>()
+    private var scoreboardTitle: String = ""
 
-    static {
-        scoreboardNames = new ArrayList<String>();
-        scoreboardTitle = "";
-    }
-
-    // prevent instantiation
-    private ScoreboardReader() {
+    init {
+        scoreboardNames = ArrayList<String>()
+        scoreboardTitle = ""
     }
 
     /**
      * Used to make sure that we maximally update the scoreboard names once a tick.
      */
-    public static void resetCache() {
-        needsUpdate = true;
+    @JvmStatic
+    fun resetCache() {
+        needsUpdate = true
     }
 
     /**
      * Get the top-most string which is displayed on the scoreboard. (doesn't have a score on the side)
      * Be aware that this can contain color codes.
      */
-    public static String getScoreboardTitle() {
+    @JvmStatic
+    fun getScoreboardTitle(): String {
         if (needsUpdate) {
-            updateNames();
-            needsUpdate = false;
+            updateNames()
+            needsUpdate = false
         }
-        return scoreboardTitle;
+        return scoreboardTitle
     }
 
     /**
      * Get all currently visible strings on the scoreboard. (excluding title)
      * Be aware that this can contain color codes.
      */
-    public static ArrayList<String> getScoreboardNames() {
+    fun getScoreboardNames(): MutableList<String> {
         // the array will only be updated upon request
         if (needsUpdate) {
-            updateNames();
-            needsUpdate = false;
+            updateNames()
+            needsUpdate = false
         }
-        return scoreboardNames;
+        return scoreboardNames
     }
 
-    private static void updateNames() {
+    private fun updateNames() {
         // All the magic happens here...
 
         // Clear the array
-        if (!scoreboardNames.isEmpty()) {
-            scoreboardNames.clear();
+        if (!scoreboardNames!!.isEmpty()) {
+            scoreboardNames!!.clear()
         }
-        scoreboardTitle = "";
+        scoreboardTitle = ""
 
         try {
             // Get the scoreboard.
-            Scoreboard scoreboard = FMLClientHandler.instance().getClient().theWorld.getScoreboard();
+            val scoreboard = FMLClientHandler.instance().client.theWorld.scoreboard
             // Get the right objective. I think the 1 stands for the sidebar objective but I've just copied it from the rendering code.
-            ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
+            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
             // only update if there actually is something to update
-            scoreboardTitle = sidebarObjective.getDisplayName();
+            scoreboardTitle = sidebarObjective!!.displayName
             // Get a collection of all scores
-            Collection scores = scoreboard.getSortedScores(sidebarObjective);
+            val scores = scoreboard.getSortedScores(sidebarObjective)
             // Process all scores
-            for (Object score : scores) {
+            for (score in scores) {
                 // Make sure it can be casted to Score
-                if (score instanceof Score) {
+                if (score is Score) {
                     // Get the team for the fake player
-                    ScorePlayerTeam team = scoreboard.getPlayersTeam(((Score) score).getPlayerName());
+                    val team = scoreboard.getPlayersTeam(score.playerName)
                     // Add the name to the array. formatPlayerName() is used to add prefix and suffix which are used to circumvent the 16 char limit for the name.
-                    scoreboardNames.add(ScorePlayerTeam.formatPlayerName(team, ((Score) score).getPlayerName()));
+                    scoreboardNames!!.add(ScorePlayerTeam.formatPlayerName(team, score.playerName))
                 }
             }
-        } catch (Exception e) {
+        } catch (e: Exception) {
             // it is possible that there is a null pointer exception thrown when there is no scoreboard
             // just ignore this
         }
+
     }
-}
+}// prevent instantiation
