@@ -46,6 +46,7 @@
 
 package com.palechip.hudpixelmod.extended.boosterdisplay;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.api.interaction.representations.Booster;
 import com.palechip.hudpixelmod.extended.HudPixelExtended;
 import com.palechip.hudpixelmod.extended.util.ImageLoader;
@@ -53,7 +54,6 @@ import com.palechip.hudpixelmod.extended.util.LoggerHelper;
 import com.palechip.hudpixelmod.extended.util.McColorHelper;
 import com.palechip.hudpixelmod.extended.util.gui.FancyListObject;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -121,7 +121,7 @@ public class BoosterExtended extends FancyListObject implements McColorHelper {
                 HudPixelExtended.boosterManager.requestBoosters(true);
             }
 
-        this.renderPicture = EnumChatFormatting.WHITE + countDown();
+        this.renderPicture = ChatFormatting.WHITE + countDown();
         this.renderLineSmall = YELLOW + gameType.getName();
         this.renderLine1 = GOLD + gameType.getName();
         if (booster == null) {

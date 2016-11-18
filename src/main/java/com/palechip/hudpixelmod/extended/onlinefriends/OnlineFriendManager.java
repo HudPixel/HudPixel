@@ -45,6 +45,7 @@ package com.palechip.hudpixelmod.extended.onlinefriends;
   reserve the right to take down any infringing project.
  */
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.config.ConfigPropertyInt;
@@ -53,7 +54,6 @@ import com.palechip.hudpixelmod.extended.util.gui.FancyListManager;
 import com.palechip.hudpixelmod.extended.util.gui.FancyListObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -159,20 +159,20 @@ public class OnlineFriendManager extends FancyListManager implements IUpdater {
     @Override
     public void onChatReceived(ClientChatReceivedEvent e) throws Throwable {
         for (String s : OnlineFriendsLoader.getAllreadyStored()) {
-            if (e.message.getUnformattedText().equalsIgnoreCase(s + JOINED_MESSAGE))
+            if (e.getMessage().getUnformattedText().equalsIgnoreCase(s + JOINED_MESSAGE))
                 for (FancyListObject fco : localStorageFCO) {
                     OnlineFriend of = (OnlineFriend) fco;
                     if (of.getUsername().equals(s)) {
                         of.setOnline(true);
-                        of.setGamemode(EnumChatFormatting.WHITE + "not loaded yet!");
+                        of.setGamemode(ChatFormatting.WHITE + "not loaded yet!");
                     }
                 }
-            else if (e.message.getUnformattedText().equalsIgnoreCase(s + LEFT_MESSAGE))
+            else if (e.getMessage().getUnformattedText().equalsIgnoreCase(s + LEFT_MESSAGE))
                 for (FancyListObject fco : localStorageFCO) {
                     OnlineFriend of = (OnlineFriend) fco;
                     if (of.getUsername().equals(s)) {
                         of.setOnline(false);
-                        of.setGamemode(EnumChatFormatting.DARK_GRAY + "currently offline");
+                        of.setGamemode(ChatFormatting.DARK_GRAY + "currently offline");
                     }
                 }
         }
@@ -200,7 +200,7 @@ public class OnlineFriendManager extends FancyListManager implements IUpdater {
                     of.setGamemode(onlineFriends.get(of.getUsername()));
                     of.setOnline(true);
                 } else {
-                    of.setGamemode(EnumChatFormatting.DARK_GRAY + "currently offline");
+                    of.setGamemode(ChatFormatting.DARK_GRAY + "currently offline");
                     of.setOnline(false);
                 }
             }

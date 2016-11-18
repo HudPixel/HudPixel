@@ -8,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -19,9 +18,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -46,6 +47,7 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static javax.imageio.ImageIO.read;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
+@SideOnly(Side.CLIENT)
 public final class ContributorFancinessHandler implements LayerRenderer<EntityPlayer> {
     private volatile static Map<String, Option<ItemStack, LoadImgur>> stacks = new HashMap<>();;
     private volatile static boolean startedLoading = false;
@@ -101,7 +103,7 @@ public final class ContributorFancinessHandler implements LayerRenderer<EntityPl
             ItemStack item = (ItemStack) object;
             GlStateManager.pushMatrix();
             translateToHeadLevel(player);
-            getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             GlStateManager.rotate(180, 0, 0, 1);
             GlStateManager.translate(0, -0.85, 0);
             GlStateManager.rotate(-90, 0, 1, 0);
@@ -128,7 +130,7 @@ public final class ContributorFancinessHandler implements LayerRenderer<EntityPl
             double bottom = height / 4;
 
             Tessellator tessellator = Tessellator.getInstance();
-            WorldRenderer vb = tessellator.getWorldRenderer();
+            net.minecraft.client.renderer.VertexBuffer vb = tessellator.getBuffer();
 
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             vb.pos(height - bottom, -left, 0).tex(0, 0).endVertex();

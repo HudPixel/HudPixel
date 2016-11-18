@@ -45,14 +45,14 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
-import net.minecraft.util.EnumChatFormatting;
 
 public class CoinCounterModularGuiProvider extends HudPixelModularGuiProvider {
 
-    public static final String COINS_DISPLAY_TEXT = EnumChatFormatting.GOLD + "Coins";
+    public static final String COINS_DISPLAY_TEXT = ChatFormatting.GOLD + "Coins";
     protected int coins;
 
     public static int getCoinsFromMessage(String message) {

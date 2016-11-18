@@ -45,15 +45,15 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 
 public class VZBalanceModularGuiProvider extends CoinCounterModularGuiProvider {
-    public static final String NEGATIVE_COINS_DISPLAY_TEXT = EnumChatFormatting.RED + "Coins Spent";
+    public static final String NEGATIVE_COINS_DISPLAY_TEXT = ChatFormatting.RED + "Coins Spent";
     public static final String TOTAL_COINS_DISPLAY_TEXT = "Balance";
 
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "vampireZBalance", comment = "The VZ Time Tracker", def = true)
@@ -90,9 +90,9 @@ public class VZBalanceModularGuiProvider extends CoinCounterModularGuiProvider {
                     return NEGATIVE_COINS_DISPLAY_TEXT + (-this.coins);
                 case Total:
                     if (this.coins < 0) {
-                        return EnumChatFormatting.RED + "" + this.coins;
+                        return ChatFormatting.RED + "" + this.coins;
                     } else {
-                        return EnumChatFormatting.GREEN + "" + this.coins;
+                        return ChatFormatting.GREEN + "" + this.coins;
                     }
             }
         }

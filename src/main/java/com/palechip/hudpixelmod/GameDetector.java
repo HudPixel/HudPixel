@@ -55,16 +55,19 @@ import com.palechip.hudpixelmod.util.GameType;
 import com.palechip.hudpixelmod.util.ScoreboardReader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.regex.Pattern;
 
+@SideOnly(Side.CLIENT)
 public class GameDetector {
     public static final Pattern LOBBY_MATCHER = Pattern.compile("\\w*lobby\\d+");
     public static final char COLOR_CHAR = '\u00A7';
@@ -183,8 +186,8 @@ public class GameDetector {
 
     @SubscribeEvent
     public void onServerChange(EntityJoinWorldEvent event) {
-        if (!(event.entity instanceof EntityPlayerSP) || !enabled) return;
-        EntityPlayerSP player = (EntityPlayerSP) event.entity;
+        if (!(event.getEntity() instanceof EntityPlayerSP) || !enabled) return;
+        EntityPlayerSP player = (EntityPlayerSP) event.getEntity();
         player.sendChatMessage("/whereami");
         cooldown = 5;
     }
@@ -226,7 +229,7 @@ public class GameDetector {
                 if (game != currentGameType && Minecraft.getMinecraft().thePlayer != null) {
                     //success!
                     if (HudPixelMod.IS_DEBUGGING)
-                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Changed server! Game is now " + currentGameType));
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("Changed server! Game is now " + currentGameType));
                 } else {
                     currentGameType = GameType.UNKNOWN;
                     schedule = true;
@@ -254,7 +257,7 @@ public class GameDetector {
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
         if (!enabled) return;
-        String message = event.message.getUnformattedText();
+        String message = event.getMessage().getUnformattedText();
         if (message.equalsIgnoreCase("The game starts in 1 second!")) {
             HudPixelExtendedEventHandler.onGameStart();
             gameHasntBegan = false;

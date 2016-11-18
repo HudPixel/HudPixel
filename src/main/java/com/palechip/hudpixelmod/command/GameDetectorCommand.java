@@ -50,13 +50,12 @@ import com.palechip.hudpixelmod.util.ChatMessageComposer;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GameDetectorCommand extends CommandBase {
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
 
     @Override
     public String getCommandName() {
@@ -69,7 +68,8 @@ public class GameDetectorCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         new ChatMessageComposer(GameDetector.getCurrentGameType().toString()).send();
     }
+
 }

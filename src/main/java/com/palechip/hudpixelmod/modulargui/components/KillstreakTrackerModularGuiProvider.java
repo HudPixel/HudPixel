@@ -45,20 +45,20 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.extended.util.McColorHelper;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class KillstreakTrackerModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelper {
-    public static final String CURRENT_KILLSTREAK_DISPLAY_TEXT = EnumChatFormatting.DARK_PURPLE + "Killstreak: ";
+    public static final String CURRENT_KILLSTREAK_DISPLAY_TEXT = ChatFormatting.DARK_PURPLE + "Killstreak: ";
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "killstreakTracker", comment = "The Killstreak Tracker", def = true)
     public static boolean enabled = false;
-    private final String GREATEST_KILLSTREAK_DISPLAY_TEXT = EnumChatFormatting.LIGHT_PURPLE + "Best Killstreak: ";
+    private final String GREATEST_KILLSTREAK_DISPLAY_TEXT = ChatFormatting.LIGHT_PURPLE + "Best Killstreak: ";
     private int currentKillstreak;
     private int greatestKillstreak;
     private boolean showGreatest;

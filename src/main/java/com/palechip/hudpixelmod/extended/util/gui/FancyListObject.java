@@ -45,14 +45,17 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.extended.util.gui;
 
-import net.unaussprechlich.managedgui.lib.util.RenderUtils;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.unaussprechlich.managedgui.lib.util.RenderUtils;
 
 import java.util.ArrayList;
 
+@SideOnly(Side.CLIENT)
 public abstract class FancyListObject {
 
     public static int loadingBar;
@@ -210,7 +213,7 @@ public abstract class FancyListObject {
                     Math.round(xStart), Math.round(yStart), 0, 0,
                     24, 24, 24, 24, resourceLocation, 1f);
 
-        if (!renderPicture.equals(EnumChatFormatting.WHITE + "")) { //draws a background over the image if there is a string to render
+        if (!renderPicture.equals(ChatFormatting.WHITE + "")) { //draws a background over the image if there is a string to render
             RenderUtils.renderBoxWithColor(xStart, yStart + 12, 24, 9, 0f, 0f, 0f, 0.5f);
         }
 

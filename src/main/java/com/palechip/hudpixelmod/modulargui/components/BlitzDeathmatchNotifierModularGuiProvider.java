@@ -45,15 +45,15 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 
 public class BlitzDeathmatchNotifierModularGuiProvider extends SimpleHudPixelModularGuiProvider {
-    private static final String DISPLAY_STRING = EnumChatFormatting.GOLD + "DEATHMATCH STARTING SOON!";
+    private static final String DISPLAY_STRING = ChatFormatting.GOLD + "DEATHMATCH STARTING SOON!";
     private static final int ANIMATION_TIME = 5; // in MC-Ticks
     private static final int DISPLAY_TIME = 140; // = 7s
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "blitzDeathmatchNotifier", comment = "The Blitz Deathmatch Notifier", def = true)
@@ -96,16 +96,16 @@ public class BlitzDeathmatchNotifierModularGuiProvider extends SimpleHudPixelMod
             // update the color
             switch((this.ticksLeft / ANIMATION_TIME) % 4) {
                 case 0:
-                    this.renderingString = EnumChatFormatting.LIGHT_PURPLE + DISPLAY_STRING;
+                    this.renderingString = ChatFormatting.LIGHT_PURPLE + DISPLAY_STRING;
                     break;
                 case 1:
-                    this.renderingString = EnumChatFormatting.YELLOW + DISPLAY_STRING;
+                    this.renderingString = ChatFormatting.YELLOW + DISPLAY_STRING;
                     break;
                 case 2:
-                    this.renderingString = EnumChatFormatting.GREEN + DISPLAY_STRING;
+                    this.renderingString = ChatFormatting.GREEN + DISPLAY_STRING;
                     break;
                 case 3:
-                    this.renderingString = EnumChatFormatting.RED + DISPLAY_STRING;
+                    this.renderingString = ChatFormatting.RED + DISPLAY_STRING;
                     break;
             }*/
 

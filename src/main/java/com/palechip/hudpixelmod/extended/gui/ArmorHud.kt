@@ -7,9 +7,9 @@ import com.palechip.hudpixelmod.config.GeneralConfigSettings
 import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler
 import com.palechip.hudpixelmod.extended.util.IEventHandler
 import com.palechip.hudpixelmod.util.DisplayUtil
-import net.unaussprechlich.managedgui.lib.util.RenderUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
+import net.unaussprechlich.managedgui.lib.util.RenderUtils
 
 /***********************************************************************************************************************
 HudPixelReloaded - License
@@ -80,7 +80,7 @@ object ArmorHud : IEventHandler{
         if(disable_ArmorHud || !Minecraft.getMinecraft().inGameHasFocus) return
 
         for(i in 0..3) {
-            val iStack: ItemStack = Minecraft.getMinecraft().thePlayer.getCurrentArmor(3-i) ?: continue
+            val iStack: ItemStack = Minecraft.getMinecraft().thePlayer.equipmentAndArmor.elementAt(5-i) ?: continue
 
             if(renderVertical_ArmorHud)
                 if(GeneralConfigSettings.hudBackground)

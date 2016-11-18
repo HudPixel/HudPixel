@@ -1,6 +1,7 @@
 package com.palechip.hudpixelmod.config;
 
-import net.minecraft.util.EnumChatFormatting;
+import com.mojang.realmsclient.gui.ChatFormatting;
+import com.palechip.hudpixelmod.extended.util.McColorHelper;
 
 /* **********************************************************************************************************************
  HudPixelReloaded - License
@@ -53,19 +54,19 @@ import net.minecraft.util.EnumChatFormatting;
  * Little HelperEnum to avoid spelling mistakes :P
  * Please add a new category as enum and as static final (const) :)
  */
-public enum CCategory {
+public enum CCategory implements McColorHelper{
 
     //ADD A NEW CATEGORY HERE >>
-    ENUM_UNKNOWN("Unknown", EnumChatFormatting.BLACK),
-    ENUM_BOOSTER_DISPLAY("BoosterDisplay", EnumChatFormatting.GOLD),
-    ENUM_COOLDOWN_DISPLAY("CooldownDisplay", EnumChatFormatting.GOLD),
-    ENUM_FRIENDS_DISPLAY("FriendsDisplay", EnumChatFormatting.GOLD),
-    ENUM_FANCY_CHAT("FancyChat", EnumChatFormatting.GOLD),
-    ENUM_HUDPIXEL("HudPixel", EnumChatFormatting.GOLD),
-    ENUM_WARLORDS("Warlords", EnumChatFormatting.GOLD),
-    ENUM_GENERAL("General", EnumChatFormatting.GOLD),
-    ENUM_HUD("Hud", EnumChatFormatting.GOLD),
-    ENUM_ARMOR_HUD("ArmorHud", EnumChatFormatting.BOLD);
+    ENUM_UNKNOWN("Unknown", com.mojang.realmsclient.gui.ChatFormatting.BLACK),
+    ENUM_BOOSTER_DISPLAY("BoosterDisplay", GOLD),
+    ENUM_COOLDOWN_DISPLAY("CooldownDisplay", GOLD),
+    ENUM_FRIENDS_DISPLAY("FriendsDisplay", GOLD),
+    ENUM_FANCY_CHAT("FancyChat", GOLD),
+    ENUM_HUDPIXEL("HudPixel", GOLD),
+    ENUM_WARLORDS("Warlords", GOLD),
+    ENUM_GENERAL("General", GOLD),
+    ENUM_HUD("Hud", GOLD),
+    ENUM_ARMOR_HUD("ArmorHud", GOLD);
 
     //CAN'T CAST ENUMS IN @ConfigProperty<T> SO HERE ARE SOME STATIC FINALS, WE ALL LOVE STATIC FINALS!!!
     //ALSO ADD HERE >>
@@ -82,11 +83,11 @@ public enum CCategory {
 
 
     private final String name;
-    private final EnumChatFormatting enumChatFormatting;
+    private final ChatFormatting ChatFormatting;
 
-    CCategory(String name, EnumChatFormatting enumChatFormatting) {
+    CCategory(String name, ChatFormatting ChatFormatting) {
         this.name = name;
-        this.enumChatFormatting = enumChatFormatting;
+        this.ChatFormatting = ChatFormatting;
     }
 
     public static CCategory getCategoryByName(String name) {
@@ -100,7 +101,7 @@ public enum CCategory {
         return name;
     }
 
-    public EnumChatFormatting getEnumChatFormatting() {
-        return enumChatFormatting;
+    public ChatFormatting getChatFormatting() {
+        return ChatFormatting;
     }
 }

@@ -46,15 +46,16 @@
 package com.palechip.hudpixelmod.extended.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class DamageReductionCalc {
 
     public static List<String> armorReduct = new ArrayList<String>();
@@ -235,8 +236,9 @@ public class DamageReductionCalc {
             }
         }
 
-        private static void getResistance() {
-            if (mc.thePlayer.isPotionActive(Potion.resistance)) {
+        private static void getResistance() { //TODO
+            /*
+            if (mc.thePlayer.isPotionActive(Potion.getPotionById())) {
                 Collection<PotionEffect> potionEffects = mc.thePlayer.getActivePotionEffects();
                 for (PotionEffect potionEffect : potionEffects) {
                     Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
@@ -246,12 +248,12 @@ public class DamageReductionCalc {
                 }
             } else {
                 resistance = 0;
-            }
+            }*/
         }
 
         private static void getHelmetProtection() {
             if (helmet != 0) {
-                helmetProt = EnchantmentHelper.getEnchantmentLevel(0, mc.thePlayer.inventory.armorItemInSlot(3));
+                helmetProt = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(0), mc.thePlayer.inventory.armorItemInSlot(3));
             } else {
                 helmetProt = 0;
             }
@@ -259,7 +261,7 @@ public class DamageReductionCalc {
 
         private static void getChestplateProtection() {
             if (chest != 0) {
-                chestProt = EnchantmentHelper.getEnchantmentLevel(0, mc.thePlayer.inventory.armorItemInSlot(2));
+                chestProt = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(0), mc.thePlayer.inventory.armorItemInSlot(2));
             } else {
                 chestProt = 0;
             }
@@ -267,7 +269,7 @@ public class DamageReductionCalc {
 
         private static void getPantsProtection() {
             if (pants != 0) {
-                pantsProt = EnchantmentHelper.getEnchantmentLevel(0, mc.thePlayer.inventory.armorItemInSlot(1));
+                pantsProt = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(0), mc.thePlayer.inventory.armorItemInSlot(1));
             } else {
                 pantsProt = 0;
             }
@@ -275,7 +277,7 @@ public class DamageReductionCalc {
 
         private static void getBootsProtection() {
             if (boots != 0) {
-                bootsProt = EnchantmentHelper.getEnchantmentLevel(0, mc.thePlayer.inventory.armorItemInSlot(0));
+                bootsProt = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(0), mc.thePlayer.inventory.armorItemInSlot(0));
             } else {
                 bootsProt = 0;
             }

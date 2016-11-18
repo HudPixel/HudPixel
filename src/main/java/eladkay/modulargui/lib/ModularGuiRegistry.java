@@ -1,10 +1,10 @@
 package eladkay.modulargui.lib;
 
 import com.google.common.collect.Lists;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import eladkay.modulargui.lib.base.EmptyModularGuiProvider;
 import eladkay.modulargui.lib.base.NameModularGuiProvider;
 import eladkay.modulargui.lib.base.StringAbstractModularGuiProvider;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -26,7 +26,7 @@ public class ModularGuiRegistry {
      * Example elements.
      * You should keep a constant of your elements in some sort of registry class.
      */
-    public static final Element TITLE = new Element("", new StringAbstractModularGuiProvider(EnumChatFormatting.AQUA + "Modular" + EnumChatFormatting.GOLD + "Gui"));
+    public static final Element TITLE = new Element("", new StringAbstractModularGuiProvider(ChatFormatting.AQUA + "Modular" + ChatFormatting.GOLD + "Gui"));
     public static final Element NAME = new Element("IGN", new NameModularGuiProvider());
     public static final Element GROUPER = new Element("", new EmptyModularGuiProvider(), true);
 

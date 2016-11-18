@@ -1,8 +1,7 @@
 package com.palechip.hudpixelmod.extended.util;
 
-import net.minecraft.util.EnumChatFormatting;
+import com.mojang.realmsclient.gui.ChatFormatting;
 
-import static net.minecraft.util.EnumChatFormatting.*;
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -56,18 +55,18 @@ public interface McColorHelper {
      * there will be no conflict while extending
      */
 
-    EnumChatFormatting GOLD = EnumChatFormatting.GOLD;
-    EnumChatFormatting WHITE = EnumChatFormatting.WHITE;
-    EnumChatFormatting RED = EnumChatFormatting.RED;
-    EnumChatFormatting BLUE = EnumChatFormatting.BLUE;
-    EnumChatFormatting D_RED = DARK_RED;
-    EnumChatFormatting GRAY = EnumChatFormatting.GRAY;
-    EnumChatFormatting GREEN = EnumChatFormatting.GREEN;
-    EnumChatFormatting D_GRAY = DARK_GRAY;
-    EnumChatFormatting YELLOW = EnumChatFormatting.YELLOW;
-    EnumChatFormatting OBFUSCATED = EnumChatFormatting.OBFUSCATED;
-    EnumChatFormatting ITALIC = EnumChatFormatting.ITALIC;
-    EnumChatFormatting AQUA = EnumChatFormatting.AQUA;
-    EnumChatFormatting D_GREEN = DARK_GREEN;
+    ChatFormatting GOLD = ChatFormatting.GOLD;
+    ChatFormatting WHITE = ChatFormatting.WHITE;
+    ChatFormatting RED = ChatFormatting.RED;
+    ChatFormatting BLUE = ChatFormatting.BLUE;
+    ChatFormatting D_RED = ChatFormatting.DARK_RED;
+    ChatFormatting GRAY = ChatFormatting.GRAY;
+    ChatFormatting GREEN = ChatFormatting.GREEN;
+    ChatFormatting D_GRAY = ChatFormatting.DARK_GRAY;
+    ChatFormatting YELLOW = ChatFormatting.YELLOW;
+    ChatFormatting OBFUSCATED = ChatFormatting.OBFUSCATED;
+    ChatFormatting ITALIC = ChatFormatting.ITALIC;
+    ChatFormatting AQUA = ChatFormatting.AQUA;
+    ChatFormatting D_GREEN = ChatFormatting.DARK_GREEN;
 
 }

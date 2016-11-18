@@ -77,11 +77,11 @@ public class StatsViewerManager {
     public static void onRenderPlayer(Pre event) {
 
         //returns if when the rendered player is the user
-        if (event.entityPlayer.getUniqueID().equals(UUID)) return;
+        if (event.getEntityPlayer().getUniqueID().equals(UUID)) return;
 
         //renders every entry in the map
-        if (statsViewerRenderMap.containsKey(event.entityPlayer.getName()))
-            statsViewerRenderMap.get(event.entityPlayer.getName()).onRenderPlayer(event);
+        if (statsViewerRenderMap.containsKey(event.getEntityPlayer().getName()))
+            statsViewerRenderMap.get(event.getEntityPlayer().getName()).onRenderPlayer(event);
     }
 
     /**

@@ -50,11 +50,13 @@ import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler;
 import com.palechip.hudpixelmod.extended.fancychat.FancyChat;
 import com.palechip.hudpixelmod.extended.util.IEventHandler;
 import com.palechip.hudpixelmod.extended.util.McColorHelper;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -66,6 +68,7 @@ import java.util.Properties;
 /**
  * A small "ego"-class to display the the HudPixel staff with a nice color and tag #abgehoben
  */
+@SideOnly(Side.CLIENT)
 public class StaffManager implements IEventHandler, McColorHelper {
 
 
@@ -94,8 +97,8 @@ public class StaffManager implements IEventHandler, McColorHelper {
      */
     @SubscribeEvent
     public void onPlayerName(PlayerEvent.NameFormat e) {
-        if (tags.keySet().contains(e.username) || e.username.contains("PixelPlus")) {
-            e.displayname = tags.get(e.username) + e.displayname;
+        if (tags.keySet().contains(e.getUsername()) || e.getUsername().contains("PixelPlus")) {
+            e.setDisplayname(tags.get(e.getUsername()) + e.getDisplayname());
         }
     }
 
@@ -142,15 +145,15 @@ public class StaffManager implements IEventHandler, McColorHelper {
      */
     @Override
     public void onChatReceived(ClientChatReceivedEvent e) throws Throwable {
-        if (e.type != 0) return; //return if it isn't a normal chat message
-        if (e.message.getUnformattedText().contains("http"))
+        if (e.getType() != 0) return; //return if it isn't a normal chat message
+        if (e.getMessage().getUnformattedText().contains("http"))
             return; //return if the message contains a link .... so you can still click it :)
 
 
         for (String s : tags.keySet()) { //for admins
-            if (e.message.getUnformattedText().contains(s + ":") || e.message.getUnformattedText().startsWith(s + ":")) {
-                e.message = new ChatComponentText(e.message.getFormattedText().replaceFirst(s, tags.get(s) + s));
-                FancyChat.getInstance().addMessage(e.message.getFormattedText());
+            if (e.getMessage().getUnformattedText().contains(s + ":") || e.getMessage().getUnformattedText().startsWith(s + ":")) {
+                e.setMessage(new TextComponentString(e.getMessage().getFormattedText().replaceFirst(s, tags.get(s) + s)));
+                FancyChat.getInstance().addMessage(e.getMessage().getFormattedText());
                 return;
             }
         }

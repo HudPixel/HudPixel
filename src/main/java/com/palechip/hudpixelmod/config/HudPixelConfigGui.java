@@ -86,7 +86,7 @@ public class HudPixelConfigGui extends GuiConfig {
         return configCategoryMap.keySet()
                 .stream()
                 .map(cCategory -> new DummyConfigElement.DummyCategoryElement(
-                        cCategory.getEnumChatFormatting() + cCategory.getName(),
+                        cCategory.getChatFormatting() + cCategory.getName(),
                         "",
                         configCategoryMap.get(cCategory)))
                 .collect(Collectors.toList());

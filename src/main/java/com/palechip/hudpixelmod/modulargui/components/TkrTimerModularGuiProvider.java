@@ -45,6 +45,7 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.config.CCategory;
@@ -52,7 +53,6 @@ import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.extended.util.McColorHelper;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.util.ArrayList;
@@ -169,10 +169,10 @@ public class TkrTimerModularGuiProvider extends SimpleHudPixelModularGuiProvider
         } else {
             if (this.running) {
                 // show the result if the timer is running
-                return EnumChatFormatting.YELLOW + "Lap " + this.lap + ": " + this.runningTime;
+                return ChatFormatting.YELLOW + "Lap " + this.lap + ": " + this.runningTime;
             } else {
                 // return the official time if it isn't running. This may also be empty if it hasn't started yet
-                return this.officialTime.isEmpty() ? "" : EnumChatFormatting.YELLOW + "Lap " + this.lap + ": " + this.officialTime;
+                return this.officialTime.isEmpty() ? "" : ChatFormatting.YELLOW + "Lap " + this.lap + ": " + this.officialTime;
             }
         }
     }

@@ -52,13 +52,16 @@ import com.palechip.hudpixelmod.api.interaction.callbacks.PlayerResponseCallback
 import com.palechip.hudpixelmod.extended.util.LoggerHelper;
 import com.palechip.hudpixelmod.util.ChatMessageComposer;
 import net.hypixel.api.reply.PlayerReply;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 import static com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo;
 
+@SideOnly(Side.CLIENT)
 public abstract class AbstractStatsViewer implements IGameStatsViewer, PlayerResponseCallback{
 
     protected ArrayList<String> renderList;
@@ -135,7 +138,7 @@ public abstract class AbstractStatsViewer implements IGameStatsViewer, PlayerRes
             composeStats();
             return;
         }
-        new ChatMessageComposer("Failed to load stats for: " + playerUUID + "!", EnumChatFormatting.RED).send();
+        new ChatMessageComposer("Failed to load stats for: " + playerUUID + "!", TextFormatting.RED).send();
         renderList.add(RED + "FAILED!");
     }
 }

@@ -46,6 +46,7 @@
 package com.palechip.hudpixelmod.modulargui;
 
 import com.google.common.collect.Lists;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.extended.fancychat.FancyChat;
 import com.palechip.hudpixelmod.extended.update.UpdateNotifier;
@@ -54,16 +55,18 @@ import com.palechip.hudpixelmod.modulargui.components.*;
 import com.palechip.hudpixelmod.modulargui.modules.PlayGameModularGuiProvider;
 import eladkay.modulargui.lib.ModularGuiRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class ModularGuiHelper implements McColorHelper {
     public static final ModularGuiRegistry.Element TITLE = new ModularGuiRegistry.Element("simp0", new SimpleTitleModularGuiProvider());
     //ik i have these backwards
@@ -81,9 +84,9 @@ public class ModularGuiHelper implements McColorHelper {
     public static final ModularGuiRegistry.Element WALLS2_KILLCOUNTER = new ModularGuiRegistry.Element("simp4", new WallsKillCounterModularGuiProvider());
     public static final ModularGuiRegistry.Element WALLS3_KILLCOUNTER = new ModularGuiRegistry.Element("simp5", new MWKillCounterModularGuiProvider());
     public static final ModularGuiRegistry.Element PB_KILLSTREAK_TRACKER = new ModularGuiRegistry.Element("simp6", new PaintballKillstreakTrackerModularGuiProvider());
-    public static final ModularGuiRegistry.Element WARLORDS_DAMAGE_TRACKER = new ModularGuiRegistry.Element(EnumChatFormatting.RED + "Damage", new WarlordsDamageAndHealingCounterModularGuiProvider(WarlordsDamageAndHealingCounterModularGuiProvider.Type.Damage));
-    public static final ModularGuiRegistry.Element WARLORDS_HEALING_TRACKER = new ModularGuiRegistry.Element(EnumChatFormatting.GREEN + "Healing", new WarlordsDamageAndHealingCounterModularGuiProvider(WarlordsDamageAndHealingCounterModularGuiProvider.Type.Healing));
-    public static final ModularGuiRegistry.Element PLAY_GAME_MODULE = new ModularGuiRegistry.Element(EnumChatFormatting.DARK_RED + "Game", new PlayGameModularGuiProvider());
+    public static final ModularGuiRegistry.Element WARLORDS_DAMAGE_TRACKER = new ModularGuiRegistry.Element(ChatFormatting.RED + "Damage", new WarlordsDamageAndHealingCounterModularGuiProvider(WarlordsDamageAndHealingCounterModularGuiProvider.Type.Damage));
+    public static final ModularGuiRegistry.Element WARLORDS_HEALING_TRACKER = new ModularGuiRegistry.Element(ChatFormatting.GREEN + "Healing", new WarlordsDamageAndHealingCounterModularGuiProvider(WarlordsDamageAndHealingCounterModularGuiProvider.Type.Healing));
+    public static final ModularGuiRegistry.Element PLAY_GAME_MODULE = new ModularGuiRegistry.Element(ChatFormatting.DARK_RED + "Game", new PlayGameModularGuiProvider());
     public static List<IHudPixelModularGuiProviderBase> providers = Lists.newArrayList();
 
     public static void init() {
@@ -175,13 +178,13 @@ public class ModularGuiHelper implements McColorHelper {
      **/
     private static void printMessage(String message) {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(
-                new ChatComponentText(message));
+                new TextComponentString(message));
     }
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent e) {
         for (IHudPixelModularGuiProviderBase provider : providers)
-            provider.onChatMessage(e.message.getUnformattedText(), e.message.getFormattedText());
+            provider.onChatMessage(e.getMessage().getUnformattedText(), e.getMessage().getFormattedText());
     }
 
     @SubscribeEvent

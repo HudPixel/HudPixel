@@ -45,11 +45,14 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.config.GeneralConfigSettings;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class SimpleTitleModularGuiProvider extends SimpleHudPixelModularGuiProvider {
     @Override
     public boolean doesMatchForGame() {
@@ -88,7 +91,7 @@ public class SimpleTitleModularGuiProvider extends SimpleHudPixelModularGuiProvi
 
     @Override
     public String content() {
-        return EnumChatFormatting.AQUA + "HudPixel Reloaded " + HudPixelMod.DEFAULT_VERSION;
+        return ChatFormatting.AQUA + "HudPixel Reloaded " + HudPixelMod.DEFAULT_VERSION;
     }
 
     @Override

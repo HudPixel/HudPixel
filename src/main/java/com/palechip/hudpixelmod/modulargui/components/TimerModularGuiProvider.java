@@ -45,16 +45,16 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 
 public class TimerModularGuiProvider extends HudPixelModularGuiProvider {
     public static final TimerModularGuiProvider instance = new TimerModularGuiProvider();
-    public static final String TIME_DISPLAY_MESSAGE = EnumChatFormatting.YELLOW + "Time";
+    public static final String TIME_DISPLAY_MESSAGE = ChatFormatting.YELLOW + "Time";
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "timer", comment = "The Game Timer", def = true)
     public static boolean enabled = false;
     private long tickTime = 0;

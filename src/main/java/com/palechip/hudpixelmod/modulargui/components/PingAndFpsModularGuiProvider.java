@@ -50,17 +50,19 @@ import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.OldServerPinger;
+import net.minecraft.client.network.ServerPinger;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.net.UnknownHostException;
-
+@SideOnly(Side.CLIENT)
 public class PingAndFpsModularGuiProvider extends HudPixelModularGuiProvider {
     private static final int pingCooldwonMs = 2000;
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "pingFps", comment = "The Ping/FPS Display", def = true)
     public static boolean enabled = false;
     private static long nextTimeStamp;
     private static long lastValidPing;
-    private static OldServerPinger serverPinger = new OldServerPinger();
+    private static ServerPinger serverPinger = new ServerPinger();
     private static String pingString;
     PingOrFps pingOrFps;
 
@@ -90,7 +92,7 @@ public class PingAndFpsModularGuiProvider extends HudPixelModularGuiProvider {
                 && Minecraft.getMinecraft().getCurrentServerData().pingToServer > 0) {
             lastValidPing = Minecraft.getMinecraft().getCurrentServerData().pingToServer;
             pingString =
-                    // EnumChatFormatting.WHITE
+                    // ChatFormatting.WHITE
                            /* + */""
                     + lastValidPing
                     + "ms";

@@ -29,12 +29,16 @@ package com.palechip.hudpixelmod.extended.util;
 
 import com.palechip.hudpixelmod.HudPixelMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-
+@SideOnly(Side.CLIENT)
 public class SoundManager {
 
     public static void playSound(Sounds name) {
-        Minecraft.getMinecraft().thePlayer.playSound(HudPixelMod.MODID + ":" + name, 5, 1);
+        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation(HudPixelMod.MODID + ":" + name)), 5, 1);
     }
 
     public enum Sounds {

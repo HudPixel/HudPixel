@@ -45,8 +45,8 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.modules;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
-import net.minecraft.util.EnumChatFormatting;
 
 public class PlayGameModularGuiProvider extends HudPixelModularGuiProvider {
 
@@ -90,9 +90,9 @@ public class PlayGameModularGuiProvider extends HudPixelModularGuiProvider {
     @Override
     public String content() {
         if (content.equals("solo_insane") || content.equals("solo_normal") || content.equals("team_insane") || content.equals("team_normal"))
-            return EnumChatFormatting.AQUA + "Press P to play " + EnumChatFormatting.BLUE + "SkyWars";
+            return ChatFormatting.AQUA + "Press P to play " + ChatFormatting.BLUE + "SkyWars";
         if (content.equals("blitz_solo_insane"))
-            return EnumChatFormatting.AQUA + "Press P to play " + EnumChatFormatting.BLUE + "BSG";
+            return ChatFormatting.AQUA + "Press P to play " + ChatFormatting.BLUE + "BSG";
         return content;
     }
 

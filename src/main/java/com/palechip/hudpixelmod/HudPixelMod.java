@@ -47,7 +47,6 @@ package com.palechip.hudpixelmod;
 
 import com.google.common.collect.Lists;
 import com.palechip.hudpixelmod.chat.WarlordsDamageChatFilter;
-import com.palechip.hudpixelmod.command.*;
 import com.palechip.hudpixelmod.config.EasyConfigHandler;
 import com.palechip.hudpixelmod.config.HudPixelConfigGui;
 import com.palechip.hudpixelmod.extended.HudPixelExtended;
@@ -62,7 +61,6 @@ import eladkay.modulargui.lib.Renderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -95,14 +93,14 @@ import static com.palechip.hudpixelmod.HudPixelMod.SHORT_VERSION;
         name = HudPixelMod.NAME,
         clientSideOnly = true,
         guiFactory = "com.palechip.hudpixelmod.config.HudPixelGuiFactory",
-        acceptedMinecraftVersions = "1.8.9"
+        acceptedMinecraftVersions = "1.9.4"
 )
 @SideOnly(Side.CLIENT)
 public class HudPixelMod {
 
     public static final String MODID = "hudpixel";
     public static final String SHORT_VERSION = "3.0"; // only to be used for the annotation which requires such a constant.
-    public static final String DEFAULT_VERSION = "3.2.7dev";
+    public static final String DEFAULT_VERSION = "3.2.7dev MC1.9.4";
     public static final String HYPIXEL_DOMAIN = "hypixel.net";
     static final String NAME = "HudPixel Reloaded";
     // key related vars
@@ -178,12 +176,14 @@ public class HudPixelMod {
             CONFIG = new Configuration(event.getSuggestedConfigurationFile());
             HudPixelMod.CONFIG.load();
 
+            /*
             ClientCommandHandler.instance.registerCommand(new GameCommand());
             ClientCommandHandler.instance.registerCommand(new ScoreboardCommand());
             ClientCommandHandler.instance.registerCommand(new GameDetectorCommand());
             ClientCommandHandler.instance.registerCommand(new BookVerboseInfoCommand());
             ClientCommandHandler.instance.registerCommand(DiscordCommand.INSTANCE);
             ClientCommandHandler.instance.registerCommand(NameCommand.INSTANCE);
+            */
             new HudPixelMethodHandles();
             // Initialize the logger
             this.LOGGER = LogManager.getLogger("HudPixel");
@@ -223,6 +223,7 @@ public class HudPixelMod {
         if (IS_DEBUGGING) {
             this.debugKey = new KeyBinding("DEBUG KEY", Keyboard.KEY_J, KEY_CATEGORY);
             ClientRegistry.registerKeyBinding(this.debugKey);
+            //yeah
         }
     }
 
@@ -230,7 +231,7 @@ public class HudPixelMod {
     public void onChatMessage(ClientChatReceivedEvent event) {
         try {
             if (isHypixelNetwork()) {
-                if (event.type == 0) { // this one reads the normal chat messages
+                if (event.getType() == 0) { // this one reads the normal chat messages
                     this.warlordsChatFilter.onChat(event);
                 }
             }

@@ -58,12 +58,14 @@ import com.palechip.hudpixelmod.modulargui.ModularGuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ import java.util.ArrayList;
 import static com.palechip.hudpixelmod.HudPixelMod.MODID;
 import static com.palechip.hudpixelmod.util.DisplayUtil.getMcScale;
 
-
+@SideOnly(Side.CLIENT)
 public class HudPixelExtendedEventHandler {
 
     private static final long clickDelay = 1000;
@@ -156,14 +158,14 @@ public class HudPixelExtendedEventHandler {
      **/
     private static void printMessage(String message) {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(
-                new ChatComponentText(message));
+                new TextComponentString(message));
     }
 
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
         try {
             // This event isn't bound to the Hypixel Network
-            if (eventArgs.modID.equals(MODID)) {
+            if (eventArgs.getModID().equals(MODID)) {
                 EasyConfigHandler.INSTANCE.synchronize();
                 getIeventBuffer().forEach(IEventHandler::onConfigChanged);
             }
@@ -301,7 +303,7 @@ public class HudPixelExtendedEventHandler {
     public void onRenderTick(RenderGameOverlayEvent.Post e) {
         try {
             //Don't do anything unless we are on Hypixel
-            if (HudPixelMod.isHypixelNetwork() && e.type == RenderGameOverlayEvent.ElementType.ALL && !e.isCancelable()) {
+            if (HudPixelMod.isHypixelNetwork() && e.getType() == RenderGameOverlayEvent.ElementType.ALL && !e.isCancelable()) {
                 getIeventBuffer().forEach(IEventHandler::onRender);
                 if (FancyChat.enabled) FancyChat.getInstance().onRenderTick();
             }

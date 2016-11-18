@@ -45,16 +45,16 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 
 public class BlitzStarTrackerModularGuiProvider extends HudPixelModularGuiProvider {
 
-    public static final String DISPLAY_MESSAGE = EnumChatFormatting.DARK_GREEN + "Blitz Star";
+    public static final String DISPLAY_MESSAGE = ChatFormatting.DARK_GREEN + "Blitz Star";
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "blitzStarTracker", comment = "The Blitz Star Tracker", def = true)
     public static boolean enabled = false;
     private final long DURATION = 60000; // = 60s The blitz star ability only lasts 30s. It's intentionally inaccurate.
@@ -138,16 +138,16 @@ public class BlitzStarTrackerModularGuiProvider extends HudPixelModularGuiProvid
                 return "Not released";
             case HIDDEN:
                 // it's hidden
-                return EnumChatFormatting.YELLOW + "Hidden";
+                return ChatFormatting.YELLOW + "Hidden";
             case FOUND:
                 // tell the player who had it.
-                return EnumChatFormatting.LIGHT_PURPLE + (this.owner.isEmpty() ? "Found" : this.owner);
+                return ChatFormatting.LIGHT_PURPLE + (this.owner.isEmpty() ? "Found" : this.owner);
             case ACTIVE:
-                return EnumChatFormatting.RED + this.owner + " -> " + this.activatedBlitz;
+                return ChatFormatting.RED + this.owner + " -> " + this.activatedBlitz;
             case FORFEIT:
             case USED:
                 // it's gone
-                return EnumChatFormatting.GREEN + "Gone";
+                return ChatFormatting.GREEN + "Gone";
         }
         return "";
     }

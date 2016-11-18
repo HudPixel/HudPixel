@@ -50,15 +50,14 @@ import com.palechip.hudpixelmod.util.ScoreboardReader;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import static com.palechip.hudpixelmod.GameDetector.stripColor;
 
+@SideOnly(Side.CLIENT)
 public class ScoreboardCommand extends CommandBase {
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
 
     @Override
     public String getCommandName() {
@@ -71,13 +70,11 @@ public class ScoreboardCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         ScoreboardReader.resetCache();
         String title = ScoreboardReader.getScoreboardTitle();
         title = stripColor(title).toLowerCase();
         System.out.println(title);
         new ChatMessageComposer("\"" + title + "\"").send();
     }
-
-
 }

@@ -45,21 +45,21 @@
  **********************************************************************************************************************/
 package com.palechip.hudpixelmod.modulargui.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.extended.util.McColorHelper;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class MWKillCounterModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelper {
-    private static final String KILL_DISPLAY = EnumChatFormatting.AQUA + "Kills: " + EnumChatFormatting.RED;
-    private static final String FINAL_KILL_DISPLAY = EnumChatFormatting.BLUE + "Final Kills: " + EnumChatFormatting.RED;
-    private static final String ASSISTS_DISPLAY = EnumChatFormatting.AQUA + "" + EnumChatFormatting.ITALIC + "Assists: " + EnumChatFormatting.DARK_GRAY;
-    private static final String FINAL_ASSISTS_DISPLAY = EnumChatFormatting.BLUE + "" + EnumChatFormatting.ITALIC + "Final Assists: " + EnumChatFormatting.DARK_GRAY;
-    private static final String WITHER_COINS_DISPLAY = EnumChatFormatting.GOLD + "Wither Coins: ";
+    private static final String KILL_DISPLAY = ChatFormatting.AQUA + "Kills: " + ChatFormatting.RED;
+    private static final String FINAL_KILL_DISPLAY = ChatFormatting.BLUE + "Final Kills: " + ChatFormatting.RED;
+    private static final String ASSISTS_DISPLAY = ChatFormatting.AQUA + "" + ChatFormatting.ITALIC + "Assists: " + ChatFormatting.DARK_GRAY;
+    private static final String FINAL_ASSISTS_DISPLAY = ChatFormatting.BLUE + "" + ChatFormatting.ITALIC + "Final Assists: " + ChatFormatting.DARK_GRAY;
+    private static final String WITHER_COINS_DISPLAY = ChatFormatting.GOLD + "Wither Coins: ";
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "megaWallsKillCounter", comment = "The MW Kill Tracker", def = true)
     public static boolean enabled = false;
     private KillType trackedType = KillType.Normal;

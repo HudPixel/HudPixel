@@ -27,19 +27,21 @@
 package net.unaussprechlich.managedgui.lib.util;
 
 import com.palechip.hudpixelmod.config.GeneralConfigSettings;
-import net.unaussprechlich.managedgui.lib.util.storage.StorageFourSide;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.unaussprechlich.managedgui.lib.util.storage.StorageFourSide;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class RenderUtils {
 
     public static void renderItemStackWithText(int id, int meta, int xStart, int yStart, String overlay){
@@ -115,7 +117,7 @@ public class RenderUtils {
     public static void renderBoxWithColor(float xStart, float yStart, int width, int height, ColorRGBA color) {
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        net.minecraft.client.renderer.VertexBuffer worldrenderer = tessellator.getBuffer();
 
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
@@ -138,7 +140,7 @@ public class RenderUtils {
                                           float red, float green, float blue, float alpha){
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        net.minecraft.client.renderer.VertexBuffer worldrenderer = tessellator.getBuffer();
 
         GlStateManager.popMatrix();
         GlStateManager.enableBlend();
@@ -175,7 +177,7 @@ public class RenderUtils {
         float f = 1.0F / height;
         float f1 = 1.0F / width;
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        net.minecraft.client.renderer.VertexBuffer worldrenderer = tessellator.getBuffer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos((double) x, (double) (y + height), 0.0D).tex((double) (width * f), (double) ((height + height) * f1)).endVertex();
         worldrenderer.pos((double) (x + width), (double) (y + height), 0.0D).tex((double) ((width + width) * f), (double) ((height + height) * f1)).endVertex();

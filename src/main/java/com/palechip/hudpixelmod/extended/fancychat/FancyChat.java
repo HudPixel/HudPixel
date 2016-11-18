@@ -46,27 +46,30 @@
 
 package com.palechip.hudpixelmod.extended.fancychat;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.config.ConfigPropertyInt;
 import com.palechip.hudpixelmod.extended.util.MessageBuffer;
 import com.palechip.hudpixelmod.extended.util.SoundManager;
-import net.unaussprechlich.managedgui.lib.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.unaussprechlich.managedgui.lib.util.RenderUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.palechip.hudpixelmod.extended.fancychat.FancyChatFilter.*;
 
+@SideOnly(Side.CLIENT)
 public class FancyChat {
 
     // [SETTING] the offset between each chatline (in ms)
@@ -167,7 +170,7 @@ public class FancyChat {
         // add a the secound spacer for the party-invite message
         if (spacerPartyRequired) {
             this.printMessage(nothing);
-            this.printMessage(EnumChatFormatting.GOLD + spacer);
+            this.printMessage(ChatFormatting.GOLD + spacer);
             spacerPartyRequired = false;
         }
 
@@ -196,7 +199,7 @@ public class FancyChat {
      * @param e The chat event
      */
     public void onChat(ClientChatReceivedEvent e) {
-        String message = e.message.getUnformattedText().replace("§6[Hud§4Admin§6]§4", ""); //ffs
+        String message = e.getMessage().getUnformattedText().replace("§6[Hud§4Admin§6]§4", ""); //ffs
         //System.out.println(message);
         // [IF] it is a partyinventation
         if (message.contains(partyInvite1) || message.contains(partyInvite2)) {
@@ -207,7 +210,7 @@ public class FancyChat {
             e.setCanceled(true);
 
         } else if (fancyChatChecker(message)) {
-            addFancyChatEntry(e.message.getFormattedText());
+            addFancyChatEntry(e.getMessage().getFormattedText());
 
             //playes a sound when the player recieves a message
             if (!message.contains(" " + Minecraft.getMinecraft().thePlayer.getName() + ": ")) {
@@ -215,13 +218,13 @@ public class FancyChat {
             }
 
         } else if (message.startsWith("From ")) {
-            addFancyChatEntry(e.message.getFormattedText());
+            addFancyChatEntry(e.getMessage().getFormattedText());
 
             SoundManager.playSound(SoundManager.Sounds.NOTIFICATION_SHORT2);
 
             // [IF] the message is a FancyChatMessage
         } else if (message.startsWith("To ")) {
-            addFancyChatEntry(e.message.getFormattedText());
+            addFancyChatEntry(e.getMessage().getFormattedText());
         } else if (HudPixelMod.IS_DEBUGGING) {
             if (message.startsWith("<aussprechlich2> messagebuffer.clear")) {
                 fancyChatMessages.messageBuffer.clear();
@@ -364,9 +367,9 @@ public class FancyChat {
     private void partyChecker(String message, ClientChatReceivedEvent e) {
 
         if (message.contains(partyInvite1)) {
-            this.printMessage(EnumChatFormatting.GOLD + spacer);
+            this.printMessage(ChatFormatting.GOLD + spacer);
             this.printMessage(nothing);
-            this.printMessage(e.message.getFormattedText());
+            this.printMessage(e.getMessage().getFormattedText());
             e.setCanceled(true);
             SoundManager.playSound(SoundManager.Sounds.NOTIFICATION_OLDSCHOOLMESSAGE);
 
@@ -407,7 +410,7 @@ public class FancyChat {
      **/
     private void printMessage(String message) {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(
-                new ChatComponentText(message));
+                new TextComponentString(message));
     }
 
     /**

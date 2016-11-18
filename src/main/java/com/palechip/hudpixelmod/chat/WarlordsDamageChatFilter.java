@@ -52,10 +52,13 @@ import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.config.ConfigPropertyInt;
 import com.palechip.hudpixelmod.util.GameType;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SideOnly(Side.CLIENT)
 public class WarlordsDamageChatFilter {
     public static final String take = "\u00AB";
     public static final String give = "\u00BB";
@@ -111,7 +114,7 @@ public class WarlordsDamageChatFilter {
         if (GameDetector.getCurrentGameType().equals(GameType.WARLORDS)) {
             // isHypixelNetwork if the filter is enabled
             if (warlordsFilterDamageDone > 0 || warlordsFilterDamageTaken > 0 || warlordsFilterHealingDone > 0 || warlordsFilterHealingReceived > 0 || warlordsFilterAbsorbtion || warlordsFilterWounded) {
-                String message = e.message.getUnformattedText();
+                String message = e.getMessage().getUnformattedText();
                 // incoming
                 if (message.startsWith(take)) {
                     // healing
