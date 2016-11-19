@@ -1,8 +1,13 @@
 package com.palechip.hudpixelmod.extended.statsviewer.gamemodes;
 
 import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer;
+import com.palechip.hudpixelmod.extended.util.McColorHelper;
 
 import java.util.UUID;
+
+import static net.minecraft.util.text.TextFormatting.DARK_GRAY;
+import static net.minecraft.util.text.TextFormatting.GOLD;
+import static net.minecraft.util.text.TextFormatting.GRAY;
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -49,16 +54,16 @@ import java.util.UUID;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public class ArenaStatsViewer extends AbstractStatsViewer {
+public class ArenaStatsViewer extends AbstractStatsViewer implements McColorHelper {
 
     /*
     *Lets add some static finals. Players love static finals.
     */
-    private static final String COINS = D_GRAY + " [" + GRAY + "Coins" + D_GRAY + "] ";
-    private static final String WINS = D_GRAY + " [" + GRAY + "Wins" + D_GRAY + "] ";
-    private static final String KILLS = D_GRAY + " [" + GRAY + "Kills" + D_GRAY + "] ";
-    private static final String DEATHS = D_GRAY + " [" + GRAY + "Deaths" + D_GRAY + "] ";
-    private static final String KD = D_GRAY + " [" + GRAY + "K/D" + D_GRAY + "] ";
+    private static final String COINS = DARK_GRAY + " [" + GRAY + "Coins" + DARK_GRAY + "] ";
+    private static final String WINS = DARK_GRAY + " [" + GRAY + "Wins" + DARK_GRAY + "] ";
+    private static final String KILLS = DARK_GRAY + " [" + GRAY + "Kills" + DARK_GRAY + "] ";
+    private static final String DEATHS = DARK_GRAY + " [" + GRAY + "Deaths" + DARK_GRAY + "] ";
+    private static final String KD = DARK_GRAY + " [" + GRAY + "K/D" + DARK_GRAY + "] ";
     private int coins;
     private int kills;
     private int deaths;
@@ -71,8 +76,8 @@ public class ArenaStatsViewer extends AbstractStatsViewer {
     }
 
     private void generateRenderList() {
-        renderList.add(COINS + GOLD + this.coins + WINS + GOLD + this.wins);
-        renderList.add(KILLS + GOLD + this.kills + DEATHS + GOLD + this.deaths + KD + GOLD + this.kd);
+        getRenderList().add(COINS + GOLD + this.coins + WINS + GOLD + this.wins);
+        getRenderList().add(KILLS + GOLD + this.kills + DEATHS + GOLD + this.deaths + KD + GOLD + this.kd);
     }
 
     @Override

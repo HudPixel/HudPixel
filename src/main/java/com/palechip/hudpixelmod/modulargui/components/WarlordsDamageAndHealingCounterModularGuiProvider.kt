@@ -43,139 +43,130 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.modulargui.components;
+package com.palechip.hudpixelmod.modulargui.components
 
-import com.palechip.hudpixelmod.GameDetector;
-import com.palechip.hudpixelmod.HudPixelMod;
-import com.palechip.hudpixelmod.chat.WarlordsDamageChatFilter;
-import com.palechip.hudpixelmod.config.CCategory;
-import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
-import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
-import com.palechip.hudpixelmod.util.GameType;
+import com.palechip.hudpixelmod.GameDetector
+import com.palechip.hudpixelmod.HudPixelMod
+import com.palechip.hudpixelmod.chat.WarlordsDamageChatFilter
+import com.palechip.hudpixelmod.config.CCategory
+import com.palechip.hudpixelmod.config.ConfigPropertyBoolean
+import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider
+import com.palechip.hudpixelmod.util.GameType
+import com.palechip.hudpixelmod.util.McColorHelperJava
+import net.minecraft.util.text.TextFormatting
+import java.util.regex.Pattern
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+class WarlordsDamageAndHealingCounterModularGuiProvider(private val type: WarlordsDamageAndHealingCounterModularGuiProvider.Type) : HudPixelModularGuiProvider(), McColorHelperJava {
+    private var count: Int = 0
 
-public class WarlordsDamageAndHealingCounterModularGuiProvider extends HudPixelModularGuiProvider {
-    @ConfigPropertyBoolean(category = CCategory.WARLORDS, id = "warlordsDamageAndHealthCounter", comment = "The Warlords Damage And Health Tracker", def = true)
-    public static boolean enabled = false;
-    private Type type;
-    private int count;
-
-    public WarlordsDamageAndHealingCounterModularGuiProvider(Type type) {
-        this.type = type;
+    override fun doesMatchForGame(): Boolean {
+        return GameDetector.doesGameTypeMatchWithCurrent(GameType.WARLORDS) && !GameDetector.isLobby() && enabled
     }
 
-    /**
-     * @return The damage or health. 0 in case of failure.
-     */
-    public static int getDamageOrHealthValue(String message) {
-        try {
-            // filter !, which highlights critical damage/health
-            message = message.replace("!", "");
-
-            // do some regex magic
-            Pattern p = Pattern.compile("\\s[0-9]+\\s");
-            Matcher m = p.matcher(message);
-            if (!m.find()) {
-                // We failed :(
-                return 0;
-            }
-            // save the result
-            String result = m.group();
-            // if there is a second match, we'll use that because the first was an all number username in this case
-            if (m.find()) {
-                result = m.group();
-            }
-
-            // and cast it into an integer (without whitespace)
-            return Integer.valueOf(result.replace(" ", ""));
-        } catch (Exception e) {
-            HudPixelMod.INSTANCE.logDebug("Failed to extract damage from this message: " + message);
-        }
-        // We failed :(
-        return 0;
+    override fun setupNewGame() {
+        this.count = 0
     }
 
-    @Override
-    public boolean doesMatchForGame() {
-        return GameDetector.doesGameTypeMatchWithCurrent(GameType.WARLORDS) && !GameDetector.isLobby() && enabled;
+    operator fun TextFormatting.plus(string: String) = "$this$string"
+    override fun onGameStart() {
     }
 
-    @Override
-    public void setupNewGame() {
-        this.count = 0;
+    override fun onGameEnd() {
     }
 
-    @Override
-    public void onGameStart() {
+    override fun onTickUpdate() {
     }
 
-    @Override
-    public void onGameEnd() {
-    }
-
-    @Override
-    public void onTickUpdate() {
-    }
-
-    @Override
-    public void onChatMessage(String textMessage, String formattedMessage) {
+    override fun onChatMessage(textMessage: String, formattedMessage: String) {
         // incoming
         if (textMessage.startsWith(WarlordsDamageChatFilter.give)) {
             // healing
             if (this.type == Type.Healing && textMessage.contains(WarlordsDamageChatFilter.healing)) {
-                this.count += getDamageOrHealthValue(textMessage);
+                this.count += getDamageOrHealthValue(textMessage)
             }
             // damage
             if (this.type == Type.Damage && !textMessage.contains(WarlordsDamageChatFilter.absorption) && !textMessage.contains(WarlordsDamageChatFilter.healing)) {
-                this.count += getDamageOrHealthValue(textMessage);
+                this.count += getDamageOrHealthValue(textMessage)
             }
         }
     }
 
-    public String getRenderingString() {
-        // if the played class doens't have access to healing, they won't be bothered.
-        if (this.count == 0 && this.type == Type.Healing) {
-            return "";
+    // if the played class doens't have access to healing, they won't be bothered.
+    // format into xxx.x
+    //eladkay: yes, I know.
+    val renderingString: String
+        get() {
+            if (this.count == 0 && this.type == Type.Healing) {
+                return ""
+            }
+            val formatted = Math.round(this.count / 100.0) / 10.0
+            when (this.type) {
+                WarlordsDamageAndHealingCounterModularGuiProvider.Type.Healing -> return "${formatted}k"
+                WarlordsDamageAndHealingCounterModularGuiProvider.Type.Damage -> return "${formatted}k"
+            }
+            return ""
         }
 
-        // format into xxx.x
-        double formatted = Math.round(this.count / 100.0) / 10.0;
-
-        //eladkay: yes, I know.
-        switch (this.type) {
-            case Healing:
-                return formatted + "k";
-            case Damage:
-                return formatted + "k";
-        }
-        return "";
+    override fun showElement(): Boolean {
+        return doesMatchForGame()
     }
 
-    @Override
-    public boolean showElement() {
-        return doesMatchForGame();
+    override fun content(): String {
+        return renderingString
     }
 
-    @Override
-    public String content() {
-        return getRenderingString();
+    override fun ignoreEmptyCheck(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean ignoreEmptyCheck() {
-        return false;
-    }
-
-    @Override
-    public String getAfterstats() {
+    override fun getAfterstats(): String {
         if (type == Type.Damage) {
-            return YELLOW + "You dealt a total of " + RED + count + " damage.\n";
+            return TextFormatting.YELLOW + "You dealt a total of " + TextFormatting.RED + count + " damage.\n"
         } else {
-            return YELLOW + "You dealt a total of " + GREEN + count + " healing.";
+            return TextFormatting.YELLOW + "You dealt a total of " + TextFormatting.GREEN + count + " healing."
         }
     }
 
-    public enum Type {Damage, Healing}
+    enum class Type {
+        Damage, Healing
+    }
+
+    companion object {
+        @ConfigPropertyBoolean(category = CCategory.WARLORDS, id = "warlordsDamageAndHealthCounter", comment = "The Warlords Damage And Health Tracker", def = true)
+        @JvmStatic
+        var enabled = false
+
+        /**
+         * @return The damage or health. 0 in case of failure.
+         */
+        fun getDamageOrHealthValue(message: String): Int {
+            var message = message
+            try {
+                // filter !, which highlights critical damage/health
+                message = message.replace("!", "")
+
+                // do some regex magic
+                val p = Pattern.compile("\\s[0-9]+\\s")
+                val m = p.matcher(message)
+                if (!m.find()) {
+                    // We failed :(
+                    return 0
+                }
+                // save the result
+                var result = m.group()
+                // if there is a second match, we'll use that because the first was an all number username in this case
+                if (m.find()) {
+                    result = m.group()
+                }
+
+                // and cast it into an integer (without whitespace)
+                return Integer.valueOf(result.replace(" ", ""))!!
+            } catch (e: Exception) {
+                HudPixelMod.logDebug("Failed to extract damage from this message: " + message)
+            }
+
+            // We failed :(
+            return 0
+        }
+    }
 }

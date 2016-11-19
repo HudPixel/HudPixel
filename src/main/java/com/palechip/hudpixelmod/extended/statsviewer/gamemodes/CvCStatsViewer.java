@@ -1,6 +1,7 @@
 package com.palechip.hudpixelmod.extended.statsviewer.gamemodes;
 
 import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ import java.util.UUID;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public class CvCStatsViewer extends AbstractStatsViewer {
+public class CvCStatsViewer extends AbstractStatsViewer implements McColorHelperJava {
 
 
     /*
@@ -77,10 +78,10 @@ public class CvCStatsViewer extends AbstractStatsViewer {
     }
 
     private void generateRenderList() {
-        renderList.add(ROUND_WINS + GOLD + this.round_wins + COINS + GOLD + this.coins);
-        renderList.add(BOMBS_DEFUSED + GOLD + this.bombs_defused + BOMBS_PLANTED + GOLD + this.bombs_planted);
-        renderList.add(HEADSHOT_KILLS + GOLD + this.headshot_kills);
-        renderList.add(KILLS + GOLD + this.kills + DEATHS + GOLD + this.deaths + KD + GOLD + this.kd);
+        getRenderList().add(ROUND_WINS + GOLD + this.round_wins + COINS + GOLD + this.coins);
+        getRenderList().add(BOMBS_DEFUSED + GOLD + this.bombs_defused + BOMBS_PLANTED + GOLD + this.bombs_planted);
+        getRenderList().add(HEADSHOT_KILLS + GOLD + this.headshot_kills);
+        getRenderList().add(KILLS + GOLD + this.kills + DEATHS + GOLD + this.deaths + KD + GOLD + this.kd);
 
     }
 

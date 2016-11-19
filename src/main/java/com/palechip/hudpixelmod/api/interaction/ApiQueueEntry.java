@@ -73,7 +73,7 @@ public class ApiQueueEntry{
     }
 
     public void execute(){
-        LoggerHelper.logInfo(debugInfo + "Making a request: " + request.getURL(HypixelAPI.getInstance()));
+        LoggerHelper.INSTANCE.logInfo(debugInfo + "Making a request: " + request.getURL(HypixelAPI.getInstance()));
 
         switch (request.getRequestType()){
             case BOOSTERS: executeBoosterRequest(); break;

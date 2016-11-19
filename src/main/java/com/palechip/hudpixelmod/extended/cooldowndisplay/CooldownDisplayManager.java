@@ -52,6 +52,7 @@ import com.palechip.hudpixelmod.config.ConfigPropertyInt;
 import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler;
 import com.palechip.hudpixelmod.extended.util.IEventHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
@@ -123,5 +124,35 @@ public class CooldownDisplayManager implements IEventHandler {
 
     @Override
     public void onChatReceived(ClientChatReceivedEvent e) throws Throwable {
+    }
+
+    @Override
+    public void everyTenTICKS() {
+
+    }
+
+    @Override
+    public void everySEC() {
+
+    }
+
+    @Override
+    public void everyFiveSEC() {
+
+    }
+
+    @Override
+    public void everyMIN() {
+
+    }
+
+    @Override
+    public void openGUI(GuiScreen guiScreen) {
+
+    }
+
+    @Override
+    public void onConfigChanged() {
+
     }
 }

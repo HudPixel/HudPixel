@@ -1,7 +1,9 @@
-package com.palechip.hudpixelmod.extended.util;
+package com.palechip.hudpixelmod.extended.onlinefriends
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
 
+import com.palechip.hudpixelmod.extended.util.ImageLoader.chatLocation
+import net.minecraft.client.Minecraft.getMinecraft
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -48,25 +50,11 @@ import com.mojang.realmsclient.gui.ChatFormatting;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public interface McColorHelper {
+class OnlineFriendsMessageButton(internal var playerName:
 
-    /**
-     * A class can just extend another class .... so I used a interface to ensure
-     * there will be no conflict while extending
-     */
+                                 String) : FancyListButton(1f, 0f, 0f, chatLocation()) {
 
-    ChatFormatting GOLD = ChatFormatting.GOLD;
-    ChatFormatting WHITE = ChatFormatting.WHITE;
-    ChatFormatting RED = ChatFormatting.RED;
-    ChatFormatting BLUE = ChatFormatting.BLUE;
-    ChatFormatting D_RED = ChatFormatting.DARK_RED;
-    ChatFormatting GRAY = ChatFormatting.GRAY;
-    ChatFormatting GREEN = ChatFormatting.GREEN;
-    ChatFormatting D_GRAY = ChatFormatting.DARK_GRAY;
-    ChatFormatting YELLOW = ChatFormatting.YELLOW;
-    ChatFormatting OBFUSCATED = ChatFormatting.OBFUSCATED;
-    ChatFormatting ITALIC = ChatFormatting.ITALIC;
-    ChatFormatting AQUA = ChatFormatting.AQUA;
-    ChatFormatting D_GREEN = ChatFormatting.DARK_GREEN;
-
+    override fun onClick() {
+        getMinecraft().thePlayer.sendChatMessage("/msg " + playerName)
+    }
 }

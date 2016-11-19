@@ -1,10 +1,7 @@
-package com.palechip.hudpixelmod.extended.util.gui;
+package com.palechip.hudpixelmod.extended.util
 
-import net.minecraft.util.ResourceLocation;
+import com.palechip.hudpixelmod.HudPixelMod
 
-import static net.unaussprechlich.managedgui.lib.util.RenderUtils.drawModalRectWithCustomSizedTexture;
-import static net.unaussprechlich.managedgui.lib.util.RenderUtils.renderBoxWithColor;
-import static java.lang.Math.round;
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -51,44 +48,24 @@ import static java.lang.Math.round;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public abstract class FancyListButton {
+object LoggerHelper {
 
-    public boolean isHover;
-    private float xStart = -1;
-    private float yStart = -1;
-    private ResourceLocation resourceLocation;
+    private val LOGGER = HudPixelMod.logger
 
-    private float r;
-    private float g;
-    private float b;
-
-    protected FancyListButton(float r, float g, float b, ResourceLocation resourceLocation) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.resourceLocation = resourceLocation;
+    fun logInfo(s: String) {
+        LOGGER!!.info("[Extended]" + s)
     }
 
-    protected abstract void onClick();
-
-    void onMouseClick(int mX, int mY) {
-        if (isHover && mX > xStart && mX < xStart + 140 && mY > yStart && mY < yStart + 24)
-            onClick();
+    fun logWarn(s: String) {
+        LOGGER!!.warn("[Extended]" + s)
     }
 
-    void onMouseInput(int mX, int mY) {
-        if (xStart < 0 || yStart < 0) return;
-        isHover = mX > xStart && mX < xStart + 24 && mY > yStart && mY < yStart + 24;
+    fun logError(s: String) {
+        LOGGER!!.error("[Extended]" + s)
     }
 
-    void onRender(float xStart, float yStart) {
-        this.xStart = xStart;
-        this.yStart = yStart;
-        if (!isHover) renderBoxWithColor(xStart, yStart, 24, 24, r, g, b, 0.5f); //draws the background
-        else renderBoxWithColor(xStart, yStart, 24, 24, r, g, b, 0.8f);
-        drawModalRectWithCustomSizedTexture( //draws the image shown
-                round(xStart), round(yStart), 0, 0,
-                24, 24, 24, 24, resourceLocation, 1f);
+    fun logDebug(s: String) {
+        LOGGER!!.debug("[Debug]" + s)
     }
+
 }
-

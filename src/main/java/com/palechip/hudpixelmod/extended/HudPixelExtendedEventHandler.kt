@@ -132,7 +132,7 @@ object HudPixelExtendedEventHandler {
                 for (i in ieventBuffer)
                     i.openGUI(Minecraft.getMinecraft().currentScreen)
                 if (Minecraft.getMinecraft().thePlayer != null)
-                    OnlineFriendManager.getInstance()
+                    OnlineFriendManager
                 FancyChat.getInstance().openGui()
 
             }

@@ -72,7 +72,7 @@ object HudPixelExtended {
         UUID = Minecraft.getMinecraft().session.profile.id
         boosterManager = BoosterManager()
         staffManager = StaffManager()
-        ApiManager.getINSTANCE().setup()
+        ApiManager
 
         CooldownDisplayManager.getInstance()
         ArmorHud

@@ -1,8 +1,3 @@
-package com.palechip.hudpixelmod.extended.util;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
  * <p>
@@ -48,44 +43,84 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public interface IEventHandler {
 
-    default void onClientTick() {
+package com.palechip.hudpixelmod.extended.onlinefriends
+
+import com.palechip.hudpixelmod.api.interaction.callbacks.SessionResponseCallback
+import com.palechip.hudpixelmod.api.interaction.representations.Session
+import com.palechip.hudpixelmod.extended.data.player.PlayerDatabase
+import com.palechip.hudpixelmod.extended.util.ILoadPlayerHeadCallback
+import com.palechip.hudpixelmod.extended.util.LoadPlayerHead
+import com.palechip.hudpixelmod.extended.util.McColorHelper
+import com.palechip.hudpixelmod.extended.util.gui.FancyListObject
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.TextFormatting
+import java.util.*
+
+
+class OnlineFriend
+/**
+ * Constructor ... also loads the playerhead
+ * @param gamemode current string to render
+ */
+internal constructor(private val playerUUID: UUID, internal var gamemode: String?) : FancyListObject(), ILoadPlayerHeadCallback, SessionResponseCallback, McColorHelper {
+    var isOnline: Boolean = false
+    internal val username:
+
+            String
+
+    operator fun TextFormatting.plus(string: String?) = "$this$string"
+    operator fun String.plus(string: TextFormatting?) = "$this$string"
+
+    init {
+        this.username = PlayerDatabase.getPlayerByUUID(playerUUID).name
+
+
+        this.resourceLocation = null
+
+        this.renderLine1 = TextFormatting.GRAY + "o " + TextFormatting.GOLD + username
+        this.renderLine2 = TextFormatting.GRAY + gamemode
+        this.renderLineSmall = TextFormatting.GRAY + "o " + TextFormatting.YELLOW + username
+        this.renderPicture = TextFormatting.WHITE + ""
+
+        LoadPlayerHead(username, this)
     }
 
-    default void everyTenTICKS(){
-
-    }
-
-    default void everySEC(){
-
-    }
-
-    default void everyFiveSEC(){
-
-    }
-
-    default void everyMIN(){
-
-    }
-
-    default void onChatReceived(ClientChatReceivedEvent e) throws Throwable {
-    }
-
-    default void onRender() {
-    }
-
-    default void handleMouseInput(int i, int mX, int mY) {
-    }
-
-    default void onMouseClick(int mX, int mY) {
-    }
-
-    default void openGUI(GuiScreen guiScreen) {
-    }
-
-    default void onConfigChanged() {
+    internal fun setOnline(isOnline: Boolean?) {
+        this.isOnline = isOnline!!
     }
 
 
+    override fun onTick() {
+        if (!OnlineFriendManager.enabled) return
+        if (isOnline && this.fancyListObjectButtons.isEmpty()) {
+            this.addButton(OnlineFriendsMessageButton(username))
+            this.addButton(OnlineFriendsPartyButton(username))
+        } else if (!isOnline) {
+            this.fancyListObjectButtons.clear()
+        }
+        if (isOnline)
+            this.renderLine1 = TextFormatting.GOLD + username + TextFormatting.GREEN + "  "
+        else
+            this.renderLine1 = TextFormatting.GOLD + username + TextFormatting.DARK_RED + "  "
+        this.renderLine2 = gamemode
+        if (isOnline)
+            this.renderLineSmall = TextFormatting.YELLOW + username + TextFormatting.GREEN + "  "
+        else
+            this.renderLineSmall = TextFormatting.YELLOW + username + TextFormatting.DARK_RED + " "
+    }
+
+    override fun onLoadPlayerHeadResponse(resourceLocation: ResourceLocation?) {
+        if (resourceLocation != null) {
+            this.resourceLocation = resourceLocation
+        }
+    }
+
+    override fun onSessionRespone(session: Session) {
+        println(session.toString())
+        gamemode = TextFormatting.GREEN + session.replyGameType
+    }
 }
+
+
+

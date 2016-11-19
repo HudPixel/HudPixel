@@ -44,189 +44,208 @@
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
-package com.palechip.hudpixelmod.extended.onlinefriends;
+package com.palechip.hudpixelmod.extended.onlinefriends
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler;
-import com.palechip.hudpixelmod.extended.util.IEventHandler;
-import com.palechip.hudpixelmod.extended.util.LoggerHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.HashMap;
+import com.mojang.realmsclient.gui.ChatFormatting
+import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler
+import com.palechip.hudpixelmod.extended.util.IEventHandler
+import com.palechip.hudpixelmod.extended.util.LoggerHelper
+import com.palechip.hudpixelmod.util.plus
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiScreen
+import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
+import java.util.*
 
 @SideOnly(Side.CLIENT)
-public class OnlineFriendsUpdater implements IEventHandler {
-
-    //######################################################################################################################
-    // [SETTING] the friendlist separation message
-    private static final String SEPARATION_MESSAGE = "-----------------------------------------------------";
-    // [SETTING] the friendlist headline message
-    private static final String FRIENDS_LIST_START = "Friends (Page ";
-    // [SETTING] the friendlist offline message
-    private static final String IS_CURRENTLY_OFFLINE = " is currently offline";
-    // [SETTING] time between every request(in ms)
-    private static final int REQUEST_DELAY = 5000;
+class OnlineFriendsUpdater internal constructor(private val callback: IUpdater) : IEventHandler {
     //######################################################################################################################
 
-    private HashMap<String, String> onlineFriends = new HashMap<String, String>();
-    private boolean friendListExpected = false;
-    private boolean friendsListStarted = false;
-    private boolean maybeFriendsList = false;
-    private long lastRequest = 0;
-    private boolean hasFinished = false;
+    private val onlineFriends = HashMap<String, String>()
+    private var friendListExpected = false
+    private var friendsListStarted = false
+    private var maybeFriendsList = false
+    private var lastRequest: Long = 0
+    private var hasFinished = false
 
-    private int count = 0;
-    private int page = 1;
-    private boolean requestNextPage = false;
+    private var count = 0
+    private var page = 1
+    private var requestNextPage = false
 
-    private IUpdater callback;
-
-    OnlineFriendsUpdater(IUpdater iUpdater) {
-        LoggerHelper.logInfo("[OnlineFriends][Updater]: going to update your online friends!");
-        HudPixelExtendedEventHandler.registerIEvent(this);
-        onlineFriends.clear();
-        callback = iUpdater;
-        requestPage(1);
+    init {
+        LoggerHelper.logInfo("[OnlineFriends][Updater]: going to update your online friends!")
+        HudPixelExtendedEventHandler.registerIEvent(this)
+        onlineFriends.clear()
+        requestPage(1)
     }
 
-    private void requestPage(int page) {
-        requestNextPage = false;
-        lastRequest = System.currentTimeMillis();
-        if (Minecraft.getMinecraft().thePlayer == null) return;
-        friendListExpected = true;
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("/f list " + page);
+    private fun requestPage(page: Int) {
+        requestNextPage = false
+        lastRequest = System.currentTimeMillis()
+        if (Minecraft.getMinecraft().thePlayer == null) return
+        friendListExpected = true
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/f list " + page)
     }
 
     /**
      * function which checks if the friendlist is outdated and if there is another
      * request for a second,... /f list X command
-     *
+
      * @firedBY HudPixelExtendedEventHandler > onClientTick()
      */
-    @Override
-    public void onClientTick() {
-        if (requestNextPage && System.currentTimeMillis() > (lastRequest + REQUEST_DELAY)) {
-            LoggerHelper.logInfo("[OnlineFriends][Updater]: Why do you have so many friends ... i will request page " + page + " now!");
-            requestPage(page);
+    override fun onClientTick() {
+        if (requestNextPage && System.currentTimeMillis() > lastRequest + REQUEST_DELAY) {
+            LoggerHelper.logInfo("[OnlineFriends][Updater]: Why do you have so many friends ... i will request page $page now!")
+            requestPage(page)
         }
     }
 
     /**
      * listens to the chatevents if there is a requested friendlist
-     *
+
      * @param e ClientChatReceivedEven
+     * *
      * @firedBY HudPixelExtendedEventHandler > onChat()
      */
-    @Override
-    public void onChatReceived(ClientChatReceivedEvent e) throws Throwable {
+    @Throws(Throwable::class)
+    override fun onChatReceived(e: ClientChatReceivedEvent) {
         //TODO: THIS IS PRETTY AF ... I NEED MORE VARS TO MAKE IT WORK ... YOU CAN STILL UNDERSTAND HOW IT SEPARATES o.O
         // checks first if there is a request
         if (friendListExpected) {
-            String m = e.getMessage().getUnformattedText();
+            val m = e.message.unformattedText
             //starts and stops the friendlistchatparser by the separation message
 
             if (m.startsWith(SEPARATION_MESSAGE)) {
                 if (friendsListStarted) {
-                    resetFriendList(false);
+                    resetFriendList(false)
                 } else {
-                    maybeFriendsList = true;
+                    maybeFriendsList = true
                 }
 
             } else if (maybeFriendsList) {
                 if (m.contains(FRIENDS_LIST_START)) {
-                    maybeFriendsList = false;
-                    friendsListStarted = true;
+                    maybeFriendsList = false
+                    friendsListStarted = true
                 } else
-                    resetFriendList(true);
+                    resetFriendList(true)
             } else if (m.contains(IS_CURRENTLY_OFFLINE)) {
-                hasFinished = true;
+                hasFinished = true
             } else if (!m.contains(IS_CURRENTLY_OFFLINE) && friendsListStarted) {
-                count++;
+                count++
                 if (count >= 8) {
-                    page++;
-                    requestNextPage = true;
+                    page++
+                    requestNextPage = true
                 }
-                chatParser(m);
+                chatParser(m)
             }
 
 
             // deletes the message
-            e.setCanceled(true);
+            e.isCanceled = true
         }
     }
 
     /**
      * a internal function which separates the message and extracts player, game and servertype
-     *
+
      * @param m message to parse
      */
-    private void chatParser(String m) {
+    private fun chatParser(m: String) {
 
 
         //splits the string
-        String[] singleWords = m.split(" ");
+        val singleWords = m.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         //the first element has to be the playername
-        String playerName = singleWords[0];
-        String gameType = ChatFormatting.GRAY + "in an unknown realm.";
+        val playerName = singleWords[0]
+        var gameType = ChatFormatting.GRAY + "in an unknown realm."
 
         //if the player is in any gamemode game/lobby
-        if (singleWords[3].equalsIgnoreCase("a")) {
+        if (singleWords[3].equals("a", ignoreCase = true)) {
 
-            if (singleWords[singleWords.length - 1].equalsIgnoreCase("game"))
-                gameType = ChatFormatting.RED + singleWords[4];
-            else if (singleWords[singleWords.length - 1].equalsIgnoreCase("lobby"))
-                gameType = ChatFormatting.GREEN + singleWords[4];
+            if (singleWords[singleWords.size - 1].equals("game", ignoreCase = true))
+                gameType = ChatFormatting.RED + singleWords[4]
+            else if (singleWords[singleWords.size - 1].equals("lobby", ignoreCase = true))
+                gameType = ChatFormatting.GREEN + singleWords[4]
 
             //needed to add support for games like Crazy Walls who are written in two words
-            for (int i = 5; i < singleWords.length; i++) {
-                gameType += " ";
-                gameType += singleWords[i];
+            for (i in 5..singleWords.size - 1) {
+                gameType += " "
+                gameType += singleWords[i]
             }
 
             // if the player is in housing
-        } else if (singleWords[3].equalsIgnoreCase("housing"))
-            gameType = ChatFormatting.GREEN + singleWords[3];
-
-            // if the player is idling in the limbo
-        else if (singleWords[2].equalsIgnoreCase("idle"))
-            gameType = ChatFormatting.GRAY + "idle in Limbo";
-        LoggerHelper.logInfo("[OnlineFriends][Updater]: [" + playerName + "] -> " + gameType);
-        onlineFriends.put(playerName, gameType);
+        } else if (singleWords[3].equals("housing", ignoreCase = true))
+            gameType = ChatFormatting.GREEN + singleWords[3]
+        else if (singleWords[2].equals("idle", ignoreCase = true))
+            gameType = ChatFormatting.GRAY + "idle in Limbo"// if the player is idling in the limbo
+        LoggerHelper.logInfo("[OnlineFriends][Updater]: [$playerName] -> $gameType")
+        onlineFriends.put(playerName, gameType)
     }
 
-    private void resetFriendList(boolean error) {
+    private fun resetFriendList(error: Boolean) {
         if (error) {
-            callback.onUpdaterResponse(null);
-            LoggerHelper.logInfo("[OnlineFriends][Updater]: Something went wrong on Page: " + page + " Line: " + count + "!");
-            HudPixelExtendedEventHandler.unregisterIEvent(this);
-            callback.onUpdaterResponse(null);
+            callback.onUpdaterResponse(null)
+            LoggerHelper.logInfo("[OnlineFriends][Updater]: Something went wrong on Page: $page Line: $count!")
+            HudPixelExtendedEventHandler.unregisterIEvent(this)
+            callback.onUpdaterResponse(null)
         } else {
             if (hasFinished) {
-                HudPixelExtendedEventHandler.unregisterIEvent(this);
-                callback.onUpdaterResponse(onlineFriends);
+                HudPixelExtendedEventHandler.unregisterIEvent(this)
+                callback.onUpdaterResponse(onlineFriends)
             }
-            friendsListStarted = false;
-            maybeFriendsList = false;
-            friendListExpected = false;
-            hasFinished = false;
+            friendsListStarted = false
+            maybeFriendsList = false
+            friendListExpected = false
+            hasFinished = false
         }
     }
 
-    @Override
-    public void onRender() {
+    override fun onRender() {
     }
 
-    @Override
-    public void handleMouseInput(int i, int mX, int mY) {
+    override fun handleMouseInput(i: Int, mX: Int, mY: Int) {
     }
 
-    @Override
-    public void onMouseClick(int mX, int mY) {
+    override fun onMouseClick(mX: Int, mY: Int) {
     }
 
 
+    override fun everyTenTICKS() {
+
+    }
+
+    override fun everySEC() {
+
+    }
+
+    override fun everyFiveSEC() {
+
+    }
+
+    override fun everyMIN() {
+
+    }
+
+    override fun openGUI(guiScreen: GuiScreen?) {
+
+    }
+
+    override fun onConfigChanged() {
+
+    }
+
+    companion object {
+
+        //######################################################################################################################
+        // [SETTING] the friendlist separation message
+        private val SEPARATION_MESSAGE = "-----------------------------------------------------"
+        // [SETTING] the friendlist headline message
+        private val FRIENDS_LIST_START = "Friends (Page "
+        // [SETTING] the friendlist offline message
+        private val IS_CURRENTLY_OFFLINE = " is currently offline"
+        // [SETTING] time between every request(in ms)
+        private val REQUEST_DELAY = 5000
+    }
 }

@@ -1,6 +1,7 @@
 package com.palechip.hudpixelmod.extended.statsviewer.gamemodes;
 
 import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ import java.util.UUID;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public class UHCStatsViewer extends AbstractStatsViewer {
+public class UHCStatsViewer extends AbstractStatsViewer implements McColorHelperJava {
 
 
     /*
@@ -74,9 +75,9 @@ public class UHCStatsViewer extends AbstractStatsViewer {
 
 
     private void generateRenderList() {
-        renderList.add(" "/*This is a placeholder*/);
-        renderList.add(COINS + GOLD + this.coins + SCORE + GOLD + this.score);
-        renderList.add(KILLS + GOLD + this.kills + DEATHS + GOLD + this.deaths + KD + GOLD + this.kd);
+        getRenderList().add(" "/*This is a placeholder*/);
+        getRenderList().add(COINS + GOLD + this.coins + SCORE + GOLD + this.score);
+        getRenderList().add(KILLS + GOLD + this.kills + DEATHS + GOLD + this.deaths + KD + GOLD + this.kd);
 
     }
 

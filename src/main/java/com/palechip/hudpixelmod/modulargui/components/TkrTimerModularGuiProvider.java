@@ -50,14 +50,14 @@ import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
-import com.palechip.hudpixelmod.extended.util.McColorHelper;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.util.ArrayList;
 
-public class TkrTimerModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelper {
+public class TkrTimerModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelperJava {
     public static final String LAP_COMPLETION_MESSAGE_REGEX = "(Lap \\d Completed!).*";
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "kartRacersAccurateTimeDisplay", comment = "The TKR Time Tracker", def = true)
     public static boolean enabled = false;

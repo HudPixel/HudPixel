@@ -78,7 +78,7 @@ object ArmorProtectionModularGuiProvider : HudPixelModularGuiProvider() {
 
     override fun onTickUpdate() {
         if (Minecraft.getMinecraft().thePlayer != null)
-            content = DamageReductionCalc.getReduction()[2]
+            content = DamageReductionCalc.reduction[2]
     }
 
     override fun onChatMessage(textMessage: String?, formattedMessage: String?) {

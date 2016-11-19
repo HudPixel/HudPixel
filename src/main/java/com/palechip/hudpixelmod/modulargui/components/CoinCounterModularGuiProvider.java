@@ -49,8 +49,9 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 
-public class CoinCounterModularGuiProvider extends HudPixelModularGuiProvider {
+public class CoinCounterModularGuiProvider extends HudPixelModularGuiProvider implements McColorHelperJava {
 
     public static final String COINS_DISPLAY_TEXT = ChatFormatting.GOLD + "Coins";
     protected int coins;

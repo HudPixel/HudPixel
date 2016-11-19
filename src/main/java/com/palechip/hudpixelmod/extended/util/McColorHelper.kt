@@ -1,9 +1,7 @@
-package com.palechip.hudpixelmod.extended.onlinefriends;
+package com.palechip.hudpixelmod.extended.util
 
-import com.palechip.hudpixelmod.extended.util.gui.FancyListButton;
+import com.mojang.realmsclient.gui.ChatFormatting
 
-import static com.palechip.hudpixelmod.extended.util.ImageLoader.chatLocation;
-import static net.minecraft.client.Minecraft.getMinecraft;
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -50,17 +48,27 @@ import static net.minecraft.client.Minecraft.getMinecraft;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public class OnlineFriendsMessageButton extends FancyListButton {
+interface McColorHelper {
+    companion object {
 
-    String playerName;
+        /**
+         * A class can just extend another class .... so I used a interface to ensure
+         * there will be no conflict while extending
+         */
 
-    protected OnlineFriendsMessageButton(String playerName) {
-        super(1f, 0f, 0f, chatLocation());
-        this.playerName = playerName;
+        val GOLD = ChatFormatting.GOLD
+        val WHITE = ChatFormatting.WHITE
+        val RED = ChatFormatting.RED
+        val BLUE = ChatFormatting.BLUE
+        val D_RED = ChatFormatting.DARK_RED
+        val GRAY = ChatFormatting.GRAY
+        val GREEN = ChatFormatting.GREEN
+        val D_GRAY = ChatFormatting.DARK_GRAY
+        val YELLOW = ChatFormatting.YELLOW
+        val OBFUSCATED = ChatFormatting.OBFUSCATED
+        val ITALIC = ChatFormatting.ITALIC
+        val AQUA = ChatFormatting.AQUA
+        val D_GREEN = ChatFormatting.DARK_GREEN
     }
 
-    @Override
-    protected void onClick() {
-        getMinecraft().thePlayer.sendChatMessage("/msg " + playerName);
-    }
 }

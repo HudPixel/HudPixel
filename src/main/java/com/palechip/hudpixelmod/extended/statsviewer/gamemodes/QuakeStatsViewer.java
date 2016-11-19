@@ -1,6 +1,7 @@
 package com.palechip.hudpixelmod.extended.statsviewer.gamemodes;
 
 import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ import java.util.UUID;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public class QuakeStatsViewer extends AbstractStatsViewer{
+public class QuakeStatsViewer extends AbstractStatsViewer implements McColorHelperJava {
 
 
     /*
@@ -81,10 +82,10 @@ public class QuakeStatsViewer extends AbstractStatsViewer{
 
 
     private void generateRenderList() {
-        renderList.add(SOLO_WINS + GOLD + this.solo_wins + TEAM_WINS + GOLD + this.team_wins);
-        renderList.add(TEAM_KILLS + GOLD + this.team_kills + TEAM_DEATHS + GOLD + this.team_deaths + TEAM_KD + GOLD + this.team_kd);
-        renderList.add(SOLO_KILLS + GOLD + this.solo_kills + SOLO_DEATHS + GOLD + this.solo_deaths + SOLO_KD + GOLD + this.solo_kd);
-        renderList.add(TRIGGER + GOLD + this.trigger);
+        getRenderList().add(SOLO_WINS + GOLD + this.solo_wins + TEAM_WINS + GOLD + this.team_wins);
+        getRenderList().add(TEAM_KILLS + GOLD + this.team_kills + TEAM_DEATHS + GOLD + this.team_deaths + TEAM_KD + GOLD + this.team_kd);
+        getRenderList().add(SOLO_KILLS + GOLD + this.solo_kills + SOLO_DEATHS + GOLD + this.solo_deaths + SOLO_KD + GOLD + this.solo_kd);
+        getRenderList().add(TRIGGER + GOLD + this.trigger);
     }
 
     @Override

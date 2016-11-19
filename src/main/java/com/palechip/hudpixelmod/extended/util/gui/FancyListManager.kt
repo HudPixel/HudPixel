@@ -43,157 +43,159 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.extended.util.gui;
+package com.palechip.hudpixelmod.extended.util.gui
 
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler;
-import com.palechip.hudpixelmod.extended.util.IEventHandler;
-import com.palechip.hudpixelmod.util.DisplayUtil;
-import net.minecraft.client.gui.GuiScreen;
+import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler
+import com.palechip.hudpixelmod.extended.util.IEventHandler
+import com.palechip.hudpixelmod.util.DisplayUtil
+import net.minecraft.client.gui.GuiScreen
+import java.util.*
 
-import java.util.ArrayList;
+abstract class FancyListManager(protected var shownObjects: Int, xStart: Float, yStart: Float, renderRightSide: Boolean) : IEventHandler {
+    protected var isButtons = false
+    protected var isMouseHander = false
+    protected var xStart = 2f
+    protected var yStart = 2f
+    protected var renderRightSide = false
 
-import static com.palechip.hudpixelmod.extended.util.gui.FancyListObject.loadingBar;
+    protected var fancyListObjects = ArrayList<FancyListObject>()
+    private var indexScroll = 0
 
-public abstract class FancyListManager implements IEventHandler {
-
-    /**
-     * process the current loadingbar value
-     */
-    private static int tickCounter = 0;
-    protected int shownObjects;
-    protected boolean isButtons = false;
-    protected boolean isMouseHander = false;
-    protected float xStart = 2;
-    protected float yStart = 2;
-    protected boolean renderRightSide = false;
-
-    protected ArrayList<FancyListObject> fancyListObjects = new ArrayList<FancyListObject>();
-    private int indexScroll = 0;
-
-    public FancyListManager(int shownObjects, float xStart, float yStart, boolean renderRightSide) {
-        this.shownObjects = shownObjects;
-        this.xStart = xStart;
-        this.yStart = yStart;
-        this.renderRightSide = renderRightSide;
-        HudPixelExtendedEventHandler.registerIEvent(this);
+    init {
+        this.xStart = xStart
+        this.yStart = yStart
+        this.renderRightSide = renderRightSide
+        HudPixelExtendedEventHandler.registerIEvent(this)
     }
 
-    public static void processLoadingBar() {
-        if (tickCounter >= 2) {
-            if (loadingBar >= 15) loadingBar = 0;
-            else loadingBar++;
-            tickCounter = 0;
-        } else tickCounter++;
+    fun size(): Int {
+        return fancyListObjects.size
     }
 
-    public int size() {
-        return fancyListObjects.size();
+    override fun openGUI(guiScreen: GuiScreen?) {
+        indexScroll = 0
     }
 
-    @Override
-    public void openGUI(GuiScreen guiScreen) {
-        indexScroll = 0;
+    override fun onConfigChanged() {
+        this.renderRightSide = configRenderRight
+        this.xStart = configxStart.toFloat()
+        this.yStart = configyStart.toFloat()
     }
 
-    @Override
-    public void onConfigChanged() {
-        this.renderRightSide = getConfigRenderRight();
-        this.xStart = getConfigxStart();
-        this.yStart = getConfigyStart();
-    }
+    abstract val configxStart: Int
 
-    public abstract int getConfigxStart();
+    abstract val configyStart: Int
 
-    public abstract int getConfigyStart();
-
-    public abstract boolean getConfigRenderRight();
+    abstract val configRenderRight: Boolean
 
     /**
      * this really renders nothing it just sets rge right offset for each element
      */
-    protected void renderDisplay() {
+    protected fun renderDisplay() {
 
-        if (fancyListObjects.isEmpty()) return;
+        if (fancyListObjects.isEmpty()) return
 
-        float xStart = this.xStart;
-        float yStart = this.yStart;
+        var xStart = this.xStart
+        var yStart = this.yStart
 
-        if (renderRightSide) xStart = DisplayUtil.getScaledMcWidth() - xStart - 140;
+        if (renderRightSide) xStart = DisplayUtil.getScaledMcWidth().toFloat() - xStart - 140f
 
-        if (fancyListObjects.size() <= shownObjects) {
-            yStart += 13;
-            for (FancyListObject fco : fancyListObjects) {
-                fco.onRenderTick(false, xStart, yStart, renderRightSide);
-                yStart += 25;
+        if (fancyListObjects.size <= shownObjects) {
+            yStart += 13f
+            for (fco in fancyListObjects) {
+                fco.onRenderTick(false, xStart, yStart, renderRightSide)
+                yStart += 25f
             }
-            return;
+            return
         }
 
-        if (indexScroll > 0) fancyListObjects.get(indexScroll - 1).onRenderTick(true, xStart, yStart, renderRightSide);
-        yStart += 13;
+        if (indexScroll > 0) fancyListObjects[indexScroll - 1].onRenderTick(true, xStart, yStart, renderRightSide)
+        yStart += 13f
 
-        for (int i = indexScroll; i <= indexScroll + shownObjects - 1; i++) {
-            fancyListObjects.get(i).onRenderTick(false, xStart, yStart, renderRightSide);
-            yStart += 25;
+        for (i in indexScroll..indexScroll + shownObjects - 1) {
+            fancyListObjects[i].onRenderTick(false, xStart, yStart, renderRightSide)
+            yStart += 25f
         }
 
         if (indexScroll + shownObjects <= size() - 1)
-            fancyListObjects.get(indexScroll + shownObjects).onRenderTick(true, xStart, yStart, renderRightSide);
+            fancyListObjects[indexScroll + shownObjects].onRenderTick(true, xStart, yStart, renderRightSide)
     }
 
 
-    @Override
-    public void onMouseClick(int mX, int mY) {
-        if (!isMouseHander) return;
-        if (fancyListObjects.isEmpty()) return;
-        if (fancyListObjects.size() <= shownObjects)
-            for (FancyListObject fco : fancyListObjects)
-                fco.onMouseClick(mX, mY);
-        else for (int i = indexScroll; i <= indexScroll + shownObjects - 1; i++) {
-            if (isButtons)
-                fancyListObjects.get(i).onMouseClick(mX, mY);
-        }
+    override fun onMouseClick(mX: Int, mY: Int) {
+        if (!isMouseHander) return
+        if (fancyListObjects.isEmpty()) return
+        if (fancyListObjects.size <= shownObjects)
+            for (fco in fancyListObjects)
+                fco.onMouseClick(mX, mY)
+        else
+            for (i in indexScroll..indexScroll + shownObjects - 1) {
+                if (isButtons)
+                    fancyListObjects[i].onMouseClick(mX, mY)
+            }
     }
 
     /**
      * handels the scrollinput and processes the right index for the list
-     *
+
      * @param i scroll input
      */
 
-    @Override
-    public void handleMouseInput(int i, int mX, int mY) {
-        if (!isMouseHander) return;
-        if (fancyListObjects.isEmpty()) return;
-        if (fancyListObjects.size() <= shownObjects)
-            for (FancyListObject fco : fancyListObjects)
-                fco.onMouseInput(mX, mY);
-        else for (int fco = indexScroll; fco <= indexScroll + shownObjects - 1; fco++) {
-            if (isButtons)
-                fancyListObjects.get(fco).onMouseInput(mX, mY);
-        }
+    override fun handleMouseInput(i: Int, mX: Int, mY: Int) {
+        if (!isMouseHander) return
+        if (fancyListObjects.isEmpty()) return
+        if (fancyListObjects.size <= shownObjects)
+            for (fco in fancyListObjects)
+                fco.onMouseInput(mX, mY)
+        else
+            for (fco in indexScroll..indexScroll + shownObjects - 1) {
+                if (isButtons)
+                    fancyListObjects[fco].onMouseInput(mX, mY)
+            }
 
-        if (mY > (26 * shownObjects + 28)) return;
+        if (mY > 26 * shownObjects + 28) return
         if (renderRightSide) {
-            float xStart = DisplayUtil.getScaledMcWidth() - this.xStart - 140;
-            if (mX < xStart || mX > xStart + 140) return;
-        } else if (mX > 140 + xStart) return;
+            val xStart = DisplayUtil.getScaledMcWidth().toFloat() - this.xStart - 140f
+            if (mX < xStart || mX > xStart + 140) return
+        } else if (mX > 140 + xStart) return
 
         if (i != 0) {
             if (i < 0) {
-                if (indexScroll >= (size() - shownObjects)) {
-                    indexScroll = size() - shownObjects;
+                if (indexScroll >= size() - shownObjects) {
+                    indexScroll = size() - shownObjects
                 } else {
-                    indexScroll++;
+                    indexScroll++
                 }
             } else if (i > 0) {
                 if (indexScroll - 1 <= 0) {
-                    indexScroll = 0;
+                    indexScroll = 0
                 } else {
-                    indexScroll--;
+                    indexScroll--
                 }
             }
         }
     }
+
+
+
+
+    companion object {
+        /**
+         * process the current loadingbar value
+         */
+        private var tickCounter = 0
+        fun processLoadingBar() {
+            if (tickCounter >= 2) {
+                if (FancyListObject.loadingBar >= 15)
+                    FancyListObject.loadingBar = 0
+                else
+                    FancyListObject.loadingBar++
+                tickCounter = 0
+            } else
+                tickCounter++
+        }
+    }
+
+
 
 }

@@ -29,56 +29,46 @@
  * You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors reserve the right to take down any infringing project.
  */
 
-package com.palechip.hudpixelmod.extended.data.player;
+package com.palechip.hudpixelmod.extended.data.player
 
-import com.palechip.hudpixelmod.extended.util.ILoadPlayerHeadCallback;
-import com.palechip.hudpixelmod.extended.util.LoadPlayerHead;
-import com.palechip.hudpixelmod.extended.util.LoggerHelper;
-import com.palechip.hudpixelmod.util.UuidCallback;
-import com.palechip.hudpixelmod.util.UuidHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.palechip.hudpixelmod.extended.util.ILoadPlayerHeadCallback
+import com.palechip.hudpixelmod.extended.util.LoadPlayerHead
+import com.palechip.hudpixelmod.extended.util.LoggerHelper
+import com.palechip.hudpixelmod.util.UuidCallback
+import com.palechip.hudpixelmod.util.UuidHelper
+import net.minecraft.util.ResourceLocation
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
+import java.util.*
 
-import java.util.UUID;
 @SideOnly(Side.CLIENT)
-public class PlayerFactory implements UuidCallback, ILoadPlayerHeadCallback {
-
-    private UUID uuid;
-    private String name;
-    private ResourceLocation resourceLocation;
-    private IPlayerLoadedCallback iPlayerLoadedCallback;
+class PlayerFactory(private val uuid: UUID, private val iPlayerLoadedCallback: IPlayerLoadedCallback) : UuidCallback, ILoadPlayerHeadCallback {
+    private var name: String? = null
+    private var resourceLocation: ResourceLocation? = null
 
 
-    public PlayerFactory(UUID uuid, IPlayerLoadedCallback iPlayerLoadedCallback) {
-        if(PlayerDatabase.containsUUID(uuid)){
-            iPlayerLoadedCallback.onPlayerLoadedCallback(uuid);
-            return;
-        }
-        this.uuid = uuid;
-        this.iPlayerLoadedCallback = iPlayerLoadedCallback;
-        new UuidHelper(getUUIDasString(), this);
+    init {
+        if (PlayerDatabase.containsUUID(uuid)) {
+            iPlayerLoadedCallback.onPlayerLoadedCallback(uuid)
+        } else UuidHelper(uuiDasString, this)
     }
 
 
-    private String getUUIDasString() {
-        return uuid.toString().replace("-", "");
+    private val uuiDasString: String
+        get() = uuid.toString().replace("-", "")
+
+    private fun createPlayer() {
+        PlayerDatabase.add(Player(uuid, name, resourceLocation), iPlayerLoadedCallback)
     }
 
-    private void createPlayer() {
-        PlayerDatabase.add(new Player(uuid, name, resourceLocation), iPlayerLoadedCallback);
+    override fun onUuidCallback(playerName: String) {
+        LoggerHelper.logInfo("[PlayerBuilder]$uuid=$playerName")
+        this.name = playerName
+        LoadPlayerHead(name!!, this)
     }
 
-    @Override
-    public void onUuidCallback(String playerName) {
-        LoggerHelper.logInfo("[PlayerBuilder]" + uuid + "=" + playerName);
-        this.name = playerName;
-        new LoadPlayerHead(name, this);
-    }
-
-    @Override
-    public void onLoadPlayerHeadResponse(ResourceLocation resourceLocation) {
-        this.resourceLocation = resourceLocation;
-        createPlayer(); //player will be created now
+    override fun onLoadPlayerHeadResponse(resourceLocation: ResourceLocation?) {
+        this.resourceLocation = resourceLocation
+        createPlayer() //player will be created now
     }
 }

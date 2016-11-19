@@ -49,7 +49,8 @@ import com.palechip.hudpixelmod.HudPixelMod;
 import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler;
 import com.palechip.hudpixelmod.extended.fancychat.FancyChat;
 import com.palechip.hudpixelmod.extended.util.IEventHandler;
-import com.palechip.hudpixelmod.extended.util.McColorHelper;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -69,7 +70,7 @@ import java.util.Properties;
  * A small "ego"-class to display the the HudPixel staff with a nice color and tag #abgehoben
  */
 @SideOnly(Side.CLIENT)
-public class StaffManager implements IEventHandler, McColorHelper {
+public class StaffManager implements IEventHandler, McColorHelperJava {
 
 
     /**
@@ -111,6 +112,56 @@ public class StaffManager implements IEventHandler, McColorHelper {
             System.out.println("Loading fanciness for " + key + ": " + value);
             tags.put(key, value.contains("admin") ? hudAdminTag() : value.contains("helper") ? hudHelperTag() : value);
         }
+    }
+
+    @Override
+    public void onClientTick() {
+
+    }
+
+    @Override
+    public void everyTenTICKS() {
+
+    }
+
+    @Override
+    public void everySEC() {
+
+    }
+
+    @Override
+    public void everyFiveSEC() {
+
+    }
+
+    @Override
+    public void everyMIN() {
+
+    }
+
+    @Override
+    public void onRender() {
+
+    }
+
+    @Override
+    public void handleMouseInput(int i, int mX, int mY) {
+
+    }
+
+    @Override
+    public void onMouseClick(int mX, int mY) {
+
+    }
+
+    @Override
+    public void openGUI(GuiScreen guiScreen) {
+
+    }
+
+    @Override
+    public void onConfigChanged() {
+
     }
 
     private static class AdminHandler extends Thread {

@@ -1,3 +1,11 @@
+package com.palechip.hudpixelmod.extended.boosterdisplay
+
+import com.palechip.hudpixelmod.api.interaction.representations.Booster
+import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
+
+import com.palechip.hudpixelmod.extended.util.ImageLoader.boosterTip
+import net.minecraft.client.Minecraft.getMinecraft
+
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
  * <p>
@@ -43,99 +51,9 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
+internal class BoosterTipButton(private val booster: Booster) : FancyListButton(1f, 1f, 1f, boosterTip()) {
 
-package com.palechip.hudpixelmod.extended.onlinefriends;
-
-import com.palechip.hudpixelmod.api.interaction.callbacks.SessionResponseCallback;
-import com.palechip.hudpixelmod.api.interaction.representations.Session;
-import com.palechip.hudpixelmod.extended.data.player.PlayerDatabase;
-import com.palechip.hudpixelmod.extended.util.ILoadPlayerHeadCallback;
-import com.palechip.hudpixelmod.extended.util.LoadPlayerHead;
-import com.palechip.hudpixelmod.extended.util.McColorHelper;
-import com.palechip.hudpixelmod.extended.util.gui.FancyListObject;
-import net.minecraft.util.ResourceLocation;
-
-import java.util.UUID;
-
-
-public class OnlineFriend extends FancyListObject implements ILoadPlayerHeadCallback, SessionResponseCallback, McColorHelper {
-
-
-    private String gamemode;
-    private boolean isOnline;
-    private UUID playerUUID;
-    private String username;
-
-    /**
-     * Constructor ... also loads the playerhead
-     * @param gamemode current string to render
-     */
-    OnlineFriend(UUID playerUUID, String gamemode) {
-        this.gamemode = gamemode;
-        this.playerUUID = playerUUID;
-        this.username = PlayerDatabase.getPlayerByUUID(playerUUID).getName();
-
-
-        this.resourceLocation = null;
-
-        this.renderLine1 = GRAY + "o " + GOLD + username;
-        this.renderLine2 = GRAY + gamemode;
-        this.renderLineSmall = GRAY + "o " + YELLOW + username;
-        this.renderPicture = WHITE + "";
-
-        new LoadPlayerHead(username, this);
-    }
-
-    String getUsername() {
-        return username;
-    }
-
-    String getGamemode() {
-        return gamemode;
-    }
-
-    void setGamemode(String gamemode) {
-        this.gamemode = gamemode;
-    }
-
-    public boolean isOnline() {
-        return isOnline;
-    }
-
-    void setOnline(Boolean isOnline) {
-        this.isOnline = isOnline;
-    }
-
-
-    @Override
-    public void onTick() {
-        if (!OnlineFriendManager.enabled) return;
-        if (isOnline && this.fancyListObjectButtons.isEmpty()) {
-            this.addButton(new OnlineFriendsMessageButton(username));
-            this.addButton(new OnlineFriendsPartyButton(username));
-        } else if (!isOnline) {
-            this.fancyListObjectButtons.clear();
-        }
-        if (isOnline) this.renderLine1 = GOLD + username + GREEN + "  ";
-        else this.renderLine1 = GOLD + username + D_RED + "  ";
-        this.renderLine2 = gamemode;
-        if (isOnline) this.renderLineSmall = YELLOW + username + GREEN + "  ";
-        else this.renderLineSmall = YELLOW + username + D_RED + " ";
-    }
-
-    @Override
-    public void onLoadPlayerHeadResponse(ResourceLocation resourceLocation) {
-        if (resourceLocation != null) {
-            this.resourceLocation = resourceLocation;
-        }
-    }
-
-    @Override
-    public void onSessionRespone(Session session) {
-        System.out.println(session.toString());
-        gamemode = GREEN + session.getReplyGameType();
+    override fun onClick() {
+        getMinecraft().thePlayer.sendChatMessage("/tip " + booster.owner + " " + booster.tipName)
     }
 }
-
-
-

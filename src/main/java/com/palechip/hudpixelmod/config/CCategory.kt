@@ -1,4 +1,7 @@
-package com.palechip.hudpixelmod.api.interaction;
+package com.palechip.hudpixelmod.config
+
+import com.palechip.hudpixelmod.extended.util.McColorHelper
+import net.minecraft.util.text.TextFormatting
 
 /* **********************************************************************************************************************
  HudPixelReloaded - License
@@ -46,64 +49,46 @@ package com.palechip.hudpixelmod.api.interaction;
  reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
-import com.palechip.hudpixelmod.api.interaction.callbacks.ApiKeyLoadedCallback;
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler;
-import com.palechip.hudpixelmod.extended.util.IEventHandler;
-import com.palechip.hudpixelmod.extended.util.LoggerHelper;
-import net.hypixel.api.HypixelAPI;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.UUID;
 
 /**
- * @author unaussprechlich
- * @since 13.11.2016
+ * Little HelperEnum to avoid spelling mistakes :P
+ * Please add a new category as enum and as static final (const) :)
  */
-@SideOnly(Side.CLIENT)
-public class ApiManager implements IEventHandler, ApiKeyLoadedCallback {
+enum class CCategory private constructor(val nm: String, val chatFormatting: TextFormatting) : McColorHelper {
 
-    private int heat = 0;
+    //ADD A NEW CATEGORY HERE >>
+    ENUM_UNKNOWN("Unknown", TextFormatting.BLACK),
+    ENUM_BOOSTER_DISPLAY("BoosterDisplay", TextFormatting.GOLD),
+    ENUM_COOLDOWN_DISPLAY("CooldownDisplay", TextFormatting.GOLD),
+    ENUM_FRIENDS_DISPLAY("FriendsDisplay", TextFormatting.GOLD),
+    ENUM_FANCY_CHAT("FancyChat", TextFormatting.GOLD),
+    ENUM_HUDPIXEL("HudPixel", TextFormatting.GOLD),
+    ENUM_WARLORDS("Warlords", TextFormatting.GOLD),
+    ENUM_GENERAL("General", TextFormatting.GOLD),
+    ENUM_HUD("Hud", TextFormatting.GOLD),
+    ENUM_ARMOR_HUD("ArmorHud", TextFormatting.GOLD);
 
-    private static ApiManager INSTANCE;
 
-    public static ApiManager getINSTANCE() {
-        if (INSTANCE == null)
-            INSTANCE = new ApiManager();
-        return INSTANCE;
-    }
+    companion object {
 
-    private ApiManager() {
+        //CAN'T CAST ENUMS IN @ConfigProperty<T> SO HERE ARE SOME STATIC FINALS, WE ALL LOVE STATIC FINALS!!!
+        //ALSO ADD HERE >>
+        const val UNKNOWN = "Unknown"
+        const val BOOSTER_DISPLAY = "BoosterDisplay"
+        const val COOLDOWN_DISPLAY = "CooldownDisplay"
+        const val FRIENDS_DISPLAY = "FriendsDisplay"
+        const val FANCY_CHAT = "FancyChat"
+        const val HUDPIXEL = "HudPixel"
+        const val WARLORDS = "Warlords"
+        const val GENERAL = "General"
+        const val HUD = "Hud"
+        const val ARMOR_HUD = "ArmorHud"
 
-    }
-
-    public void setup(){
-        HudPixelExtendedEventHandler.registerIEvent(this);
-        ApiKeyHandler.getINSTANCE().loadKey(this);
-    }
-
-    @Override
-    public void everyTenTICKS() {
-        if(heat >= 100 || ApiQueue.isLocked() || ApiKeyHandler.isLoadingFailed()) return;
-        if(ApiQueue.hasNext())
-            ApiQueue.getNextEntry().execute();
-        heat++;
-    }
-
-    @Override
-    public void everyFiveSEC() {
-
-    }
-
-    @Override
-    public void everyMIN() {
-        heat = 0;
-    }
-
-    @Override
-    public void ApiKeyLoaded(boolean failed, String key) {
-        LoggerHelper.logInfo("[API][key] failed=" + failed + " key=" + key);
-        if (failed) return;
-        HypixelAPI.getInstance().setApiKey(UUID.fromString(key));
+        fun getCategoryByName(name: String?): CCategory {
+            for (cCategory in CCategory.values())
+                if (cCategory.name.equals(name, ignoreCase = true))
+                    return cCategory
+            return CCategory.ENUM_UNKNOWN
+        }
     }
 }

@@ -1,11 +1,3 @@
-package com.palechip.hudpixelmod.extended.boosterdisplay;
-
-import com.palechip.hudpixelmod.api.interaction.representations.Booster;
-import com.palechip.hudpixelmod.extended.util.gui.FancyListButton;
-
-import static com.palechip.hudpixelmod.extended.util.ImageLoader.boosterTip;
-import static net.minecraft.client.Minecraft.getMinecraft;
-
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
  * <p>
@@ -51,18 +43,42 @@ import static net.minecraft.client.Minecraft.getMinecraft;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-class BoosterTipButton extends FancyListButton {
-
-    private Booster booster;
+package com.palechip.hudpixelmod.extended.util
 
 
-    BoosterTipButton(Booster booster) {
-        super(1f, 1f, 1f, boosterTip());
-        this.booster = booster;
+import com.palechip.hudpixelmod.extended.fancychat.FancyChat
+import net.minecraftforge.fml.client.FMLClientHandler
+import java.util.*
+
+class MessageBuffer(private val maxBufferSize: Int) {
+
+    @JvmField
+    var messageBuffer = ArrayList<String>()
+
+
+    fun addMinecraftEntry(message: String) {
+        val fontRenderer = FMLClientHandler.instance().client.fontRendererObj
+        val messageList = fontRenderer.listFormattedStringToWidth(message, FancyChat.FIELD_WIDTH.toInt())
+
+        for (o in messageList) {
+            messageBuffer.add(0, o as String)
+            checkSize()
+        }
     }
 
-    @Override
-    protected void onClick() {
-        getMinecraft().thePlayer.sendChatMessage("/tip " + booster.getOwner() + " " + booster.getTipName());
+    fun getLast(size: Int): List<String> {
+        return getSubArray(0, size)
+    }
+
+    private fun checkSize() {
+        if (messageBuffer.size >= maxBufferSize) {
+            for (i in messageBuffer.size downTo maxBufferSize) {
+                messageBuffer.removeAt(i - 1)
+            }
+        }
+    }
+
+    fun getSubArray(startIndex: Int, endIndex: Int): List<String> {
+        return messageBuffer.subList(startIndex, endIndex)
     }
 }

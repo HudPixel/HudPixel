@@ -46,10 +46,11 @@
 package com.palechip.hudpixelmod.extended.statsviewer.gamemodes;
 
 import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 
 import java.util.UUID;
 
-public class WallsStatsViewer extends AbstractStatsViewer {
+public class WallsStatsViewer extends AbstractStatsViewer implements McColorHelperJava {
 
 
     /*
@@ -74,8 +75,8 @@ public class WallsStatsViewer extends AbstractStatsViewer {
     }
 
     private void generateRenderList() {
-        renderList.add(WINS + GOLD + wins + LOSSES + GOLD + losses + WL + GOLD + wl);
-        renderList.add(KILLS + GOLD + kills + DEATHS + GOLD + deaths + KD + GOLD + kd);
+        getRenderList().add(WINS + GOLD + wins + LOSSES + GOLD + losses + WL + GOLD + wl);
+        getRenderList().add(KILLS + GOLD + kills + DEATHS + GOLD + deaths + KD + GOLD + kd);
     }
 
     @Override

@@ -44,67 +44,56 @@
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
-package com.palechip.hudpixelmod.extended.boosterdisplay;
+package com.palechip.hudpixelmod.extended.boosterdisplay
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import com.palechip.hudpixelmod.api.interaction.representations.Booster;
-import com.palechip.hudpixelmod.extended.HudPixelExtended;
-import com.palechip.hudpixelmod.extended.util.ImageLoader;
-import com.palechip.hudpixelmod.extended.util.LoggerHelper;
-import com.palechip.hudpixelmod.extended.util.McColorHelper;
-import com.palechip.hudpixelmod.extended.util.gui.FancyListObject;
-import com.palechip.hudpixelmod.util.GameType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.realmsclient.gui.ChatFormatting
+import com.palechip.hudpixelmod.api.interaction.representations.Booster
+import com.palechip.hudpixelmod.extended.HudPixelExtended
+import com.palechip.hudpixelmod.extended.util.ImageLoader
+import com.palechip.hudpixelmod.extended.util.LoggerHelper
+import com.palechip.hudpixelmod.extended.util.McColorHelper
+import com.palechip.hudpixelmod.extended.util.gui.FancyListObject
+import com.palechip.hudpixelmod.util.GameType
+import com.palechip.hudpixelmod.util.plus
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
 @SideOnly(Side.CLIENT)
-public class BoosterExtended extends FancyListObject implements McColorHelper {
-    private static final long tipDelay = 60 * 60 * 1000; //the tipdelay time for a gamemode
+class BoosterExtended
+/**
+ * @param gameType The gametype this boosterdisplay is for
+ */
+internal constructor(//######################################################################################################################
+        val gameType: GameType) : FancyListObject(), McColorHelper {
+    private var timeNextTip: Long = 0
+    internal var booster:
 
-    //######################################################################################################################
-    private static final long boosterLenght = 60 * 60 * 1000; //the time a booster gets activated
+            Booster? = null
+        private set
+    private var lastBoosterAdded: Long = 0
 
-
-    //######################################################################################################################
-    private GameType gameType;
-    private long timeNextTip;
-    private Booster booster;
-    private long lastBoosterAdded;
-
-    /**
-     * @param gameType The gametype this boosterdisplay is for
-     */
-    BoosterExtended(GameType gameType) {
-        timeNextTip = 0;
-        this.gameType = gameType;
-        this.resourceLocation = ImageLoader.gameIconLocation(gameType);
+    init {
+        timeNextTip = 0
+        this.resourceLocation = ImageLoader.gameIconLocation(gameType)
     }
 
-    Booster getBooster() {
-        return booster;
-    }
-
-    void setCurrentBooster(Booster booster) {
-        lastBoosterAdded = System.currentTimeMillis();
-        this.booster = booster;
-        this.fancyListObjectButtons.clear();
-    }
-
-    public GameType getGameType() {
-        return gameType;
+    internal fun setCurrentBooster(booster: Booster) {
+        lastBoosterAdded = System.currentTimeMillis()
+        this.booster = booster
+        this.fancyListObjectButtons.clear()
     }
 
     /**
      * sets a this gamemode tipped also sets the current booster to tipped if there is any
-     *
+
      * @param player the player you have tipped to
      */
-    void setGameModeTipped(String player) {
-        LoggerHelper.logInfo("[BoosterDisplay]: You tipped " + player + " in " + gameType.getNm());
-        timeNextTip = System.currentTimeMillis() + tipDelay;
-        if (booster != null && booster.getOwner().equalsIgnoreCase(player)) {
-            LoggerHelper.logInfo("[BoosterDisplay]: Also found a booster for " + player);
-            booster.tip();
+    internal fun setGameModeTipped(player: String) {
+        LoggerHelper.logInfo("[BoosterDisplay]: You tipped " + player + " in " + gameType.nm)
+        timeNextTip = System.currentTimeMillis() + tipDelay
+        if (booster != null && booster!!.owner.equals(player, ignoreCase = true)) {
+            LoggerHelper.logInfo("[BoosterDisplay]: Also found a booster for " + player)
+            booster!!.tip()
         }
     }
 
@@ -113,27 +102,26 @@ public class BoosterExtended extends FancyListObject implements McColorHelper {
      * It checks if the booster is outdated and also generates the current
      * RenderStrings
      */
-    @Override
-    public void onTick() {
+    override fun onTick() {
         if (booster != null)
-            if (System.currentTimeMillis() - (booster.getRemainingTime() * 1000) > lastBoosterAdded) {
-                this.booster = null;
-                HudPixelExtended.boosterManager.requestBoosters(true);
+            if (System.currentTimeMillis() - booster!!.remainingTime * 1000 > lastBoosterAdded) {
+                this.booster = null
+                HudPixelExtended.boosterManager.requestBoosters(true)
             }
 
-        this.renderPicture = ChatFormatting.WHITE + countDown();
-        this.renderLineSmall = YELLOW + gameType.getNm();
-        this.renderLine1 = GOLD + gameType.getNm();
+        this.renderPicture = ChatFormatting.WHITE + countDown()
+        this.renderLineSmall = McColorHelper.YELLOW + gameType.nm
+        this.renderLine1 = McColorHelper.GOLD + gameType.nm
         if (booster == null) {
-            this.renderLine2 = GRAY + "No Booster online!";
-            this.fancyListObjectButtons.clear();
+            this.renderLine2 = McColorHelper.GRAY + "No Booster online!"
+            this.fancyListObjectButtons.clear()
         } else {
-            if (booster.isTipped()) {
-                this.renderLine2 = RED + booster.getOwner();
-                this.fancyListObjectButtons.clear();
+            if (booster!!.isTipped) {
+                this.renderLine2 = McColorHelper.RED + booster!!.owner
+                this.fancyListObjectButtons.clear()
             } else {
-                if (fancyListObjectButtons.isEmpty()) addButton(new BoosterTipButton(booster));
-                this.renderLine2 = GREEN + booster.getOwner();
+                if (fancyListObjectButtons.isEmpty()) addButton(BoosterTipButton(booster!!))
+                this.renderLine2 = McColorHelper.GREEN + booster!!.owner
             }
 
         }
@@ -141,24 +129,35 @@ public class BoosterExtended extends FancyListObject implements McColorHelper {
 
     /**
      * Generates the countdown displayed over the game icon
-     *
+
      * @return the current countdown string
      */
-    private String countDown() {
+    private fun countDown(): String {
         if (timeNextTip < System.currentTimeMillis()) {
-            timeNextTip = 0;
-            return "";
+            timeNextTip = 0
+            return ""
         }
-        long timeBuff = timeNextTip - System.currentTimeMillis();
-        String sMin;
-        long min = (timeBuff / 1000 / 60);
-        if (min < 10) sMin = "0" + min;
-        else sMin = "" + min;
-        String sSec;
-        long sec = (timeBuff / 1000) - (min * 60);
-        if (sec < 10) sSec = "0" + sec;
-        else sSec = "" + sec;
-        return sMin + ":" + sSec;
+        val timeBuff = timeNextTip - System.currentTimeMillis()
+        val sMin: String
+        val min = timeBuff / 1000 / 60
+        if (min < 10)
+            sMin = "0" + min
+        else
+            sMin = "" + min
+        val sSec: String
+        val sec = timeBuff / 1000 - min * 60
+        if (sec < 10)
+            sSec = "0" + sec
+        else
+            sSec = "" + sec
+        return sMin + ":" + sSec
+    }
+
+    companion object {
+        private val tipDelay = 60 * 60 * 1000.toLong() //the tipdelay time for a gamemode
+
+        //######################################################################################################################
+        private val boosterLenght = 60 * 60 * 1000.toLong() //the time a booster gets activated
     }
 
 }

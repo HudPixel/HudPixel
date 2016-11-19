@@ -49,12 +49,12 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
-import com.palechip.hudpixelmod.extended.util.McColorHelper;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-public class KillstreakTrackerModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelper {
+public class KillstreakTrackerModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelperJava {
     public static final String CURRENT_KILLSTREAK_DISPLAY_TEXT = ChatFormatting.DARK_PURPLE + "Killstreak: ";
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "killstreakTracker", comment = "The Killstreak Tracker", def = true)
     public static boolean enabled = false;

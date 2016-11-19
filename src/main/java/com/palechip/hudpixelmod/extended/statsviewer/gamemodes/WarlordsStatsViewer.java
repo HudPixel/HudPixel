@@ -1,6 +1,7 @@
 package com.palechip.hudpixelmod.extended.statsviewer.gamemodes;
 
 import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ import java.util.UUID;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public class WarlordsStatsViewer extends AbstractStatsViewer {
+public class WarlordsStatsViewer extends AbstractStatsViewer implements McColorHelperJava {
 
     /**
      * Some static-final stuff to make the code cleaner ....
@@ -88,10 +89,10 @@ public class WarlordsStatsViewer extends AbstractStatsViewer {
      * generates the renderList
      */
     private void generateRenderList() {
-        renderList.add(KD + GOLD + kd + WL + GOLD + wl + "%");
-        renderList.add(LOS + GOLD + losses + WIN + GOLD + wins);
-        renderList.add(KDA + GOLD + kills + D_GRAY + " | " + GOLD + assists + D_GRAY + " | " + GOLD + deaths);
-        renderList.add(SHA + GOLD + shamanLevel + WAR + GOLD + warriorLevel + PAL + GOLD + paladinLevel + MAG + GOLD + mageLevel);
+        getRenderList().add(KD + GOLD + kd + WL + GOLD + wl + "%");
+        getRenderList().add(LOS + GOLD + losses + WIN + GOLD + wins);
+        getRenderList().add(KDA + GOLD + kills + D_GRAY + " | " + GOLD + assists + D_GRAY + " | " + GOLD + deaths);
+        getRenderList().add(SHA + GOLD + shamanLevel + WAR + GOLD + warriorLevel + PAL + GOLD + paladinLevel + MAG + GOLD + mageLevel);
     }
 
     /**

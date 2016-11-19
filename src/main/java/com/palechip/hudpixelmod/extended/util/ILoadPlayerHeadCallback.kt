@@ -1,9 +1,6 @@
-package com.palechip.hudpixelmod.extended.onlinefriends;
+package com.palechip.hudpixelmod.extended.util
 
-import com.palechip.hudpixelmod.extended.util.gui.FancyListButton;
-
-import static com.palechip.hudpixelmod.extended.util.ImageLoader.partyLocation;
-import static net.minecraft.client.Minecraft.getMinecraft;
+import net.minecraft.util.ResourceLocation
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -50,17 +47,7 @@ import static net.minecraft.client.Minecraft.getMinecraft;
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-public class OnlineFriendsPartyButton extends FancyListButton {
+interface ILoadPlayerHeadCallback {
 
-    private String playerName;
-
-    OnlineFriendsPartyButton(String playerName) {
-        super(0f, 0f, 1f, partyLocation());
-        this.playerName = playerName;
-    }
-
-    @Override
-    protected void onClick() {
-        getMinecraft().thePlayer.sendChatMessage("/p invite " + playerName);
-    }
+    fun onLoadPlayerHeadResponse(resourceLocation: ResourceLocation?)
 }

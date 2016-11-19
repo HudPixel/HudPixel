@@ -51,8 +51,9 @@ import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
 import com.palechip.hudpixelmod.modulargui.HudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 
-public class TimerModularGuiProvider extends HudPixelModularGuiProvider {
+public class TimerModularGuiProvider extends HudPixelModularGuiProvider implements McColorHelperJava {
     public static final TimerModularGuiProvider instance = new TimerModularGuiProvider();
     public static final String TIME_DISPLAY_MESSAGE = ChatFormatting.YELLOW + "Time";
     @ConfigPropertyBoolean(category = CCategory.HUD, id = "timer", comment = "The Game Timer", def = true)

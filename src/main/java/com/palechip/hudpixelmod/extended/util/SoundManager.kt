@@ -25,35 +25,30 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
 
-package com.palechip.hudpixelmod.extended.util;
+package com.palechip.hudpixelmod.extended.util
 
-import com.palechip.hudpixelmod.HudPixelMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.palechip.hudpixelmod.HudPixelMod
+import net.minecraft.client.Minecraft
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.SoundEvent
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
 @SideOnly(Side.CLIENT)
-public class SoundManager {
+object SoundManager {
 
-    public static void playSound(Sounds name) {
-        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation(HudPixelMod.MODID + ":" + name)), 5, 1);
+    @JvmStatic
+    fun playSound(name: Sounds) {
+        Minecraft.getMinecraft().thePlayer.playSound(SoundEvent(ResourceLocation(HudPixelMod.MODID + ":" + name)), 5f, 1f)
     }
 
-    public enum Sounds {
+    enum class Sounds private constructor(private val nm: String) {
         NOTIFICATION_LONG("NOTIFICATION_LONG"),
         NOTIFICATION_LONG2("NOTIFICATION_LONG2"),
         NOTIFICATION_OLDSCHOOLMESSAGE("NOTIFICATION_OLDSCHOOLMESSAGE"),
         NOTIFICATION_SHORT("NOTIFICATION_SHORT"),
         NOTIFICATION_SHORT2("NOTIFICATION_SHORT2"),
-        NOTIFICATION_SHORT_WOOD("NOTIFICATION_SHORT_WOOD");
-
-        private final String name;
-
-        Sounds(String name) {
-            this.name = name;
-        }
+        NOTIFICATION_SHORT_WOOD("NOTIFICATION_SHORT_WOOD")
     }
 }
 

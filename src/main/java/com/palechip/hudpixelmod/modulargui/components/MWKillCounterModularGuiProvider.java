@@ -49,12 +49,12 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import com.palechip.hudpixelmod.GameDetector;
 import com.palechip.hudpixelmod.config.CCategory;
 import com.palechip.hudpixelmod.config.ConfigPropertyBoolean;
-import com.palechip.hudpixelmod.extended.util.McColorHelper;
 import com.palechip.hudpixelmod.modulargui.SimpleHudPixelModularGuiProvider;
 import com.palechip.hudpixelmod.util.GameType;
+import com.palechip.hudpixelmod.util.McColorHelperJava;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-public class MWKillCounterModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelper {
+public class MWKillCounterModularGuiProvider extends SimpleHudPixelModularGuiProvider implements McColorHelperJava {
     private static final String KILL_DISPLAY = ChatFormatting.AQUA + "Kills: " + ChatFormatting.RED;
     private static final String FINAL_KILL_DISPLAY = ChatFormatting.BLUE + "Final Kills: " + ChatFormatting.RED;
     private static final String ASSISTS_DISPLAY = ChatFormatting.AQUA + "" + ChatFormatting.ITALIC + "Assists: " + ChatFormatting.DARK_GRAY;

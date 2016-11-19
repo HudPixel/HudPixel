@@ -1,4 +1,4 @@
-package com.palechip.hudpixelmod.extended.statsviewer.msc;
+package com.palechip.hudpixelmod.extended.statsviewer.msc
 
 /* **********************************************************************************************************************
  HudPixelReloaded - License
@@ -46,99 +46,93 @@ package com.palechip.hudpixelmod.extended.statsviewer.msc;
  reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
-import com.google.gson.JsonObject;
-import com.palechip.hudpixelmod.api.interaction.ApiQueueEntryBuilder;
-import com.palechip.hudpixelmod.api.interaction.callbacks.PlayerResponseCallback;
-import com.palechip.hudpixelmod.extended.util.LoggerHelper;
-import com.palechip.hudpixelmod.util.ChatMessageComposer;
-import net.hypixel.api.reply.PlayerReply;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.UUID;
-
-import static com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo;
+import com.google.gson.JsonObject
+import com.palechip.hudpixelmod.api.interaction.ApiQueueEntryBuilder
+import com.palechip.hudpixelmod.api.interaction.callbacks.PlayerResponseCallback
+import com.palechip.hudpixelmod.extended.util.LoggerHelper
+import com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo
+import com.palechip.hudpixelmod.util.ChatMessageComposer
+import net.hypixel.api.reply.PlayerReply
+import net.minecraft.util.text.TextFormatting
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
+import java.util.*
 
 @SideOnly(Side.CLIENT)
-public abstract class AbstractStatsViewer implements IGameStatsViewer, PlayerResponseCallback{
+abstract class AbstractStatsViewer protected constructor(protected val playerUUID: UUID, protected val databaseName: String) : IGameStatsViewer, PlayerResponseCallback {
 
-    protected ArrayList<String> renderList;
-    protected final UUID playerUUID;
-    protected final String databaseName;
-    protected JsonObject statistics;
+    protected var renderList0: ArrayList<String>
+    protected var statistics: JsonObject? = null
 
-    protected AbstractStatsViewer(UUID uuid, String databaseName) {
-        this.playerUUID = uuid;
-        this.databaseName = databaseName;
-        renderList = new ArrayList<>();
-        ApiQueueEntryBuilder.newInstance().playerRequestByUUID(uuid).setCallback(this).create();
+    init {
+        renderList0 = ArrayList<String>()
+        ApiQueueEntryBuilder.newInstance().playerRequestByUUID(playerUUID).setCallback(this).create()
     }
 
 
     /**
      * Implements the IGameStatsViewer interface
-     *
+
      * @return the renderList
      */
-    @Override
-    public ArrayList<String> getRenderList() {
-        if (renderList.isEmpty()) {
-            return null;
+    override fun getRenderList(): ArrayList<String>? {
+        if (renderList0.isEmpty()) {
+            return null
         }
-        return renderList;
+        return renderList
     }
 
-    protected abstract void composeStats();
+    protected abstract fun composeStats()
 
-    protected double calculateKD(int kills, int deaths){
+    protected fun calculateKD(kills: Int, deaths: Int): Double {
         if (deaths > 0)
-            return  (double) Math.round(((double) kills / (double) deaths) * 1000) / 1000;
+            return Math.round(kills.toDouble() / deaths.toDouble() * 1000).toDouble() / 1000
         else
-            return  kills;
+            return kills.toDouble()
     }
 
-    protected int calculateWL(int wins, int losses){
+    protected fun calculateWL(wins: Int, losses: Int): Int {
         if (losses > 0)
-            return  (int) Math.round(((double) wins / (double) (wins + losses)) * 100);
+            return Math.round(wins.toDouble() / (wins + losses).toDouble() * 100).toInt()
         else
-            return  100;
+            return 100
     }
 
     /**
      * little helper function that gets the Json entry
-     *
+
      * @param s entry in the "Warlords" object
+     * *
      * @return 0 if the entry is null
      */
-    protected int getInt(String s) {
+    protected fun getInt(s: String): Int? {
         try {
-            return this.statistics.get(s).getAsInt();
-        } catch (Exception ex) {
-            logInfo("[Stats| + " + databaseName + "]: No entry for " + s + "returning 0!");
-            return 0;
+            return this.statistics?.get(s)?.asInt
+        } catch (ex: Exception) {
+            logInfo("[Stats| + " + databaseName + "]: No entry for " + s + "returning 0!")
+            return 0
         }
+
     }
 
-    protected String getString(String s) {
+    protected fun getString(s: String): String? {
         try {
-            return this.statistics.get(s).getAsString();
-        } catch (Exception ex) {
-            logInfo("[Stats| + " + databaseName + "]: No entry for " + s + "returning Err!");
-            return "Err";
+            return this.statistics?.get(s)?.asString
+        } catch (ex: Exception) {
+            logInfo("[Stats| + " + databaseName + "]: No entry for " + s + "returning Err!")
+            return "Err"
         }
+
     }
 
-    @Override
-    public void onPlayerResponse(PlayerReply player) {
-        if (player != null && player.getPlayer() != null) {
-            LoggerHelper.logInfo("[Stats]loaded stats for uuid=" + playerUUID);
-            this.statistics = player.getPlayer().get("stats").getAsJsonObject().get(databaseName).getAsJsonObject();
-            composeStats();
-            return;
+    override fun onPlayerResponse(player: PlayerReply?) {
+        if (player != null && player.player != null) {
+            LoggerHelper.logInfo("[Stats]loaded stats for uuid=" + playerUUID)
+            this.statistics = player.player.get("stats").asJsonObject.get(databaseName).asJsonObject
+            composeStats()
+            return
         }
-        new ChatMessageComposer("Failed to load stats for: " + playerUUID + "!", TextFormatting.RED).send();
-        renderList.add(RED + "FAILED!");
+        ChatMessageComposer("Failed to load stats for: $playerUUID!", TextFormatting.RED).send()
+        renderList0.add("${TextFormatting.RED}FAILED!")
     }
 }

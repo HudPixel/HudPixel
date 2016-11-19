@@ -1,3 +1,11 @@
+package com.palechip.hudpixelmod.extended.util.gui
+
+import net.minecraft.util.ResourceLocation
+
+import net.unaussprechlich.managedgui.lib.util.RenderUtils.drawModalRectWithCustomSizedTexture
+import net.unaussprechlich.managedgui.lib.util.RenderUtils.renderBoxWithColor
+import java.lang.Math.round
+
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
  * <p>
@@ -43,49 +51,34 @@
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-package com.palechip.hudpixelmod.extended.util;
+abstract class FancyListButton protected constructor(private val r: Float, private val g: Float, private val b: Float, private val resourceLocation: ResourceLocation) {
 
+    var isHover: Boolean = false
+    private var xStart = -1f
+    private var yStart = -1f
 
-import com.palechip.hudpixelmod.extended.fancychat.FancyChat;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraftforge.fml.client.FMLClientHandler;
+    protected abstract fun onClick()
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MessageBuffer {
-
-    public ArrayList<String> messageBuffer = new ArrayList<String>();
-    private int maxBufferSize;
-
-    public MessageBuffer(int maxSize) {
-        this.maxBufferSize = maxSize;
+    internal fun onMouseClick(mX: Int, mY: Int) {
+        if (isHover && mX > xStart && mX < xStart + 140 && mY > yStart && mY < yStart + 24)
+            onClick()
     }
 
-
-    public void addMinecraftEntry(String message) {
-        FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRendererObj;
-        List messageList = fontRenderer.listFormattedStringToWidth(message, FancyChat.FIELD_WIDTH);
-
-        for (Object o : messageList) {
-            messageBuffer.add(0, (String) o);
-            checkSize();
-        }
+    internal fun onMouseInput(mX: Int, mY: Int) {
+        if (xStart < 0 || yStart < 0) return
+        isHover = mX > xStart && mX < xStart + 24 && mY > yStart && mY < yStart + 24
     }
 
-    public List<String> getLast(int size) {
-        return getSubArray(0, size);
-    }
-
-    private void checkSize() {
-        if (messageBuffer.size() >= maxBufferSize) {
-            for (int i = messageBuffer.size(); i >= maxBufferSize; i--) {
-                messageBuffer.remove(i - 1);
-            }
-        }
-    }
-
-    public List<String> getSubArray(int startIndex, int endIndex) {
-        return messageBuffer.subList(startIndex, endIndex);
+    internal fun onRender(xStart: Float, yStart: Float) {
+        this.xStart = xStart
+        this.yStart = yStart
+        if (!isHover)
+            renderBoxWithColor(xStart.toDouble(), yStart.toDouble(), 24.0, 24.0, r, g, b, 0.5f) //draws the background
+        else
+            renderBoxWithColor(xStart.toDouble(), yStart.toDouble(), 24.0, 24.0, r, g, b, 0.8f)
+        drawModalRectWithCustomSizedTexture(//draws the image shown
+                round(xStart), round(yStart), 0, 0,
+                24, 24, 24, 24, resourceLocation, 1f)
     }
 }
+
