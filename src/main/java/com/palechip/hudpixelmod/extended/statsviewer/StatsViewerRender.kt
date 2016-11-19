@@ -1,21 +1,17 @@
-package com.palechip.hudpixelmod.extended.onlinefriends
+package com.palechip.hudpixelmod.extended.statsviewer
 
-import com.palechip.hudpixelmod.api.interaction.ApiQueueEntryBuilder
-import com.palechip.hudpixelmod.api.interaction.callbacks.FriendResponseCallback
-import com.palechip.hudpixelmod.config.GeneralConfigSettings
-import com.palechip.hudpixelmod.extended.HudPixelExtended
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler.registerIEvent
-import com.palechip.hudpixelmod.extended.data.player.IPlayerLoadedCallback
-import com.palechip.hudpixelmod.extended.data.player.PlayerDatabase
-import com.palechip.hudpixelmod.extended.data.player.PlayerFactory
-import com.palechip.hudpixelmod.extended.util.IEventHandler
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logWarn
-import com.palechip.hudpixelmod.extended.util.McColorHelper
-import com.palechip.hudpixelmod.util.plus
-import net.hypixel.api.reply.FriendsReply
+import com.palechip.hudpixelmod.extended.statsviewer.msc.IGameStatsViewer
+import com.palechip.hudpixelmod.extended.statsviewer.msc.StatsCache.getPlayerByName
+import com.palechip.hudpixelmod.util.GameType
+import net.minecraft.client.renderer.GlStateManager.*
+import net.minecraft.client.renderer.Tessellator.getInstance
+import net.minecraft.client.renderer.entity.RenderPlayer
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_COLOR
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraftforge.client.event.RenderPlayerEvent.Pre
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
+import org.lwjgl.opengl.GL11.glNormal3f
 import java.lang.System.currentTimeMillis
 import java.util.*
 
@@ -64,64 +60,92 @@ import java.util.*
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-
 @SideOnly(Side.CLIENT)
-class OnlineFriendsLoader : FriendResponseCallback, IEventHandler, IPlayerLoadedCallback {
+class StatsViewerRender internal constructor(gameType: GameType, playerUUID: UUID) {
+
+    private val iGameStatsViewer: IGameStatsViewer?
+    internal val expireTimestamp: Long
 
     init {
-        setupLoader()
+        this.iGameStatsViewer = getPlayerByName(playerUUID, gameType)
+        this.expireTimestamp = currentTimeMillis() + DURATION
     }
 
-    fun setupLoader() {
-        registerIEvent(this)
-        requestFriends(true)
-    }
+    /**
+     * Renders the stats above the player
 
-    private fun requestFriends(forceRequest: Boolean?) {
-        if (GeneralConfigSettings.useAPI && OnlineFriendManager.enabled) {
-            // isHypixelNetwork if enough time has past
-            if (currentTimeMillis() > lastRequest + REQUEST_COOLDOWN || forceRequest!!) {
-                // save the time of the request
-                lastRequest = currentTimeMillis()
-                // tell the queue that we need boosters
-                ApiQueueEntryBuilder.newInstance().friendsRequestByUUID(HudPixelExtended.UUID).setCallback(this).create()
+     * @param event RenderPlayerEvent
+     */
+    internal fun onRenderPlayer(event: Pre) {
+
+        val offset = 0.3
+        var i = 1
+
+        if (this.iGameStatsViewer?.getRenderList() != null) {
+            for (s in this.iGameStatsViewer?.getRenderList() ?: listOf<String>()) {
+                renderName(event.renderer, s, event.entityPlayer, event.x, event.y + offset * i, event.z)
+                i++
             }
+        } else {
+            renderName(event.renderer, "Loading stats ....", event.entityPlayer, event.x, event.y + offset, event.z)
         }
-    }
-
-    override fun onFriendResponse(friendShips: List<FriendsReply.FriendShip>?) {
-        if (friendShips == null) {
-            logWarn("[OnlineFriends][APIloader]: The api answered the request with NULL!")
-            return
-        }
-        logInfo("[OnlineFriends][APIloader]: The API answered with a total of " + friendShips.size + " friends! I will request all the Names now.")
-        friendShips.forEach( { this.checkFriend(it) })
-        isApiLoaded = true
-    }
-
-    fun checkFriend(f: FriendsReply.FriendShip) {
-        if (f.uuidSender.toString() == HudPixelExtended.UUID.toString())
-            PlayerFactory(f.uuidReceiver, this)
-        else
-            PlayerFactory(f.uuidSender, this)
-    }
-
-    override fun onPlayerLoadedCallback(uuid: UUID) {
-        for (s in allreadyStoredUUID)
-            if (s === uuid)
-                return
-        allreadyStoredUUID.add(uuid)
-        allreadyStored.add(PlayerDatabase.getPlayerByUUID(uuid)?.name)
-        OnlineFriendManager.addFriend(OnlineFriend(uuid, McColorHelper.GRAY + "Not loaded yet!"))
     }
 
     companion object {
 
-        private val REQUEST_COOLDOWN = 20 * 60 * 1000 // = 30min
-        private var lastRequest: Long = 0
-        val allreadyStored = ArrayList<String?>()
-        private val allreadyStoredUUID = ArrayList<UUID>()
-        var isApiLoaded = false
-            private set
+        private val DURATION = 10000
+
+        /**
+         * renders a string above a Player copied from the original mc namerenderer
+
+         * @param renderer the renderer
+         * *
+         * @param str      the string to render
+         * *
+         * @param entityIn the entity to render above
+         * *
+         * @param x        x-cord
+         * *
+         * @param y        y-cord
+         * *
+         * @param z        z-cord
+         */
+        private fun renderName(renderer: RenderPlayer, str: String, entityIn: EntityPlayer, x: Double, y: Double, z: Double) {
+            val fontrenderer = renderer.fontRendererFromRenderManager
+            val f = 1.6f
+            val f1 = 0.016666668f * f
+            pushMatrix()
+            translate(x.toFloat() + 0.0f, y.toFloat() + entityIn.height + 0.5f, z.toFloat())
+            glNormal3f(0.0f, 1.0f, 0.0f)
+            rotate(-renderer.renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+            rotate(renderer.renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+            scale(-f1, -f1, f1)
+            disableLighting()
+            depthMask(false)
+            disableDepth()
+            enableBlend()
+            tryBlendFuncSeparate(770, 771, 1, 0)
+            val tessellator = getInstance()
+            val worldrenderer = tessellator.buffer
+            val i = 0
+
+            val j = fontrenderer.getStringWidth(str) / 2
+            disableTexture2D()
+            worldrenderer.begin(7, POSITION_COLOR)
+            worldrenderer.pos((-j - 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            worldrenderer.pos((-j - 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            worldrenderer.pos((j + 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            worldrenderer.pos((j + 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            tessellator.draw()
+            enableTexture2D()
+            fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, 553648127)
+            enableDepth()
+            depthMask(true)
+            fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, -1)
+            enableLighting()
+            disableBlend()
+            color(1.0f, 1.0f, 1.0f, 1.0f)
+            popMatrix()
+        }
     }
 }

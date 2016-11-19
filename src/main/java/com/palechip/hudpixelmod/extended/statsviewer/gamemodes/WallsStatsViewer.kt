@@ -1,24 +1,3 @@
-package com.palechip.hudpixelmod.extended.onlinefriends
-
-import com.palechip.hudpixelmod.api.interaction.ApiQueueEntryBuilder
-import com.palechip.hudpixelmod.api.interaction.callbacks.FriendResponseCallback
-import com.palechip.hudpixelmod.config.GeneralConfigSettings
-import com.palechip.hudpixelmod.extended.HudPixelExtended
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler.registerIEvent
-import com.palechip.hudpixelmod.extended.data.player.IPlayerLoadedCallback
-import com.palechip.hudpixelmod.extended.data.player.PlayerDatabase
-import com.palechip.hudpixelmod.extended.data.player.PlayerFactory
-import com.palechip.hudpixelmod.extended.util.IEventHandler
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logWarn
-import com.palechip.hudpixelmod.extended.util.McColorHelper
-import com.palechip.hudpixelmod.util.plus
-import net.hypixel.api.reply.FriendsReply
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
-import java.lang.System.currentTimeMillis
-import java.util.*
-
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
  * <p>
@@ -64,64 +43,54 @@ import java.util.*
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
+package com.palechip.hudpixelmod.extended.statsviewer.gamemodes
 
-@SideOnly(Side.CLIENT)
-class OnlineFriendsLoader : FriendResponseCallback, IEventHandler, IPlayerLoadedCallback {
+import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer
+import com.palechip.hudpixelmod.util.McColorHelperJava
+import net.minecraft.util.text.TextFormatting
+import java.util.*
 
-    init {
-        setupLoader()
+class WallsStatsViewer(uuid: UUID, statsName: String) : AbstractStatsViewer(uuid, statsName), McColorHelperJava {
+
+    private var kills: Int = 0
+    private var deaths: Int = 0
+    private var wins: Int = 0
+    private var losses: Int = 0
+    private var kd: Double = 0.toDouble()
+    private var wl: Double = 0.toDouble()
+
+    private fun generateRenderList() {
+        getRenderList()?.add(WINS + McColorHelperJava.GOLD + wins + LOSSES + McColorHelperJava.GOLD + losses + WL + McColorHelperJava.GOLD + wl)
+        getRenderList()?.add(KILLS + McColorHelperJava.GOLD + kills + DEATHS + McColorHelperJava.GOLD + deaths + KD + McColorHelperJava.GOLD + kd)
     }
 
-    fun setupLoader() {
-        registerIEvent(this)
-        requestFriends(true)
-    }
+    override fun composeStats() {
 
-    private fun requestFriends(forceRequest: Boolean?) {
-        if (GeneralConfigSettings.useAPI && OnlineFriendManager.enabled) {
-            // isHypixelNetwork if enough time has past
-            if (currentTimeMillis() > lastRequest + REQUEST_COOLDOWN || forceRequest!!) {
-                // save the time of the request
-                lastRequest = currentTimeMillis()
-                // tell the queue that we need boosters
-                ApiQueueEntryBuilder.newInstance().friendsRequestByUUID(HudPixelExtended.UUID).setCallback(this).create()
-            }
-        }
-    }
+        this.kills = getInt("kills")!!
+        this.deaths = getInt("deaths")!!
+        this.wins = getInt("wins")!!
+        this.losses = getInt("losses")!!
 
-    override fun onFriendResponse(friendShips: List<FriendsReply.FriendShip>?) {
-        if (friendShips == null) {
-            logWarn("[OnlineFriends][APIloader]: The api answered the request with NULL!")
-            return
-        }
-        logInfo("[OnlineFriends][APIloader]: The API answered with a total of " + friendShips.size + " friends! I will request all the Names now.")
-        friendShips.forEach( { this.checkFriend(it) })
-        isApiLoaded = true
-    }
+        kd = calculateKD(kills, deaths)
+        wl = calculateWL(wins, losses).toDouble()
 
-    fun checkFriend(f: FriendsReply.FriendShip) {
-        if (f.uuidSender.toString() == HudPixelExtended.UUID.toString())
-            PlayerFactory(f.uuidReceiver, this)
-        else
-            PlayerFactory(f.uuidSender, this)
-    }
+        generateRenderList()
 
-    override fun onPlayerLoadedCallback(uuid: UUID) {
-        for (s in allreadyStoredUUID)
-            if (s === uuid)
-                return
-        allreadyStoredUUID.add(uuid)
-        allreadyStored.add(PlayerDatabase.getPlayerByUUID(uuid)?.name)
-        OnlineFriendManager.addFriend(OnlineFriend(uuid, McColorHelper.GRAY + "Not loaded yet!"))
     }
 
     companion object {
 
-        private val REQUEST_COOLDOWN = 20 * 60 * 1000 // = 30min
-        private var lastRequest: Long = 0
-        val allreadyStored = ArrayList<String?>()
-        private val allreadyStoredUUID = ArrayList<UUID>()
-        var isApiLoaded = false
-            private set
+        operator fun TextFormatting.plus(string: String) = "$this$string"
+        operator fun String.plus(string: TextFormatting) = "$this$string"
+
+        /*
+    *Lets add some static finals. Players love static finals.
+    */
+        private val KILLS = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "⚔" + McColorHelperJava.D_GRAY + "] "
+        private val DEATHS = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "☠" + McColorHelperJava.D_GRAY + "] "
+        private val WINS = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "Wins" + McColorHelperJava.D_GRAY + "] "
+        private val LOSSES = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "Losses" + McColorHelperJava.D_GRAY + "] "
+        private val KD = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "K/D" + McColorHelperJava.D_GRAY + "] "
+        private val WL = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "W/L" + McColorHelperJava.D_GRAY + "] "
     }
 }

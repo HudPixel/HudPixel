@@ -1,8 +1,7 @@
 package com.palechip.hudpixelmod.extended.onlinefriends
 
-import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
-
 import com.palechip.hudpixelmod.extended.util.ImageLoader.chatLocation
+import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
 import net.minecraft.client.Minecraft.getMinecraft
 
 /* **********************************************************************************************************************
@@ -52,7 +51,7 @@ import net.minecraft.client.Minecraft.getMinecraft
  **********************************************************************************************************************/
 class OnlineFriendsMessageButton(internal var playerName:
 
-                                 String) : FancyListButton(1f, 0f, 0f, chatLocation()) {
+                                 String?) : FancyListButton(1f, 0f, 0f, chatLocation()) {
 
     override fun onClick() {
         getMinecraft().thePlayer.sendChatMessage("/msg " + playerName)

@@ -1,23 +1,4 @@
-package com.palechip.hudpixelmod.extended.onlinefriends
-
-import com.palechip.hudpixelmod.api.interaction.ApiQueueEntryBuilder
-import com.palechip.hudpixelmod.api.interaction.callbacks.FriendResponseCallback
-import com.palechip.hudpixelmod.config.GeneralConfigSettings
-import com.palechip.hudpixelmod.extended.HudPixelExtended
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler.registerIEvent
-import com.palechip.hudpixelmod.extended.data.player.IPlayerLoadedCallback
-import com.palechip.hudpixelmod.extended.data.player.PlayerDatabase
-import com.palechip.hudpixelmod.extended.data.player.PlayerFactory
-import com.palechip.hudpixelmod.extended.util.IEventHandler
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logWarn
-import com.palechip.hudpixelmod.extended.util.McColorHelper
-import com.palechip.hudpixelmod.util.plus
-import net.hypixel.api.reply.FriendsReply
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
-import java.lang.System.currentTimeMillis
-import java.util.*
+package com.palechip.hudpixelmod.extended.cooldowndisplay
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -65,63 +46,64 @@ import java.util.*
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
+import com.palechip.hudpixelmod.GameDetector
+import com.palechip.hudpixelmod.util.GameType
+import net.minecraft.client.Minecraft
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
+import net.unaussprechlich.managedgui.lib.util.RenderUtils
+
+import java.util.Objects
+
 @SideOnly(Side.CLIENT)
-class OnlineFriendsLoader : FriendResponseCallback, IEventHandler, IPlayerLoadedCallback {
+class CooldownDisplayModule(private val id: Int, private val meta: Int, private val slot: Int) {
+    private var coolDown: String? = null
+    private val itemStack: ItemStack
+    private var isHidden = false
 
     init {
-        setupLoader()
+        itemStack = ItemStack(Item.getItemById(id))
+        if (meta > 0) itemStack.itemDamage = meta
     }
 
-    fun setupLoader() {
-        registerIEvent(this)
-        requestFriends(true)
-    }
+    fun renderModule(xStart: Float, yStart: Float) {
+        if (isHidden) return
+        if (coolDown != "") {
+            RenderUtils.renderBoxWithColor((xStart - 2).toDouble(), (yStart - 2).toDouble(), size.toDouble(), size.toDouble(), 1f, 0f, 0f, 0.5f)
+        } else {
+            RenderUtils.renderBoxWithColor((xStart - 2).toDouble(), (yStart - 2).toDouble(), size.toDouble(), size.toDouble(), 0f, 1f, 0f, 0.5f)
+        }
+        RenderUtils.renderBoxWithColor((xStart - 1).toDouble(), (yStart - 1).toDouble(), (size - 2).toDouble(), (size - 2).toDouble(), 0f, 0f, 0f, 0.6f)
+        RenderUtils.renderItemStackWithText(id, meta, Math.round(xStart), Math.round(yStart), coolDown)
+        if (Minecraft.getMinecraft().thePlayer.heldItemMainhand != null && Minecraft.getMinecraft().thePlayer.heldItemMainhand == Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(slot)) {
+            RenderUtils.renderBoxWithColor((xStart - 2).toDouble(), (yStart - 2).toDouble(), size.toDouble(), 1.0, 1f, 1f, 1f, 1f)
+            RenderUtils.renderBoxWithColor((xStart - 2).toDouble(), (yStart - 3 + size).toDouble(), size.toDouble(), 1.0, 1f, 1f, 1f, 1f)
+            RenderUtils.renderBoxWithColor((xStart - 3 + size).toDouble(), (yStart - 2).toDouble(), 1.0, size.toDouble(), 1f, 1f, 1f, 1f)
+            RenderUtils.renderBoxWithColor((xStart - 2).toDouble(), (yStart - 2).toDouble(), 1.0, size.toDouble(), 1f, 1f, 1f, 1f)
 
-    private fun requestFriends(forceRequest: Boolean?) {
-        if (GeneralConfigSettings.useAPI && OnlineFriendManager.enabled) {
-            // isHypixelNetwork if enough time has past
-            if (currentTimeMillis() > lastRequest + REQUEST_COOLDOWN || forceRequest!!) {
-                // save the time of the request
-                lastRequest = currentTimeMillis()
-                // tell the queue that we need boosters
-                ApiQueueEntryBuilder.newInstance().friendsRequestByUUID(HudPixelExtended.UUID).setCallback(this).create()
-            }
         }
     }
 
-    override fun onFriendResponse(friendShips: List<FriendsReply.FriendShip>?) {
-        if (friendShips == null) {
-            logWarn("[OnlineFriends][APIloader]: The api answered the request with NULL!")
+    fun onClientTick() {
+        if (Minecraft.getMinecraft().thePlayer.inventory != null && Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(slot) == null) {
+            isHidden = true
             return
+        } else {
+            isHidden = false
         }
-        logInfo("[OnlineFriends][APIloader]: The API answered with a total of " + friendShips.size + " friends! I will request all the Names now.")
-        friendShips.forEach( { this.checkFriend(it) })
-        isApiLoaded = true
-    }
-
-    fun checkFriend(f: FriendsReply.FriendShip) {
-        if (f.uuidSender.toString() == HudPixelExtended.UUID.toString())
-            PlayerFactory(f.uuidReceiver, this)
+        val iStack = Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(slot)!!
+        if (GameDetector.currentGameType === GameType.WARLORDS && slot == 4 && iStack.itemDamage == 15)
+            coolDown = ">1m"
+        else if (iStack.stackSize > 1)
+            coolDown = "" + iStack.stackSize
         else
-            PlayerFactory(f.uuidSender, this)
-    }
-
-    override fun onPlayerLoadedCallback(uuid: UUID) {
-        for (s in allreadyStoredUUID)
-            if (s === uuid)
-                return
-        allreadyStoredUUID.add(uuid)
-        allreadyStored.add(PlayerDatabase.getPlayerByUUID(uuid)?.name)
-        OnlineFriendManager.addFriend(OnlineFriend(uuid, McColorHelper.GRAY + "Not loaded yet!"))
+            coolDown = ""
     }
 
     companion object {
 
-        private val REQUEST_COOLDOWN = 20 * 60 * 1000 // = 30min
-        private var lastRequest: Long = 0
-        val allreadyStored = ArrayList<String?>()
-        private val allreadyStoredUUID = ArrayList<UUID>()
-        var isApiLoaded = false
-            private set
+        private val size: Short = 20
     }
 }

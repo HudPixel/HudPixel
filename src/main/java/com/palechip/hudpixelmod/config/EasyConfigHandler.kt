@@ -86,9 +86,9 @@ object EasyConfigHandler {
                 it.key.set(null, HudPixelMod.CONFIG.get(it.value.getString("category", CCategory.UNKNOWN), it.value.getString("id", ""), it.value.getString("def", ""), it.value.getString("comment", "")).string)
                 HudPixelConfigGui.addElement(
                         CCategory.getCategoryByName(it.value.getString("category", CCategory.UNKNOWN)),
-                        it.value.getString("id", ""),
-                        it.value.getString("def", ""),
-                        it.value.getString("comment", "")
+                        it.value.getString("id", "")!!,
+                        it.value.getString("def", "")!!,
+                        it.value.getString("comment", "")!!
                 )
             }
         }

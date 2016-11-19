@@ -67,7 +67,7 @@ import javax.imageio.ImageIO.read
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 @SideOnly(Side.CLIENT)
-class LoadPlayerHead(private val username: String, private val callback: ILoadPlayerHeadCallback) : IEventHandler {
+class LoadPlayerHead(private val username: String?, private val callback: ILoadPlayerHeadCallback) : IEventHandler {
 
     private var image: BufferedImage? = null
     private var resourceLocation: ResourceLocation? = null

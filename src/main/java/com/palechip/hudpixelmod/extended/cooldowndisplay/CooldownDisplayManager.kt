@@ -1,23 +1,4 @@
-package com.palechip.hudpixelmod.extended.onlinefriends
-
-import com.palechip.hudpixelmod.api.interaction.ApiQueueEntryBuilder
-import com.palechip.hudpixelmod.api.interaction.callbacks.FriendResponseCallback
-import com.palechip.hudpixelmod.config.GeneralConfigSettings
-import com.palechip.hudpixelmod.extended.HudPixelExtended
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler.registerIEvent
-import com.palechip.hudpixelmod.extended.data.player.IPlayerLoadedCallback
-import com.palechip.hudpixelmod.extended.data.player.PlayerDatabase
-import com.palechip.hudpixelmod.extended.data.player.PlayerFactory
-import com.palechip.hudpixelmod.extended.util.IEventHandler
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logWarn
-import com.palechip.hudpixelmod.extended.util.McColorHelper
-import com.palechip.hudpixelmod.util.plus
-import net.hypixel.api.reply.FriendsReply
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
-import java.lang.System.currentTimeMillis
-import java.util.*
+package com.palechip.hudpixelmod.extended.cooldowndisplay
 
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
@@ -65,63 +46,98 @@ import java.util.*
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
-@SideOnly(Side.CLIENT)
-class OnlineFriendsLoader : FriendResponseCallback, IEventHandler, IPlayerLoadedCallback {
+import com.palechip.hudpixelmod.GameDetector
+import com.palechip.hudpixelmod.config.CCategory
+import com.palechip.hudpixelmod.config.ConfigPropertyBoolean
+import com.palechip.hudpixelmod.config.ConfigPropertyInt
+import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler
+import com.palechip.hudpixelmod.extended.cooldowndisplay.CooldownManagerFactory.setCooldownDisplay
+import com.palechip.hudpixelmod.extended.util.IEventHandler
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiScreen
+import net.minecraft.client.gui.ScaledResolution
+import net.minecraftforge.client.event.ClientChatReceivedEvent
+import java.util.*
+
+object CooldownDisplayManager : IEventHandler {
+    internal var count = 0
 
     init {
-        setupLoader()
+        HudPixelExtendedEventHandler.registerIEvent(this)
     }
 
-    fun setupLoader() {
-        registerIEvent(this)
-        requestFriends(true)
-    }
-
-    private fun requestFriends(forceRequest: Boolean?) {
-        if (GeneralConfigSettings.useAPI && OnlineFriendManager.enabled) {
-            // isHypixelNetwork if enough time has past
-            if (currentTimeMillis() > lastRequest + REQUEST_COOLDOWN || forceRequest!!) {
-                // save the time of the request
-                lastRequest = currentTimeMillis()
-                // tell the queue that we need boosters
-                ApiQueueEntryBuilder.newInstance().friendsRequestByUUID(HudPixelExtended.UUID).setCallback(this).create()
-            }
+    override fun onClientTick() {
+        count++
+        if (count > 40) {
+            count = 0
+            cdModules = setCooldownDisplay(GameDetector.currentGameType)
         }
+        if (cdModules.isEmpty()) return
+        for (cdM in cdModules)
+            cdM.onClientTick()
     }
 
-    override fun onFriendResponse(friendShips: List<FriendsReply.FriendShip>?) {
-        if (friendShips == null) {
-            logWarn("[OnlineFriends][APIloader]: The api answered the request with NULL!")
-            return
+    override fun onRender() {
+
+        if (cdModules.isEmpty() || !enabled || GameDetector.isLobby()) return
+
+        val mc = Minecraft.getMinecraft()
+        val scale: Int
+        if (mc.gameSettings.guiScale == 0) {
+            val res = ScaledResolution(mc)
+            scale = res.scaleFactor
+        } else {
+            scale = mc.gameSettings.guiScale
         }
-        logInfo("[OnlineFriends][APIloader]: The API answered with a total of " + friendShips.size + " friends! I will request all the Names now.")
-        friendShips.forEach( { this.checkFriend(it) })
-        isApiLoaded = true
+
+        val xCenter = (Minecraft.getMinecraft().displayWidth / 2 / scale - cdModules.size / 2 * 25 + 4).toFloat()
+        val yCenter = Minecraft.getMinecraft().displayHeight / 2 / scale.toFloat()
+        for (i in cdModules.indices)
+            cdModules[i].renderModule(xCenter + xOffsetCooldownDisplay.toFloat() + (i * 25).toFloat(), yCenter + yOffsetCooldownDisplay)
     }
 
-    fun checkFriend(f: FriendsReply.FriendShip) {
-        if (f.uuidSender.toString() == HudPixelExtended.UUID.toString())
-            PlayerFactory(f.uuidReceiver, this)
-        else
-            PlayerFactory(f.uuidSender, this)
+    override fun handleMouseInput(i: Int, mX: Int, mY: Int) {
     }
 
-    override fun onPlayerLoadedCallback(uuid: UUID) {
-        for (s in allreadyStoredUUID)
-            if (s === uuid)
-                return
-        allreadyStoredUUID.add(uuid)
-        allreadyStored.add(PlayerDatabase.getPlayerByUUID(uuid)?.name)
-        OnlineFriendManager.addFriend(OnlineFriend(uuid, McColorHelper.GRAY + "Not loaded yet!"))
+    override fun onMouseClick(mX: Int, mY: Int) {
     }
 
-    companion object {
-
-        private val REQUEST_COOLDOWN = 20 * 60 * 1000 // = 30min
-        private var lastRequest: Long = 0
-        val allreadyStored = ArrayList<String?>()
-        private val allreadyStoredUUID = ArrayList<UUID>()
-        var isApiLoaded = false
-            private set
+    @Throws(Throwable::class)
+    override fun onChatReceived(e: ClientChatReceivedEvent) {
     }
+
+    override fun everyTenTICKS() {
+
+    }
+
+    override fun everySEC() {
+
+    }
+
+    override fun everyFiveSEC() {
+
+    }
+
+    override fun everyMIN() {
+
+    }
+
+    override fun openGUI(guiScreen: GuiScreen?) {
+
+    }
+
+    override fun onConfigChanged() {
+
+    }
+
+
+        @ConfigPropertyBoolean(category = CCategory.COOLDOWN_DISPLAY, id = "cooldownDisplay", comment = "The Cooldown Tracker", def = true)
+        var enabled = true
+        @ConfigPropertyInt(category = CCategory.COOLDOWN_DISPLAY, id = "yOffsetCooldownDisplay", comment = "Y offset of cooldown display", def = 25)
+        var yOffsetCooldownDisplay = 25
+        @ConfigPropertyInt(category = CCategory.COOLDOWN_DISPLAY, id = "xOffsetCooldownDisplay", comment = "X offset of cooldown display", def = 0)
+        var xOffsetCooldownDisplay = 0
+
+        internal var cdModules = ArrayList<CooldownDisplayModule>()
+
 }

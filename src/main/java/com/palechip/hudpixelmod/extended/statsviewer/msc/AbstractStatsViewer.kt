@@ -79,7 +79,7 @@ abstract class AbstractStatsViewer protected constructor(protected val playerUUI
         if (renderList0.isEmpty()) {
             return null
         }
-        return renderList
+        return renderList0
     }
 
     protected abstract fun composeStats()

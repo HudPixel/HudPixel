@@ -74,7 +74,7 @@ object HudPixelExtended {
         staffManager = StaffManager()
         ApiManager
 
-        CooldownDisplayManager.getInstance()
+        CooldownDisplayManager
         ArmorHud
     }
 

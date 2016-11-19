@@ -158,9 +158,9 @@ class ModularGuiHelper : McColorHelper {
 
             //collects all data
             for (element in ModularGuiRegistry.allElements) {
-                if (!element.provider.showElement() || element.provider.afterstats == null || element.provider.afterstats.isEmpty())
+                if (!element.provider.showElement() || element.provider.getAfterstats() == null || element.provider.getAfterstats().isEmpty())
                     continue //if you shouldn't show it, skip it.
-                renderList.add(element.provider.afterstats)
+                renderList.add(element.provider.getAfterstats())
             }
 
             /**

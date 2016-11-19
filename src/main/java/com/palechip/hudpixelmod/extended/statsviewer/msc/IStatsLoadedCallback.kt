@@ -1,7 +1,4 @@
-package com.palechip.hudpixelmod.config
-
-import com.palechip.hudpixelmod.extended.util.McColorHelper
-import net.minecraft.util.text.TextFormatting
+package com.palechip.hudpixelmod.extended.statsviewer.msc
 
 /* **********************************************************************************************************************
  HudPixelReloaded - License
@@ -49,56 +46,9 @@ import net.minecraft.util.text.TextFormatting
  reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 
+import com.google.gson.JsonObject
 
-/**
- * Little HelperEnum to avoid spelling mistakes :P
- * Please add a new category as enum and as static final (const) :)
- */
-enum class CCategory private constructor(val nm: String, val chatFormatting: TextFormatting) : McColorHelper {
+interface IStatsLoadedCallback {
 
-    //ADD A NEW CATEGORY HERE >>
-    ENUM_UNKNOWN("Unknown", TextFormatting.BLACK),
-    ENUM_BOOSTER_DISPLAY("BoosterDisplay", TextFormatting.GOLD),
-    ENUM_COOLDOWN_DISPLAY("CooldownDisplay", TextFormatting.GOLD),
-    ENUM_FRIENDS_DISPLAY("FriendsDisplay", TextFormatting.GOLD),
-    ENUM_FANCY_CHAT("FancyChat", TextFormatting.GOLD),
-    ENUM_HUDPIXEL("HudPixel", TextFormatting.GOLD),
-    ENUM_WARLORDS("Warlords", TextFormatting.GOLD),
-    ENUM_GENERAL("General", TextFormatting.GOLD),
-    ENUM_HUD("Hud", TextFormatting.GOLD),
-    ENUM_ARMOR_HUD("ArmorHud", TextFormatting.GOLD);
-
-
-    companion object {
-
-        //CAN'T CAST ENUMS IN @ConfigProperty<T> SO HERE ARE SOME STATIC FINALS, WE ALL LOVE STATIC FINALS!!!
-        //ALSO ADD HERE >>
-        const val UNKNOWN = "Unknown"
-        const val BOOSTER_DISPLAY = "BoosterDisplay"
-        const val COOLDOWN_DISPLAY = "CooldownDisplay"
-        const val FRIENDS_DISPLAY = "FriendsDisplay"
-        const val FANCY_CHAT = "FancyChat"
-        const val HUDPIXEL = "HudPixel"
-        const val WARLORDS = "Warlords"
-        const val GENERAL = "General"
-        const val HUD = "Hud"
-        const val ARMOR_HUD = "ArmorHud"
-
-        fun getCategoryByName(name: String?): CCategory {
-            return when(name) {
-                BOOSTER_DISPLAY -> CCategory.ENUM_BOOSTER_DISPLAY
-                COOLDOWN_DISPLAY -> CCategory.ENUM_COOLDOWN_DISPLAY
-                FRIENDS_DISPLAY -> CCategory.ENUM_FRIENDS_DISPLAY
-                FANCY_CHAT -> CCategory.ENUM_FANCY_CHAT
-                HUDPIXEL -> CCategory.ENUM_HUDPIXEL
-                UNKNOWN -> CCategory.ENUM_UNKNOWN
-                WARLORDS -> CCategory.ENUM_WARLORDS
-                GENERAL -> CCategory.ENUM_GENERAL
-                HUD -> CCategory.ENUM_HUD
-                ARMOR_HUD -> CCategory.ENUM_ARMOR_HUD
-                else -> throw IllegalArgumentException(name)
-
-            }
-        }
-    }
+    fun onStatsLoadedResponse(statistics: JsonObject)
 }

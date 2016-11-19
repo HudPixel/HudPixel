@@ -1,24 +1,3 @@
-package com.palechip.hudpixelmod.extended.onlinefriends
-
-import com.palechip.hudpixelmod.api.interaction.ApiQueueEntryBuilder
-import com.palechip.hudpixelmod.api.interaction.callbacks.FriendResponseCallback
-import com.palechip.hudpixelmod.config.GeneralConfigSettings
-import com.palechip.hudpixelmod.extended.HudPixelExtended
-import com.palechip.hudpixelmod.extended.HudPixelExtendedEventHandler.registerIEvent
-import com.palechip.hudpixelmod.extended.data.player.IPlayerLoadedCallback
-import com.palechip.hudpixelmod.extended.data.player.PlayerDatabase
-import com.palechip.hudpixelmod.extended.data.player.PlayerFactory
-import com.palechip.hudpixelmod.extended.util.IEventHandler
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logInfo
-import com.palechip.hudpixelmod.extended.util.LoggerHelper.logWarn
-import com.palechip.hudpixelmod.extended.util.McColorHelper
-import com.palechip.hudpixelmod.util.plus
-import net.hypixel.api.reply.FriendsReply
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
-import java.lang.System.currentTimeMillis
-import java.util.*
-
 /* **********************************************************************************************************************
  * HudPixelReloaded - License
  * <p>
@@ -64,64 +43,65 @@ import java.util.*
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
+package com.palechip.hudpixelmod.extended.statsviewer.gamemodes
 
-@SideOnly(Side.CLIENT)
-class OnlineFriendsLoader : FriendResponseCallback, IEventHandler, IPlayerLoadedCallback {
+import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer
+import com.palechip.hudpixelmod.util.McColorHelperJava
+import net.minecraft.util.text.TextFormatting
+import java.util.*
 
-    init {
-        setupLoader()
+class PaintballStatsViewer(uuid: UUID, statsName: String) : AbstractStatsViewer(uuid, statsName), McColorHelperJava {
+    //lets get some variables in here
+    private var kills: Int = 0
+    private var deaths: Int = 0
+    private var wins: Int = 0
+    private var shots: Int = 0
+    private var endurance: Int = 0
+    private var godfather: Int = 0
+    private var fortune: Int = 0
+    private var headstart: Int = 0
+    private var superluck: Int = 0
+    private var kd: Double = 0.toDouble()
+
+    private fun generateRenderList() {
+        getRenderList()?.add(ENDURANCE + McColorHelperJava.GOLD + endurance + FORTUNE + McColorHelperJava.GOLD + fortune + HEADSTART + McColorHelperJava.GOLD + headstart + SUPERLUCK + McColorHelperJava.GOLD + superluck + GODFATHER + McColorHelperJava.GOLD + godfather)
+        getRenderList()?.add(KILLS + McColorHelperJava.GOLD + kills + DEATHS + McColorHelperJava.GOLD + deaths + KD + McColorHelperJava.GOLD + kd)
+        getRenderList()?.add(WINS + McColorHelperJava.GOLD + wins + SHOTS + McColorHelperJava.GOLD + shots)
     }
 
-    fun setupLoader() {
-        registerIEvent(this)
-        requestFriends(true)
-    }
+    override fun composeStats() {
+        this.kills = getInt("kills")!!
+        this.deaths = getInt("deaths")!!
+        this.shots = getInt("shots_fired")!!
+        this.wins = getInt("wins")!!
+        this.endurance = getInt("endurance")!!
+        this.godfather = getInt("godfather")!!
+        this.fortune = getInt("fortune")!!
+        this.superluck = getInt("superluck")!!
+        this.headstart = getInt("headstart")!!
 
-    private fun requestFriends(forceRequest: Boolean?) {
-        if (GeneralConfigSettings.useAPI && OnlineFriendManager.enabled) {
-            // isHypixelNetwork if enough time has past
-            if (currentTimeMillis() > lastRequest + REQUEST_COOLDOWN || forceRequest!!) {
-                // save the time of the request
-                lastRequest = currentTimeMillis()
-                // tell the queue that we need boosters
-                ApiQueueEntryBuilder.newInstance().friendsRequestByUUID(HudPixelExtended.UUID).setCallback(this).create()
-            }
-        }
-    }
+        kd = calculateKD(kills, deaths)
 
-    override fun onFriendResponse(friendShips: List<FriendsReply.FriendShip>?) {
-        if (friendShips == null) {
-            logWarn("[OnlineFriends][APIloader]: The api answered the request with NULL!")
-            return
-        }
-        logInfo("[OnlineFriends][APIloader]: The API answered with a total of " + friendShips.size + " friends! I will request all the Names now.")
-        friendShips.forEach( { this.checkFriend(it) })
-        isApiLoaded = true
-    }
+        generateRenderList()
 
-    fun checkFriend(f: FriendsReply.FriendShip) {
-        if (f.uuidSender.toString() == HudPixelExtended.UUID.toString())
-            PlayerFactory(f.uuidReceiver, this)
-        else
-            PlayerFactory(f.uuidSender, this)
-    }
-
-    override fun onPlayerLoadedCallback(uuid: UUID) {
-        for (s in allreadyStoredUUID)
-            if (s === uuid)
-                return
-        allreadyStoredUUID.add(uuid)
-        allreadyStored.add(PlayerDatabase.getPlayerByUUID(uuid)?.name)
-        OnlineFriendManager.addFriend(OnlineFriend(uuid, McColorHelper.GRAY + "Not loaded yet!"))
     }
 
     companion object {
 
-        private val REQUEST_COOLDOWN = 20 * 60 * 1000 // = 30min
-        private var lastRequest: Long = 0
-        val allreadyStored = ArrayList<String?>()
-        private val allreadyStoredUUID = ArrayList<UUID>()
-        var isApiLoaded = false
-            private set
+        operator fun TextFormatting.plus(string: String) = "$this$string"
+        operator fun String.plus(string: TextFormatting) = "$this$string"
+        /*
+     *Lets add some static finals. Players love static finals.
+     */
+        private val KILLS = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "⚔" + McColorHelperJava.D_GRAY + "] "
+        private val DEATHS = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "☠" + McColorHelperJava.D_GRAY + "] "
+        private val WINS = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "Wins" + McColorHelperJava.D_GRAY + "] "
+        private val KD = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "K/D" + McColorHelperJava.D_GRAY + "] "
+        private val SHOTS = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "Shots" + McColorHelperJava.D_GRAY + "] "
+        private val ENDURANCE = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "E" + McColorHelperJava.D_GRAY + "] "
+        private val GODFATHER = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "G" + McColorHelperJava.D_GRAY + "] "
+        private val FORTUNE = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "F" + McColorHelperJava.D_GRAY + "] "
+        private val HEADSTART = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "H" + McColorHelperJava.D_GRAY + "] "
+        private val SUPERLUCK = McColorHelperJava.D_GRAY + " [" + McColorHelperJava.GRAY + "L" + McColorHelperJava.D_GRAY + "] "
     }
 }

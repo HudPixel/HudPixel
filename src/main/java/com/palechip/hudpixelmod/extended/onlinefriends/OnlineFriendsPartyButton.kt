@@ -1,8 +1,7 @@
 package com.palechip.hudpixelmod.extended.onlinefriends
 
-import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
-
 import com.palechip.hudpixelmod.extended.util.ImageLoader.partyLocation
+import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
 import net.minecraft.client.Minecraft.getMinecraft
 
 /* **********************************************************************************************************************
@@ -50,7 +49,7 @@ import net.minecraft.client.Minecraft.getMinecraft
  * 6. You shall not act against the will of the authors regarding anything related to the mod or its codebase. The authors
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
-class OnlineFriendsPartyButton internal constructor(private val playerName: String) : FancyListButton(0f, 0f, 1f, partyLocation()) {
+class OnlineFriendsPartyButton internal constructor(private val playerName: String?) : FancyListButton(0f, 0f, 1f, partyLocation()) {
 
     override fun onClick() {
         getMinecraft().thePlayer.sendChatMessage("/p invite " + playerName)

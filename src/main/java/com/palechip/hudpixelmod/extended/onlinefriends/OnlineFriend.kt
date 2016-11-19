@@ -67,13 +67,13 @@ internal constructor(private val playerUUID: UUID, internal var gamemode: String
     var isOnline: Boolean = false
     internal val username:
 
-            String
+            String?
 
     operator fun TextFormatting.plus(string: String?) = "$this$string"
     operator fun String.plus(string: TextFormatting?) = "$this$string"
 
     init {
-        this.username = PlayerDatabase.getPlayerByUUID(playerUUID).name
+        this.username = PlayerDatabase.getPlayerByUUID(playerUUID)?.name
 
 
         this.resourceLocation = null
