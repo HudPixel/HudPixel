@@ -2,6 +2,7 @@ package com.palechip.hudpixelmod.extended.statsviewer.gamemodes
 
 import com.palechip.hudpixelmod.extended.statsviewer.msc.AbstractStatsViewer
 import com.palechip.hudpixelmod.util.McColorHelperJava
+import net.hypixel.api.reply.PlayerReply
 import net.minecraft.util.text.TextFormatting
 import java.util.*
 
@@ -51,6 +52,7 @@ import java.util.*
  * reserve the right to take down any infringing project.
  **********************************************************************************************************************/
 class ArcadeStatsViewer(uuid: UUID, statsName: String) : AbstractStatsViewer(uuid, statsName), McColorHelperJava {
+
     private var coins: Int = 0
 
     private fun generateRenderList() {

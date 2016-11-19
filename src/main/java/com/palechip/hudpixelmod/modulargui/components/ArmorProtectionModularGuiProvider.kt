@@ -81,7 +81,7 @@ object ArmorProtectionModularGuiProvider : HudPixelModularGuiProvider() {
             content = DamageReductionCalc.reduction[2]
     }
 
-    override fun onChatMessage(textMessage: String?, formattedMessage: String?) {
+    override fun onChatMessage(textMessage: String, formattedMessage: String) {
 
     }
 
@@ -91,7 +91,7 @@ object ArmorProtectionModularGuiProvider : HudPixelModularGuiProvider() {
 
     var content: String = ""
 
-    override fun content(): String? {
+    override fun content(): String {
         return content;
     }
 
@@ -99,7 +99,7 @@ object ArmorProtectionModularGuiProvider : HudPixelModularGuiProvider() {
         return false
     }
 
-    override fun getAfterstats(): String? {
-        return null
+    override fun getAfterstats(): String {
+        return ""
     }
 }

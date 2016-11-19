@@ -182,7 +182,7 @@ abstract class FancyListObject {
         else
             RenderUtils.drawModalRectWithCustomSizedTexture(//draws the texture
                     Math.round(xStart), Math.round(yStart), 0, 0,
-                    12, 12, 12, 12, resourceLocation, 1f)
+                    12, 12, 12, 12, resourceLocation!!, 1f)
 
         fontRenderer.drawStringWithShadow(renderLineSmall!!, xStart + 14, yStart + 2, 0xffffff) //draws the first line string
     }
@@ -220,7 +220,7 @@ abstract class FancyListObject {
         else
             RenderUtils.drawModalRectWithCustomSizedTexture(//draws the image shown
                     Math.round(xStart), Math.round(yStart), 0, 0,
-                    24, 24, 24, 24, resourceLocation, 1f)
+                    24, 24, 24, 24, resourceLocation!!, 1f)
 
         if (renderPicture != ChatFormatting.WHITE + "") { //draws a background over the image if there is a string to render
             RenderUtils.renderBoxWithColor(xStart.toDouble(), (yStart + 12).toDouble(), 24.0, 9.0, 0f, 0f, 0f, 0.5f)

@@ -170,7 +170,7 @@ class StaffManager : IEventHandler, McColorHelperJava {
         for (s in tags!!.keys) { //for admins
             if (e.message.unformattedText.contains(s + ":") || e.message.unformattedText.startsWith(s + ":")) {
                 e.message = TextComponentString(e.message.formattedText.replaceFirst(s.toRegex(), tags!![s] + s))
-                FancyChat.getInstance().addMessage(e.message.formattedText)
+                FancyChat.addMessage(e.message.formattedText)
                 return
             }
         }

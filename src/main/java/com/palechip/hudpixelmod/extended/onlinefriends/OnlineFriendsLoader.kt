@@ -89,7 +89,7 @@ class OnlineFriendsLoader : FriendResponseCallback, IEventHandler, IPlayerLoaded
         }
     }
 
-    override fun onFriendResponse(friendShips: List<FriendsReply.FriendShip>?) {
+    override fun onFriendResponse(friendShips: List<FriendsReply.FriendShip>) {
         if (friendShips == null) {
             logWarn("[OnlineFriends][APIloader]: The api answered the request with NULL!")
             return

@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly
 import java.util.*
 
 @SideOnly(Side.CLIENT)
-class PlayerFactory(private val uuid: UUID, private val iPlayerLoadedCallback: IPlayerLoadedCallback) : UuidCallback, ILoadPlayerHeadCallback {
+class PlayerFactory(private val uuid: UUID?, private val iPlayerLoadedCallback: IPlayerLoadedCallback) : UuidCallback, ILoadPlayerHeadCallback {
     private var name: String? = null
     private var resourceLocation: ResourceLocation? = null
 

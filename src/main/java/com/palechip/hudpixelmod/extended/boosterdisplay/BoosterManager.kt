@@ -162,19 +162,19 @@ class BoosterManager : FancyListManager(5, BoosterManager.xOffsetBoosterDisplay.
         for (fco in fancyListObjects) {
             val be = fco as BoosterExtended
             if (be.gameType === b.gameType) {
-                if (be.booster != null && be.booster!!.owner == b.owner) {
+                if (be.booster != null && be.booster!!.owner0 == b.owner0) {
                     return
                 } else {
                     be.setCurrentBooster(b)
                     LoggerHelper.logInfo("[BoosterDisplay]: stored booster with ID " + b.gameType.nm + "[" + b.gameType.databaseID + "]"
-                            + " and owner " + b.owner + " in the boosterdisplay!")
+                            + " and owner " + b.owner0 + " in the boosterdisplay!")
                     return
                 }
             }
         }
 
         LoggerHelper.logWarn("[BoosterDisplay]: No display found for booster with ID "
-                + b.gameType.databaseID + " and owner " + b.owner + "!")
+                + b.gameType.databaseID + " and owner " + b.owner0 + "!")
     }
 
     /**
@@ -183,13 +183,13 @@ class BoosterManager : FancyListManager(5, BoosterManager.xOffsetBoosterDisplay.
 
      * @param boosters the boosters parsed by the callback
      */
-    override fun onBoosterResponse(boosters: List<BoostersReply.Booster>?) {
+    override fun onBoosterResponse(boosters: List<BoostersReply.Booster>) {
 
         // we aren't loading anymore
         if (boosters != null) {
             for (b in boosters) {
                 if (b.length < b.originalLength) {
-                    Booster(b.purchaserUuid.toString(), GameType.getTypeByDatabaseID(b.gameType.id))
+                    Booster(b.purchaserUuid.toString(), GameType.getTypeByDatabaseID(b.gameType?.id))
                 }
             }
         } else

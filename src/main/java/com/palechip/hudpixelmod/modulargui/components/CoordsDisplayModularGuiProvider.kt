@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft
  * Created by Elad on 10/24/2016.
  */
 object CoordsDisplayModularGuiProvider : SimpleHudPixelModularGuiProvider() {
+
     override fun ignoreEmptyCheck(): Boolean {
         return false
     }
@@ -25,7 +26,7 @@ object CoordsDisplayModularGuiProvider : SimpleHudPixelModularGuiProvider() {
 
     }
 
-    override fun onChatMessage(textMessage: String?, formattedMessage: String?) {
+    override fun onChatMessage(textMessage: String, formattedMessage: String) {
 
     }
 
@@ -33,12 +34,12 @@ object CoordsDisplayModularGuiProvider : SimpleHudPixelModularGuiProvider() {
 
     }
 
-    override fun getAfterstats(): String? {
-        return null
+    override fun getAfterstats(): String {
+        return ""
     }
 
 
-    override fun content(): String? {
+    override fun content(): String {
         val pos = Minecraft.getMinecraft().thePlayer.position
         return "X: ${pos.x}, Y: ${pos.y}, Z: ${pos.z}"
     }

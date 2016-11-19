@@ -76,6 +76,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
+import net.unaussprechlich.managedgui.lib.ManagedGui
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.lwjgl.input.Keyboard
@@ -134,7 +135,7 @@ object HudPixelMod {
         MinecraftForge.EVENT_BUS.register(ModularGuiHelper())
         ModularGuiHelper
         ContributorFancinessHandler
-
+        ManagedGui
 
         // setup HudPixelExtended
         HudPixelExtended

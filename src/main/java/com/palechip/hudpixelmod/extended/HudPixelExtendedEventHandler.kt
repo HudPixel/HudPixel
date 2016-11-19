@@ -133,7 +133,7 @@ object HudPixelExtendedEventHandler {
                     i.openGUI(Minecraft.getMinecraft().currentScreen)
                 if (Minecraft.getMinecraft().thePlayer != null)
                     OnlineFriendManager
-                FancyChat.getInstance().openGui()
+                FancyChat.openGui()
 
             }
         } catch (ex: Exception) {
@@ -151,7 +151,7 @@ object HudPixelExtendedEventHandler {
 
                 for (i in ieventBuffer)
                     i.onChatReceived(e)
-                FancyChat.getInstance().onChat(e)
+                FancyChat.onChat(e)
             }
         } catch (ex: Exception) {
             HudPixelMod.logWarn("[Extended]An exception occurred in onChatMessage(). Stacktrace below.")
@@ -175,7 +175,7 @@ object HudPixelExtendedEventHandler {
                 FancyListManager.processLoadingBar()
                 handleMouseScroll()
                 //Tick for FancyChat
-                FancyChat.getInstance().onClientTick()
+                FancyChat.onClientTick()
                 //Tick for the statsViewerManager
                 if (GameDetector.isLobby()) {
                     //System.out.print(GameDetector.getCurrentGameType().getName());
@@ -187,7 +187,7 @@ object HudPixelExtendedEventHandler {
                 }
 
             } else if (HudPixelMod.IS_DEBUGGING) {
-                FancyChat.getInstance().onClientTick()
+                FancyChat.onClientTick()
             }
         } catch (ex: Exception) {
             HudPixelMod.logWarn("[Extended]An exception occurred in onClientTick(). Stacktrace below.")
@@ -202,7 +202,7 @@ object HudPixelExtendedEventHandler {
             //Don't do anything unless we are on Hypixel
             if (HudPixelMod.isHypixelNetwork && e.type == RenderGameOverlayEvent.ElementType.ALL && !e.isCancelable) {
                 ieventBuffer.forEach(Consumer<IEventHandler> { it.onRender() })
-                if (FancyChat.enabled) FancyChat.getInstance().onRenderTick()
+                if (FancyChat.enabled) FancyChat.onRenderTick()
             }
         } catch (ex: Exception) {
             HudPixelMod.logWarn("[Extended]An exception occurred in omRenderTick). Stacktrace below.")
@@ -275,7 +275,7 @@ object HudPixelExtendedEventHandler {
         for (iE in ieventBuffer) {
             iE.handleMouseInput(i, mX, mY)
         }
-        FancyChat.getInstance().handleMouseInput(i)
+        FancyChat.handleMouseInput(i)
     }
 
     fun onGameStart() {

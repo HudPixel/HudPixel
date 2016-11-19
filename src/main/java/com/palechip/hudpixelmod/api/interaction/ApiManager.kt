@@ -71,9 +71,9 @@ object ApiManager : IEventHandler, ApiKeyLoadedCallback {
     }
 
     override fun everyTenTICKS() {
-        if (heat >= 100 || ApiQueue.isLocked() || ApiKeyHandler.isLoadingFailed) return
+        if (heat >= 100 || ApiQueue.isLocked || ApiKeyHandler.isLoadingFailed) return
         if (ApiQueue.hasNext())
-            ApiQueue.getNextEntry().execute()
+            ApiQueue.nextEntry.execute()
         heat++
     }
 
@@ -85,10 +85,10 @@ object ApiManager : IEventHandler, ApiKeyLoadedCallback {
         heat = 0
     }
 
-    override fun ApiKeyLoaded(failed: Boolean, key: String) {
+    override fun ApiKeyLoaded(failed: Boolean, key: String?) {
         LoggerHelper.logInfo("[API][key] failed=$failed key=$key")
         if (failed) return
-        HypixelAPI.getInstance().apiKey = UUID.fromString(key)
+        HypixelAPI.apiKey0 = UUID.fromString(key)
     }
 
 }

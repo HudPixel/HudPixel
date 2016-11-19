@@ -59,7 +59,7 @@ object PlayerDatabase {
         return null
     }
 
-    fun containsUUID(uuid: UUID): Boolean {
+    fun containsUUID(uuid: UUID?): Boolean {
         return players.containsKey(uuid)
     }
 

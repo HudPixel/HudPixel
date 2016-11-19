@@ -80,68 +80,38 @@ class ModularGuiHelper : McColorHelper {
     }
 
     companion object {
-        val TITLE = ModularGuiRegistry.Element("simp0", SimpleTitleModularGuiProvider())
+        fun register(vararg providers0: ModularGuiRegistry.Element) {
+            for(provider in providers0) {
+                ModularGuiRegistry.registerElement(provider)
+                providers.add(provider.provider as IHudPixelModularGuiProviderBase)
+            }
+        }
+        val TITLE = ModularGuiRegistry.Element("simp0", SimpleTitleModularGuiProvider)
         //ik i have these backwards
         val FPS = ModularGuiRegistry.Element("Ping", PingAndFpsModularGuiProvider(PingAndFpsModularGuiProvider.PingOrFps.FPS))
         val PING = ModularGuiRegistry.Element("FPS", PingAndFpsModularGuiProvider(PingAndFpsModularGuiProvider.PingOrFps.PING))
         val AVGPROTECTION = ModularGuiRegistry.Element("Average Protection", ArmorProtectionModularGuiProvider)
         val COORDS = ModularGuiRegistry.Element("possimp", CoordsDisplayModularGuiProvider)
         val COIN_COUNTER = ModularGuiRegistry.Element(CoinCounterModularGuiProvider.COINS_DISPLAY_TEXT, CoinCounterModularGuiProvider())
-        val TIMER = ModularGuiRegistry.Element(TimerModularGuiProvider.TIME_DISPLAY_MESSAGE, TimerModularGuiProvider.instance)
-        val BLITZ_STAR_TRACKER = ModularGuiRegistry.Element(BlitzStarTrackerModularGuiProvider.DISPLAY_MESSAGE, BlitzStarTrackerModularGuiProvider())
-        val DEATHMATCH_TRACKER = ModularGuiRegistry.Element("simp1", BlitzDeathmatchNotifierModularGuiProvider())
-        val KILLSTREAK_TRACKER = ModularGuiRegistry.Element("simp2", KillstreakTrackerModularGuiProvider())
-        val TKR_TIMER = ModularGuiRegistry.Element("simp3", TkrTimerModularGuiProvider())
-        val VZ_BALANCE = ModularGuiRegistry.Element(VZBalanceModularGuiProvider.TOTAL_COINS_DISPLAY_TEXT, VZBalanceModularGuiProvider())
-        val WALLS2_KILLCOUNTER = ModularGuiRegistry.Element("simp4", WallsKillCounterModularGuiProvider())
-        val WALLS3_KILLCOUNTER = ModularGuiRegistry.Element("simp5", MWKillCounterModularGuiProvider())
+        val TIMER = ModularGuiRegistry.Element(TimerModularGuiProvider.TIME_DISPLAY_MESSAGE, TimerModularGuiProvider)
+        val BLITZ_STAR_TRACKER = ModularGuiRegistry.Element(BlitzStarTrackerModularGuiProvider.DISPLAY_MESSAGE, BlitzStarTrackerModularGuiProvider)
+        val DEATHMATCH_TRACKER = ModularGuiRegistry.Element("simp1", BlitzDeathmatchNotifierModularGuiProvider)
+        val KILLSTREAK_TRACKER = ModularGuiRegistry.Element("simp2", KillstreakTrackerModularGuiProvider)
+        val TKR_TIMER = ModularGuiRegistry.Element("simp3", TkrTimerModularGuiProvider)
+        val VZ_BALANCE = ModularGuiRegistry.Element(VZBalanceModularGuiProvider.TOTAL_COINS_DISPLAY_TEXT, VZBalanceModularGuiProvider)
+        val WALLS2_KILLCOUNTER = ModularGuiRegistry.Element("simp4", WallsKillCounterModularGuiProvider)
+        val WALLS3_KILLCOUNTER = ModularGuiRegistry.Element("simp5", MWKillCounterModularGuiProvider)
         val PB_KILLSTREAK_TRACKER = ModularGuiRegistry.Element("simp6", PaintballKillstreakTrackerModularGuiProvider())
         val WARLORDS_DAMAGE_TRACKER = ModularGuiRegistry.Element(ChatFormatting.RED + "Damage", WarlordsDamageAndHealingCounterModularGuiProvider(WarlordsDamageAndHealingCounterModularGuiProvider.Type.Damage))
         val WARLORDS_HEALING_TRACKER = ModularGuiRegistry.Element(ChatFormatting.GREEN + "Healing", WarlordsDamageAndHealingCounterModularGuiProvider(WarlordsDamageAndHealingCounterModularGuiProvider.Type.Healing))
-        val PLAY_GAME_MODULE = ModularGuiRegistry.Element(ChatFormatting.DARK_RED + "Game", PlayGameModularGuiProvider())
+        val PLAY_GAME_MODULE = ModularGuiRegistry.Element(ChatFormatting.DARK_RED + "Game", PlayGameModularGuiProvider)
         var providers: MutableList<IHudPixelModularGuiProviderBase> = Lists.newArrayList<IHudPixelModularGuiProviderBase>()
 
         init {
-            //order matters
-            ModularGuiRegistry.registerElement(TITLE)
-            providers.add(TITLE.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(FPS)
-            providers.add(FPS.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(PING)
-            providers.add(PING.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(AVGPROTECTION)
-            providers.add(AVGPROTECTION.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(COORDS)
-            providers.add(COORDS.provider as IHudPixelModularGuiProviderBase)
-            //order no longer matters
-            ModularGuiRegistry.registerElement(COIN_COUNTER)
-            providers.add(COIN_COUNTER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(TIMER)
-            providers.add(TIMER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(BLITZ_STAR_TRACKER)
-            providers.add(BLITZ_STAR_TRACKER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(DEATHMATCH_TRACKER)
-            providers.add(DEATHMATCH_TRACKER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(KILLSTREAK_TRACKER)
-            providers.add(KILLSTREAK_TRACKER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(TKR_TIMER)
-            providers.add(TKR_TIMER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(VZ_BALANCE)
-            providers.add(VZ_BALANCE.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(WALLS2_KILLCOUNTER)
-            providers.add(WALLS2_KILLCOUNTER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(WALLS3_KILLCOUNTER)
-            providers.add(WALLS3_KILLCOUNTER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(PB_KILLSTREAK_TRACKER)
-            providers.add(PB_KILLSTREAK_TRACKER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(WARLORDS_DAMAGE_TRACKER)
-            providers.add(WARLORDS_DAMAGE_TRACKER.provider as IHudPixelModularGuiProviderBase)
-            ModularGuiRegistry.registerElement(WARLORDS_HEALING_TRACKER)
-            providers.add(WARLORDS_HEALING_TRACKER.provider as IHudPixelModularGuiProviderBase)
-
-            ModularGuiRegistry.registerElement(PLAY_GAME_MODULE)
-            providers.add(PLAY_GAME_MODULE.provider as IHudPixelModularGuiProviderBase)
+            register(TITLE, FPS, PING, AVGPROTECTION, COORDS, COIN_COUNTER, TIMER, BLITZ_STAR_TRACKER, DEATHMATCH_TRACKER, KILLSTREAK_TRACKER, TKR_TIMER, VZ_BALANCE, WALLS2_KILLCOUNTER, WALLS3_KILLCOUNTER, PB_KILLSTREAK_TRACKER, WARLORDS_DAMAGE_TRACKER, WARLORDS_HEALING_TRACKER)
         }
+
+
 
         private fun processAfterstats(): ArrayList<String> {
             val renderList = ArrayList<String>()
@@ -178,7 +148,7 @@ class ModularGuiHelper : McColorHelper {
             val renderList = processAfterstats()
             Collections.reverse(renderList)
             for (s in renderList) {
-                FancyChat.getInstance().addMessage(s)
+                FancyChat.addMessage(s)
                 printMessage(s)
             }
         }

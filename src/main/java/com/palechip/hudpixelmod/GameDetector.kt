@@ -161,7 +161,7 @@ class GameDetector {
         if (message.equals("The game starts in 1 second!", ignoreCase = true)) {
             HudPixelExtendedEventHandler.onGameStart()
             gameHasntBegan = false
-            TimerModularGuiProvider.instance.onGameStart()
+            TimerModularGuiProvider.onGameStart()
         }
         if (message.equals("                            Reward Summary", ignoreCase = true)) {
             HudPixelExtendedEventHandler.onGameEnd()

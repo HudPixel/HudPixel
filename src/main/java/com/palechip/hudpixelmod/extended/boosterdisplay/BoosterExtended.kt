@@ -91,7 +91,7 @@ internal constructor(//#########################################################
     internal fun setGameModeTipped(player: String) {
         LoggerHelper.logInfo("[BoosterDisplay]: You tipped " + player + " in " + gameType.nm)
         timeNextTip = System.currentTimeMillis() + tipDelay
-        if (booster != null && booster!!.owner.equals(player, ignoreCase = true)) {
+        if (booster != null && booster!!.owner0.equals(player, ignoreCase = true)) {
             LoggerHelper.logInfo("[BoosterDisplay]: Also found a booster for " + player)
             booster!!.tip()
         }
@@ -117,11 +117,11 @@ internal constructor(//#########################################################
             this.fancyListObjectButtons.clear()
         } else {
             if (booster!!.isTipped) {
-                this.renderLine2 = McColorHelper.RED + booster!!.owner
+                this.renderLine2 = McColorHelper.RED + booster!!.owner0!!
                 this.fancyListObjectButtons.clear()
             } else {
                 if (fancyListObjectButtons.isEmpty()) addButton(BoosterTipButton(booster!!))
-                this.renderLine2 = McColorHelper.GREEN + booster!!.owner
+                this.renderLine2 = McColorHelper.GREEN + booster!!.owner0!!
             }
 
         }

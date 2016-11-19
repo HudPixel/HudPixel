@@ -1,9 +1,8 @@
 package com.palechip.hudpixelmod.extended.boosterdisplay
 
 import com.palechip.hudpixelmod.api.interaction.representations.Booster
-import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
-
 import com.palechip.hudpixelmod.extended.util.ImageLoader.boosterTip
+import com.palechip.hudpixelmod.extended.util.gui.FancyListButton
 import net.minecraft.client.Minecraft.getMinecraft
 
 /* **********************************************************************************************************************
@@ -54,6 +53,6 @@ import net.minecraft.client.Minecraft.getMinecraft
 internal class BoosterTipButton(private val booster: Booster) : FancyListButton(1f, 1f, 1f, boosterTip()) {
 
     override fun onClick() {
-        getMinecraft().thePlayer.sendChatMessage("/tip " + booster.owner + " " + booster.tipName)
+        getMinecraft().thePlayer.sendChatMessage("/tip " + booster.owner0 + " " + booster.tipName)
     }
 }

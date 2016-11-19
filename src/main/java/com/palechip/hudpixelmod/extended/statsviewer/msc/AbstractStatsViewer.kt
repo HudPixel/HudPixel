@@ -125,10 +125,10 @@ abstract class AbstractStatsViewer protected constructor(protected val playerUUI
 
     }
 
-    override fun onPlayerResponse(player: PlayerReply?) {
+    override fun onPlayerResponse(player: PlayerReply) {
         if (player != null && player.player != null) {
             LoggerHelper.logInfo("[Stats]loaded stats for uuid=" + playerUUID)
-            this.statistics = player.player.get("stats").asJsonObject.get(databaseName).asJsonObject
+            this.statistics = player.player.asJsonObject.get("stats").asJsonObject.get(databaseName).asJsonObject
             composeStats()
             return
         }

@@ -100,7 +100,7 @@ enum class GameType private constructor(val modID: Int, val databaseID: Int, val
     companion object {
 
         @JvmStatic
-        fun getTypeByDatabaseID(ID: Int): GameType {
+        fun getTypeByDatabaseID(ID: Int?): GameType {
             for (type in GameType.values())
                 if (type.databaseID == ID)
                     return type
