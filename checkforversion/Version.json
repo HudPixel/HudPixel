@@ -5,8 +5,8 @@
     "1": "[+] potionHUD & armorHUD + config settings",
     "2": "[+] Contributor Fanciness",
     "3": "[fixed] Afterstats (again)",
-    "3": "[fixed] API & rewrite of the HudPixel backend - run the '/api' 'new' command",
-    "4": "[IMPORTANT] if you are using Optifine -> disable 'Fast' 'Render' in the Optifine settings"
+    "4": "[fixed] API & rewrite of the HudPixel backend - run the '/api' 'new' command",
+    "5": "[IMPORTANT] if you are using Optifine -> disable 'Fast' 'Render' in the Optifine settings"
   }
 }
 
