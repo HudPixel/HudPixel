@@ -2,6 +2,7 @@ package eladkay.hudpixel.command
 
 import eladkay.hudpixel.command.statsgamemodes.GeneralStats
 import eladkay.hudpixel.command.statsgamemodes.SkyWarsStats
+import eladkay.hudpixel.util.GameType
 import eladkay.hudpixel.util.plus
 import net.hypixel.api.reply.PlayerReply
 import net.minecraft.client.Minecraft
@@ -62,7 +63,7 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
             outText.append(RED + "An error has occurred; try entering a valid name.")
         } else {
             when (gamemode) {
-                SKYWARS -> outText.append(SkyWarsStats.getSkywarsStats(playerReply))
+                GameType.SKYWARS.nm.replace(" ", "").toLowerCase() -> outText.append(SkyWarsStats.getSkywarsStats(playerReply))
 
                 else -> outText.append(GeneralStats.getGeneralStats(playerReply))
             }
