@@ -70,5 +70,7 @@ public interface McColorHelper {
     EnumChatFormatting ITALIC = EnumChatFormatting.ITALIC;
     EnumChatFormatting AQUA = EnumChatFormatting.AQUA;
     EnumChatFormatting D_GREEN = DARK_GREEN;
+    EnumChatFormatting BOLD = EnumChatFormatting.BOLD;
+    EnumChatFormatting RESET = EnumChatFormatting.RESET;
 
 }

@@ -111,6 +111,7 @@ class HudPixelMod {
             ClientCommandHandler.instance.registerCommand(ClickEventCommand)
             ClientCommandHandler.instance.registerCommand(AfkCommand)
             ClientCommandHandler.instance.registerCommand(ManagedGuiDisableCommand)
+            ClientCommandHandler.instance.registerCommand(StatsCommand)
 
             ChatDetector
             HudPixelMethodHandles()
