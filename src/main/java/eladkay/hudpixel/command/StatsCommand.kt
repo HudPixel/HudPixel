@@ -16,9 +16,6 @@ import net.unaussprechlich.hudpixelextended.util.McColorHelper.*
 
 object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
 
-    var GENERAL: String = "general"
-    var SKYWARS: String = "skywars"
-
     var gamemode: String = "general"
 
 

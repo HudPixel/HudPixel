@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.hypixel.api.request.RequestType;
 import net.minecraft.util.EnumChatFormatting;
+import net.unaussprechlich.hypixel.helper.HypixelRank;
+import net.unaussprechlich.managedgui.lib.databases.player.data.Rank;
 
 import static net.unaussprechlich.hudpixelextended.util.McColorHelper.*;
 
@@ -31,22 +33,21 @@ public class PlayerReply extends AbstractReply {
                 ", super=" + super.toString() + "}";
     }
 
-    public String getRank() {
+    public Rank getRank() {
         // Is this declaration right?
-        String rank = "NONE";
+        Rank rank = null;
         if (getPlayer() != null) {
             if (getPlayer().has("newPackageRank"))
                 // Post-EULA.
-                rank = getPlayer().get("newPackageRank").getAsString();
+                rank = HypixelRank.getRankByName(getPlayer().get("newPackageRank").getAsString());
             else if (getPlayer().has("packageRank"))
                 // Pre-EULA and nondons.
-                rank = getPlayer().get("packageRank").getAsString();
-        } else
-            rank = null;
+                rank = HypixelRank.getRankByName(getPlayer().get("packageRank").getAsString());
+        }
         return rank;
     }
 
-    public String getRankColor() {
+    private String getRankColor() {
         String rankColor = "RES";
         if (getPlayer() != null) {
             if (getPlayer().has("rankPlusColor")) {
@@ -57,7 +58,7 @@ public class PlayerReply extends AbstractReply {
         return rankColor;
     }
 
-    public String getDisplayName() {
+    private String getDisplayName() {
         if (getPlayer() != null)
             return getPlayer().get("displayname").getAsString();
         else
@@ -67,7 +68,7 @@ public class PlayerReply extends AbstractReply {
     public String getFormattedDisplayName() {
         String formattedName = null;
         if (getPlayer() != null) {
-            switch (getRank()) {
+            switch (getRank().getRankApiName()) {
                 case "MVP_PLUS":
                     formattedName = AQUA + "[MVP" + EnumChatFormatting.valueOf(getRankColor()) + "+" + AQUA + "] " + getDisplayName();
                     break;

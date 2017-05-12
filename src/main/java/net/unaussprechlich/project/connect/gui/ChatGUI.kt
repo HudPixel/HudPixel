@@ -77,7 +77,7 @@ object ChatGUI : GUI() {
                     if(it.data["type"] == "From")
                         HypixelRank.getRankByName(it.data["rank"].toString())
                     else
-                        Rank("[YOU]", "" + ChatFormatting.YELLOW + "[YOU]", ChatFormatting.YELLOW)
+                        Rank("[YOU]", "", "" + ChatFormatting.YELLOW + "[YOU]", ChatFormatting.YELLOW)
             )
         }
 

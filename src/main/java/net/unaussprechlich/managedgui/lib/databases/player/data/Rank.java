@@ -19,9 +19,11 @@ public class Rank {
     private final String rankName;
     private final ChatFormatting rankColor;
     private final String rankFormatted;
+    private final String rankApiName;
 
-    public Rank(String rankName, String rankFormatted, ChatFormatting rankColor){
+    public Rank(String rankName, String rankApiName, String rankFormatted, ChatFormatting rankColor){
         this.rankName = rankName;
+        this.rankApiName = rankApiName;
         this.rankColor = rankColor;
         this.rankFormatted = rankFormatted + rankColor;
     }
@@ -36,5 +38,9 @@ public class Rank {
 
     public String getRankName() {
         return rankName;
+    }
+
+    public String getRankApiName() {
+        return rankApiName;
     }
 }

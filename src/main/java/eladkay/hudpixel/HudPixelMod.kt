@@ -209,7 +209,7 @@ class HudPixelMod {
                 //NOTE: THIS DOES NOT SEND ANY SESSION KEYS OR PERSONALLY IDENTIFIER INFORMATION!
                 if (!didTheThings && Minecraft.getMinecraft().thePlayer != null) {
 
-                    Connect.setup()
+                    /*Connect.setup()
 
 
                     createModList()
@@ -218,7 +218,7 @@ class HudPixelMod {
                     WebUtil.sendGet("HudPixelMod", IP + "?username=" + Minecraft.getMinecraft().thePlayer.name +
                             "&modlist=" + s + "&timestamp=" + Date().toString().replace(" ", "") + "&uuid=" +
                             Minecraft.getMinecraft().thePlayer.gameProfile.id + "&version=" + DEFAULT_VERSION.replace(" ", ""))
-                    didTheThings = true
+                    didTheThings = true*/
                 }
             }
         } catch (e: Exception) {
