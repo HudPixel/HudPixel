@@ -1,12 +1,14 @@
 package eladkay.hudpixel.command
 
 import eladkay.hudpixel.command.statsgamemodes.GeneralStats
+import eladkay.hudpixel.command.statsgamemodes.MegaWallsStats
 import eladkay.hudpixel.command.statsgamemodes.SkyWarsStats
 import eladkay.hudpixel.util.GameType
 import eladkay.hudpixel.util.plus
 import net.hypixel.api.reply.PlayerReply
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
+import net.minecraft.util.BlockPos
 import net.minecraft.util.ChatComponentText
 import net.unaussprechlich.hudpixelextended.hypixelapi.ApiQueueEntryBuilder
 import net.unaussprechlich.hudpixelextended.hypixelapi.callbacks.PlayerResponseCallback
@@ -27,12 +29,23 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
         return "stats"
     }
 
+    // wtf this crashes.
+//    override fun addTabCompletionOptions(sender: ICommandSender?, args: Array<out String>?, pos: BlockPos?): MutableList<String> {
+//        // TODO add all the gametypes supported preferably using gametypes.
+//        if (args != null && args.size > 1) {
+//            return mutableListOf("skywars", "megawalls", "general")
+//        } else
+//            return super.addTabCompletionOptions(sender, args, pos)
+//    }
+
     override fun processCommand(sender: ICommandSender?, args: Array<out String>?) {
         if (args!!.size > 2) {
             sender!!.addChatMessage(ChatComponentText(getCommandUsage(sender)))
         } else {
             if (args.size == 2)
                 gamemode = args[1].toLowerCase()
+                if (GameType.getTypeByName(gamemode) == GameType.UNKNOWN)
+                    sender!!.addChatMessage(ChatComponentText(GOLD + "Could not find that game. Showing general stats."))
             else
                 gamemode = "general"
 
@@ -61,6 +74,7 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
         } else {
             when (gamemode) {
                 GameType.SKYWARS.nm.replace(" ", "").toLowerCase() -> outText.append(SkyWarsStats.getSkywarsStats(playerReply))
+                GameType.MEGA_WALLS.nm.replace(" ", "").toLowerCase() -> outText.append(MegaWallsStats.getMegaWallsStats(playerReply))
 
                 else -> outText.append(GeneralStats.getGeneralStats(playerReply))
             }

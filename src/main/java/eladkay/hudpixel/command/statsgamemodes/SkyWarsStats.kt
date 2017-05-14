@@ -1,6 +1,7 @@
 package eladkay.hudpixel.command.statsgamemodes
 
 import eladkay.hudpixel.command.StatsCommand
+import eladkay.hudpixel.util.GameType
 import eladkay.hudpixel.util.asInt
 import eladkay.hudpixel.util.plus
 import net.hypixel.api.reply.PlayerReply
@@ -10,7 +11,7 @@ import net.unaussprechlich.hudpixelextended.util.McColorHelper.*
 object SkyWarsStats : McColorHelper {
     fun getSkywarsStats(pr: PlayerReply): String {
         val outText = StringBuilder()
-        val skywarsStats = pr.player.get("stats").asJsonObject.get("SkyWars").asJsonObject
+        val skywarsStats = pr.player.get("stats").asJsonObject.get(GameType.SKYWARS.statsName).asJsonObject
         // Title
         outText.append(pr.formattedDisplayName + GOLD + "'s SkyWars Stats:")
         outText.append("\n")
