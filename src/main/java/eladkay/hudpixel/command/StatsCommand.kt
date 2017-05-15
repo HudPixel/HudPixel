@@ -3,6 +3,7 @@ package eladkay.hudpixel.command
 import eladkay.hudpixel.command.statsgamemodes.GeneralStats
 import eladkay.hudpixel.command.statsgamemodes.MegaWallsStats
 import eladkay.hudpixel.command.statsgamemodes.SkyWarsStats
+import eladkay.hudpixel.command.statsgamemodes.TNTGamesStats
 import eladkay.hudpixel.util.GameType
 import eladkay.hudpixel.util.plus
 import net.hypixel.api.reply.PlayerReply
@@ -75,6 +76,7 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
             when (gamemode) {
                 GameType.SKYWARS.nm.replace(" ", "").toLowerCase() -> outText.append(SkyWarsStats.getSkywarsStats(playerReply))
                 GameType.MEGA_WALLS.nm.replace(" ", "").toLowerCase() -> outText.append(MegaWallsStats.getMegaWallsStats(playerReply))
+                GameType.TNT_GAMES.nm.replace(" ", "").toLowerCase() -> outText.append(TNTGamesStats.getTNTGamesStats(playerReply))
 
                 else -> outText.append(GeneralStats.getGeneralStats(playerReply))
             }

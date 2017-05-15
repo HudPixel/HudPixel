@@ -55,5 +55,7 @@ operator infix fun String.plus(other: EnumChatFormatting) = "$this$other"
 
 operator infix fun EnumChatFormatting.plus(other: String) = "$this$other"
 
+operator infix fun EnumChatFormatting.plus(other: EnumChatFormatting) = "$this$other"
+
 fun Any.asBoolean() = this as Boolean
 fun Any.asInt() = this as Int
