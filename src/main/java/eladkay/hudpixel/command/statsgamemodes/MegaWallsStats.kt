@@ -12,7 +12,7 @@ import net.unaussprechlich.hudpixelextended.util.McColorHelper.GOLD
 
 object MegaWallsStats {
     fun getMegaWallsStats(pr: PlayerReply): String {
-        val megawallsClasses: Array<String> = arrayOf("skeleton", "pigman", "dreadlord", "herobrine", "spider", "zombie", "hunter")
+        val megawallsClasses = arrayOf("skeleton", "pigman", "dreadlord", "herobrine", "spider", "zombie", "hunter")
 
         val outText = StringBuilder()
         val megawallsStats = pr.player.get("stats").asJsonObject.get(GameType.MEGA_WALLS.statsName).asJsonObject
