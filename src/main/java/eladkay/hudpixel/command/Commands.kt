@@ -16,5 +16,6 @@ object Commands {
         TestCommand
         VerboseChatOutputCommand
         BookVerboseInfoCommand()
+        StatsCommand
     }
 }
