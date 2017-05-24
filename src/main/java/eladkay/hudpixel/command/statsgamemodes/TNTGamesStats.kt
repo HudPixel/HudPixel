@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 
 object TNTGamesStats {
     fun getTNTGamesStats(pr: PlayerReply?): String {
+        val wizardsClasses = arrayOf("firewizard", "bloodwizard", "kineticwizard", "icewizard", "witherwizard", "toxicwizard")
         val outText: StringBuilder = StringBuilder()
         val tntgamesStats = pr!!.player.get("stats").asJsonObject.get(GameType.TNT_GAMES.statsName).asJsonObject
         // Header.
@@ -58,6 +59,7 @@ object TNTGamesStats {
         // Wizards.
         outText.append(GOLD + BOLD + "Wizards:")
         outText.append("\n")
+        outText.append(GOLD + "Kills: " + tntgamesStats.get(""))
         return outText.toString()
     }
 }
