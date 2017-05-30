@@ -3,7 +3,9 @@ package net.hypixel.api.reply;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.hypixel.api.request.RequestType;
+import net.hypixel.api.util.ILeveling;
 import net.minecraft.util.EnumChatFormatting;
+import net.unaussprechlich.hudpixelextended.util.LoggerHelper;
 import net.unaussprechlich.hypixel.helper.HypixelRank;
 import net.unaussprechlich.managedgui.lib.databases.player.data.Rank;
 
@@ -89,13 +91,7 @@ public class PlayerReply extends AbstractReply {
         return formattedName;
     }
 
-    public Integer getLevel() {
-        if (getPlayer() != null) {
-            if (getPlayer().has("networkLevel"))
-                return getPlayer().get("networkLevel").getAsInt();
-            else
-                return 0;
-        } else
-            return null;
+    public double getLevel() {
+        return ILeveling.getExactLevel(getPlayer().get(ILeveling.EXP_FIELD).getAsDouble());
     }
 }
