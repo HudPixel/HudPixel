@@ -43,10 +43,11 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
         if (args!!.size > 2) {
             sender!!.addChatMessage(ChatComponentText(getCommandUsage(sender)))
         } else {
-            if (args.size == 2)
+            if (args.size == 2) {
                 gamemode = args[1].toLowerCase()
                 if (GameType.getTypeByName(gamemode) == GameType.UNKNOWN)
-                    sender!!.addChatMessage(ChatComponentText(GOLD + "Could not find that game. Showing general stats."))
+                    sender?.addChatMessage(ChatComponentText(GOLD + "Could not find that game. Showing general stats."))
+            }
             else
                 gamemode = "general"
 

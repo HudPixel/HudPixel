@@ -16,7 +16,7 @@ object GeneralStats {
         // Rank and name.
         outText.append(pr?.formattedDisplayName)
         // Level. Basically makes it 42.24 instead of 42.2374893749287.
-        outText.append(McColorHelper.GOLD + " - Level " + McColorHelper.BOLD + BigDecimal(pr!!.level).setScale(2, BigDecimal.ROUND_HALF_UP))
+        outText.append(McColorHelper.GOLD + " - Level " + McColorHelper.BOLD + Math.round(pr!!.level * 100).toDouble() / 100)
         outText.append("\n")
         // First and last login.
         outText.append(McColorHelper.GOLD + "First login: " + McColorHelper.BOLD + DateFormat.getInstance().format(Date(pr.player.get("firstLogin").asLong)))

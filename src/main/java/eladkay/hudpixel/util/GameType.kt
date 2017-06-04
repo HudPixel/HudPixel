@@ -111,7 +111,7 @@ enum class GameType private constructor(val modID: Int, val databaseID: Int, val
 
         fun getTypeByName(name: String): GameType {
             for (type in GameType.values())
-                if (type.nm.equals(name, ignoreCase = true))
+                if (type.nm.equals(name, ignoreCase = true) || type.statsName.equals(name, ignoreCase = true))
                     return type
             return GameType.UNKNOWN
         }

@@ -1,11 +1,12 @@
 package eladkay.hudpixel.command.statsgamemodes
 
+import eladkay.hudpixel.command.StatsCommand
 import eladkay.hudpixel.util.GameType
+import eladkay.hudpixel.util.asInt
 import eladkay.hudpixel.util.plus
 import net.hypixel.api.reply.PlayerReply
 import net.unaussprechlich.hudpixelextended.util.McColorHelper
-import net.unaussprechlich.hudpixelextended.util.McColorHelper.BOLD
-import net.unaussprechlich.hudpixelextended.util.McColorHelper.GOLD
+import net.unaussprechlich.hudpixelextended.util.McColorHelper.*
 import java.text.DateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -59,7 +60,32 @@ object TNTGamesStats {
         // Wizards.
         outText.append(GOLD + BOLD + "Wizards:")
         outText.append("\n")
-        outText.append(GOLD + "Kills: " + tntgamesStats.get(""))
+        outText.append(GOLD + "Kills: " + BOLD + tntgamesStats.get("kills_capture") + RESET + GOLD +
+                " | Deaths: " + BOLD + tntgamesStats.get("deaths_capture") + RESET + GOLD +
+                " | K/D: " + BOLD + StatsCommand.calculateKD(tntgamesStats.get("kills_capture").asInt, tntgamesStats.get("deaths_capture").asInt))
+        outText.append("\n")
+        for (className in wizardsClasses) {
+            // Sneaky. Prints name.
+            outText.append(GOLD + className.split("wizard")[0].capitalize() + " Wizard: ")
+            if (tntgamesStats.has("new_" + className + "_explode")) {
+                outText.append(if (tntgamesStats.get("new_" + className + "_explode").asInt == 10) 9 else tntgamesStats.get("new_" + className + "_explode").asInt)
+            } else if (tntgamesStats.has(className + "_explode")) {
+                outText.append(if (tntgamesStats.get(className + "_explode").asInt == 10) 9 else tntgamesStats.get(className + "_explode").asInt)
+            } else {
+                // Level 1 explode.
+                outText.append(1)
+            }
+            outText.append(" and ")
+            if (tntgamesStats.has("new_" + className + "_regen")) {
+                outText.append(if (tntgamesStats.get("new_" + className + "_regen").asInt == 10) 9 else tntgamesStats.get("new_" + className + "_regen").asInt)
+            } else if (tntgamesStats.has(className + "_regen")) {
+                outText.append(if (tntgamesStats.get(className + "_regen").asInt == 10) 9 else tntgamesStats.get(className + "_regen").asInt)
+            } else {
+                // Level 1 regen.
+                outText.append(1)
+            }
+            outText.append("\n")
+        }
         return outText.toString()
     }
 }
