@@ -59,7 +59,7 @@ public class PlayerReply extends AbstractReply {
         return rankColor;
     }
 
-    private String getDisplayName() {
+    public String getDisplayName() {
         if (getPlayer() != null)
             return getPlayer().get("displayname").getAsString();
         else

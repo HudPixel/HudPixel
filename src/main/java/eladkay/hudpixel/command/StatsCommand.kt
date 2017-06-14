@@ -9,8 +9,10 @@ import eladkay.hudpixel.util.plus
 import net.hypixel.api.reply.PlayerReply
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
+import net.minecraft.event.ClickEvent
 import net.minecraft.util.BlockPos
 import net.minecraft.util.ChatComponentText
+import net.minecraft.util.ChatStyle
 import net.unaussprechlich.hudpixelextended.hypixelapi.ApiQueueEntryBuilder
 import net.unaussprechlich.hudpixelextended.hypixelapi.callbacks.PlayerResponseCallback
 import net.unaussprechlich.hudpixelextended.util.LoggerHelper
@@ -22,6 +24,7 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
     var chosenGamemode = GameType.UNKNOWN
 
     val GM_NOT_SUPPORTED_TEXT = GOLD + "This gamemode is not supported yet!"
+    val PLANCKE_STATS_URL = "https://plancke.io/hypixel/stats/"
 
 
     override fun getCommandUsage(sender: ICommandSender?): String {
@@ -104,6 +107,7 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
         }
 
 
+        if (playerReply.player != null) player.addChatComponentMessage(ChatComponentText("${BLUE}Plancke.io stats link").setChatStyle(ChatStyle().setChatClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, "$PLANCKE_STATS_URL${playerReply.displayName}"))))
         player.addChatMessage(ChatComponentText(outText.toString()))
     }
 
