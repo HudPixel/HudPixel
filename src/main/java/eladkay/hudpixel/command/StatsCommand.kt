@@ -53,7 +53,7 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
             else
                 chosenGamemode = GameType.UNKNOWN
 
-            sender!!.addChatMessage(ChatComponentText("Getting stats..."))
+            sender!!.addChatMessage(ChatComponentText(GOLD + "Trying to get stats..."))
             if (args.isEmpty()) {
                 ApiQueueEntryBuilder.newInstance()
                         .playerRequestByName(sender.name)
