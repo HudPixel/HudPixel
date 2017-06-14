@@ -36,8 +36,7 @@ public class PlayerReply extends AbstractReply {
     }
 
     public Rank getRank() {
-        // Is this declaration right?
-        Rank rank = null;
+        Rank rank = HypixelRank.DEFAULT.get();
         if (getPlayer() != null) {
             if (getPlayer().has("newPackageRank"))
                 // Post-EULA.

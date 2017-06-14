@@ -19,7 +19,9 @@ import net.unaussprechlich.hudpixelextended.util.McColorHelper.*
 
 object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
 
-    var gamemode: String = "general"
+    var chosenGamemode = GameType.UNKNOWN
+
+    val GM_NOT_SUPPORTED_TEXT = GOLD + "This gamemode is not supported yet!"
 
 
     override fun getCommandUsage(sender: ICommandSender?): String {
@@ -44,12 +46,12 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
             sender!!.addChatMessage(ChatComponentText(getCommandUsage(sender)))
         } else {
             if (args.size == 2) {
-                gamemode = args[1].toLowerCase()
-                if (GameType.getTypeByName(gamemode) == GameType.UNKNOWN)
+                chosenGamemode = GameType.getTypeByInput(args[1].toLowerCase())
+                if (chosenGamemode == GameType.UNKNOWN)
                     sender?.addChatMessage(ChatComponentText(GOLD + "Could not find that game. Showing general stats."))
             }
             else
-                gamemode = "general"
+                chosenGamemode = GameType.UNKNOWN
 
             sender!!.addChatMessage(ChatComponentText("Getting stats..."))
             if (args.isEmpty()) {
@@ -71,13 +73,31 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
         val outText = StringBuilder()
         val player = Minecraft.getMinecraft().thePlayer
 
-        if (playerReply == null || !playerReply.isSuccess) {
+        if (playerReply!!.player == null || !playerReply.isSuccess) {
             outText.append(RED + "An error has occurred; try entering a valid name.")
         } else {
-            when (gamemode) {
-                GameType.SKYWARS.nm.replace(" ", "").toLowerCase() -> outText.append(SkyWarsStats.getSkywarsStats(playerReply))
-                GameType.MEGA_WALLS.nm.replace(" ", "").toLowerCase() -> outText.append(MegaWallsStats.getMegaWallsStats(playerReply))
-                GameType.TNT_GAMES.nm.replace(" ", "").toLowerCase() -> outText.append(TNTGamesStats.getTNTGamesStats(playerReply))
+            when (chosenGamemode) {
+                GameType.QUAKECRAFT -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.THE_WALLS -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.PAINTBALL -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.BLITZ -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.VAMPIREZ -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.ARENA -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.UHC -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.COPS_AND_CRIMS -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.WARLORDS -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.ARCADE_GAMES -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.TURBO_KART_RACERS -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.SPEED_UHC -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.CRAZY_WALLS -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.SMASH_HEROES -> outText.append(GM_NOT_SUPPORTED_TEXT)
+                GameType.SKYCLASH -> outText.append(GM_NOT_SUPPORTED_TEXT)
+
+                GameType.SKYWARS -> outText.append(SkyWarsStats.getSkywarsStats(playerReply))
+                GameType.MEGA_WALLS -> outText.append(MegaWallsStats.getMegaWallsStats(playerReply))
+                GameType.TNT_GAMES -> outText.append(TNTGamesStats.getTNTGamesStats(playerReply))
+
+                GameType.HOUSING -> outText.append(GOLD + "lol 0 cookies for you.")
 
                 else -> outText.append(GeneralStats.getGeneralStats(playerReply))
             }

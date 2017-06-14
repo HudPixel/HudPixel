@@ -49,55 +49,55 @@ package eladkay.hudpixel.util
 /**
  * Replaces GameType and only holds the modID. It can be used to statically reference a certain game without storing any information which may be changed.
  */
-enum class GameType private constructor(val modID: Int, val databaseID: Int, val nm: String, val tipName: String, val scoreboardName: String, val statsName: String) {
-    UNKNOWN(-1, -1, "UNKNOWN", "", "none", ""),
-    ALL_GAMES(0, -1, "ALL GAMES", "", "any", ""),
-    QUAKECRAFT(1, 2, "Quakecraft", "quakecraft", "QUAKECRAFT", "Quake"),
-    THE_WALLS(2, 3, "Walls", "walls", "THE WALLS", "Walls"),
-    PAINTBALL(3, 4, "Paintball", "paintball", "PAINTBALL", "Paintball"),
-    BLITZ(4, 5, "Blitz Survival Games", "blitz", "BLITZ SG", "HungerGames"),
+enum class GameType private constructor(val modID: Int, val databaseID: Int, val nm: String, val tipName: String, val scoreboardName: String, val statsName: String, val inputNames: Array<String>) {
+    UNKNOWN(-1, -1, "UNKNOWN", "", "none", "", arrayOf("")),
+    ALL_GAMES(0, -1, "ALL GAMES", "", "any", "", arrayOf("all", "all games", "allgames")),
+    QUAKECRAFT(1, 2, "Quakecraft", "quakecraft", "QUAKECRAFT", "Quake", arrayOf("quake", "quakecraft")),
+    THE_WALLS(2, 3, "Walls", "walls", "THE WALLS", "Walls", arrayOf("walls", "the walls", "thewalls")),
+    PAINTBALL(3, 4, "Paintball", "paintball", "PAINTBALL", "Paintball", arrayOf("paintball", "paint")),
+    BLITZ(4, 5, "Blitz Survival Games", "blitz", "BLITZ SG", "HungerGames", arrayOf("blitz", "hungergames", "hunger games", "survival games", "survivalgames", "survival", "hunger")),
 
-    TNT_GAMES(5, 6, "TNT Games", "tnt", "THE TNT GAMES", "TNTGames"),
-    BOW_SPLEEF(6, -1, "Bow Spleef", "", TNT_GAMES.scoreboardName, ""),
-    TNT_RUN(7, -1, "TNT Run", "", TNT_GAMES.scoreboardName, "TNTGames"),
-    TNT_WIZARDS(8, -1, "TNT Wizards", "", TNT_GAMES.scoreboardName, "TNTGames"),
-    TNT_TAG(9, -1, "TNT Tag", "", TNT_GAMES.scoreboardName, "TNTGames"),
-    ANY_TNT(5, -1, TNT_GAMES.nm, TNT_GAMES.tipName, TNT_GAMES.scoreboardName, "TNTGames"),
+    TNT_GAMES(5, 6, "TNT Games", "tnt", "THE TNT GAMES", "TNTGames", arrayOf("tnt", "tntgames", "tnt games")),
+    BOW_SPLEEF(6, -1, "Bow Spleef", "", TNT_GAMES.scoreboardName, "", arrayOf("bow", "bowspleef", "bow spleef", "spleef", "bspleef")),
+    TNT_RUN(7, -1, "TNT Run", "", TNT_GAMES.scoreboardName, "TNTGames", arrayOf("run", "tntrun", "tnt run")),
+    TNT_WIZARDS(8, -1, "TNT Wizards", "", TNT_GAMES.scoreboardName, "TNTGames", arrayOf("wizards", "tntwizards", "tnt wizards")),
+    TNT_TAG(9, -1, "TNT Tag", "", TNT_GAMES.scoreboardName, "TNTGames", arrayOf("tag", "tnttag", "tnt tag")),
+    ANY_TNT(5, -1, TNT_GAMES.nm, TNT_GAMES.tipName, TNT_GAMES.scoreboardName, "TNTGames", arrayOf("anytnt", "alltnt", "any tnt", "all tnt")),
 
-    VAMPIREZ(10, 7, "VampireZ", "vampirez", "VAMPIREZ", "VampireZ"),
-    MEGA_WALLS(11, 13, "Mega Walls", "mega", "MEGA WALLS", "Walls3"),
-    ARENA(12, 17, "Arena Brawl", "arena", "ARENA BRAWL", "Arena"),
-    UHC(13, 20, "UHC Champions", "uhc", "UHC CHAMPIONS", "UHC"),
-    COPS_AND_CRIMS(14, -1, "Cops and Crims", "cops", "COPS AND CRIMS", "MCGO"),
-    WARLORDS(15, 23, "Warlords", "warlords", "WARLORDS", "Battleground"),
+    VAMPIREZ(10, 7, "VampireZ", "vampirez", "VAMPIREZ", "VampireZ", arrayOf("vamp", "vampire", "vampz", "vampirez")),
+    MEGA_WALLS(11, 13, "Mega Walls", "mega", "MEGA WALLS", "Walls3", arrayOf("mega", "megawalls", "mega walls", "walls3")),
+    ARENA(12, 17, "Arena Brawl", "arena", "ARENA BRAWL", "Arena", arrayOf("areana", "brawl", "arena brawl", "arenabrawl")),
+    UHC(13, 20, "UHC Champions", "uhc", "UHC CHAMPIONS", "UHC", arrayOf("uhc", "hardcore", "hard core", "ultra hardcore", "champions", "uhc champions", "champ")),
+    COPS_AND_CRIMS(14, -1, "Cops and Crims", "cops", "COPS AND CRIMS", "MCGO", arrayOf("cops", "csgo", "cs go", "cops and crims", "crims", "copsandcrims")),
+    WARLORDS(15, 23, "Warlords", "warlords", "WARLORDS", "Battleground", arrayOf("war", "warlords", "warlord")),
 
-    ARCADE_GAMES(16, 14, "Arcade Games", "Arcade", "ARCADE GAMES", "Arcade"),
-    BLOCKING_DEAD(17, -1, "Blocking Dead", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    BOUNTY_HUNTERS(18, -1, "Bounty Hunters", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    BUILD_BATTLE(19, -1, "Build Battle", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    CREEPER_ATTACK(20, -1, "Creeper Attack", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    DRAGON_WARS(21, -1, "Dragon Wars", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    ENDER_SPLEEF(22, -1, "Ender Spleef", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    FARM_HUNT(23, -1, "Farm Hunters", "", "Farm Hunt", "Arcade"),
-    GALAXY_WARS(24, -1, "Galaxy Wars", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    PARTY_GAMES_1(25, -1, "Party Games", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    PARTY_GAMES_2(26, -1, "Party Games", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    TRHOW_OUT(27, -1, "Throw Out", "", ARCADE_GAMES.scoreboardName, "Arcade"),
-    FOOTBALL(33, -1, "Football", "", ARCADE_GAMES.scoreboardName, "Arcade"),
+    ARCADE_GAMES(16, 14, "Arcade Games", "Arcade", "ARCADE GAMES", "Arcade", arrayOf("arcade", "arcadegames", "arcade games", "arcades")),
+    BLOCKING_DEAD(17, -1, "Blocking Dead", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("blocking dead", "blockingdead", "minez", "blockdead", "dead")),
+    BOUNTY_HUNTERS(18, -1, "Bounty Hunters", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("bounty hunters", "bountyhunters", "bounty", "hunters", "one in the quiver", "oneinthequiver", "quiver")),
+    BUILD_BATTLE(19, -1, "Build Battle", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("build battle", "buildbattle", "build")),
+    CREEPER_ATTACK(20, -1, "Creeper Attack", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("creeper attack", "creeperattack", "creeper")),
+    DRAGON_WARS(21, -1, "Dragon Wars", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("dragon wars", "dragonwars", "dragon")),
+    ENDER_SPLEEF(22, -1, "Ender Spleef", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("ender spleef", "enderspleef", "ender", "espleef")),
+    FARM_HUNT(23, -1, "Farm Hunters", "", "Farm Hunt", "Arcade", arrayOf("farm hunt", "farmhunt", "farm", "hunt")),
+    GALAXY_WARS(24, -1, "Galaxy Wars", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("galaxy wars", "galaxywars", "galaxy")),
+    PARTY_GAMES_1(25, -1, "Party Games", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("party games 1", "partygames1")),
+    PARTY_GAMES_2(26, -1, "Party Games", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("party games 2", "partygames2")),
+    TRHOW_OUT(27, -1, "Throw Out", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("throw out", "throwout", "throw")),
+    FOOTBALL(33, -1, "Football", "", ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("football", "soccer", "foot")),
 
-    TURBO_KART_RACERS(28, 25, "Turbo Kart Racers", "turbo", "TURBO KART RACERS", "GingerBread"),
-    SPEED_UHC(29, 54, "Speed UHC", "speed", "SPEED UHC", "SpeedUHC"),
-    CRAZY_WALLS(31, 52, "Crazy Walls", "crazy", "CRAZY WALLS", "TrueCombat"),
-    SMASH_HEROES(32, 24, "Smash Heroes", "smash", " SMASH HEROES", "SuperSmash"),
+    TURBO_KART_RACERS(28, 25, "Turbo Kart Racers", "turbo", "TURBO KART RACERS", "GingerBread", arrayOf("turbo kart racers", "turbo kart racers", "tkr", "turbo")),
+    SPEED_UHC(29, 54, "Speed UHC", "speed", "SPEED UHC", "SpeedUHC", arrayOf("speed uhc", "speeduhc", "speed")),
+    CRAZY_WALLS(31, 52, "Crazy Walls", "crazy", "CRAZY WALLS", "TrueCombat", arrayOf("crazy walls", "crazywalls", "crazy")),
+    SMASH_HEROES(32, 24, "Smash Heroes", "smash", " SMASH HEROES", "SuperSmash", arrayOf("smash heroes", "smashheroes", "smash")),
 
-    SMASH_HEROES_WOSPACE(32, -1, "Smash Heroes", "smash", "SMASH HEROES", "SuperSmash"),
-    SKYWARS(30, 0, "SkyWars", "skywars", "SKYWARS", "SkyWars"),
-    HOUSING(34, 26, "Housing", "Housing", "HOUSING", "Housing"),
-    SKYCLASH(35, 55, "SkyClash", "SkyClash", "SKYCLASH", "SkyClash"),/*
-    PROTOTYPE(36, NO_IDEA, "Prototype", "", "Prototype", "Prototype"),
-    CLASSIC(37, NO_IDEA, "Classic", "classic", "Classic", "Classic"),*/
+    SMASH_HEROES_WOSPACE(32, -1, "Smash Heroes", "smash", "SMASH HEROES", "SuperSmash", SMASH_HEROES.inputNames),
+    SKYWARS(30, 0, "SkyWars", "skywars", "SKYWARS", "SkyWars", arrayOf("sky wars", "skywars", "sky")),
+    HOUSING(34, 26, "Housing", "Housing", "HOUSING", "Housing", arrayOf("housing", "house", "houses")),
+    SKYCLASH(35, 55, "SkyClash", "SkyClash", "SKYCLASH", "SkyClash", arrayOf("sky clash", "skyclash", "clash")),/*
+    PROTOTYPE(36, NO_IDEA, "Prototype", "", "Prototype", "Prototype", arrayOf("prototype")),
+    CLASSIC(37, NO_IDEA, "Classic", "classic", "Classic", "Classic", arrayOf("classic games", "classicgames", "classic", "deadgames")),*/
 
-    ANY_ARCADE(16, -1, ARCADE_GAMES.nm, ARCADE_GAMES.tipName, ARCADE_GAMES.scoreboardName, "Arcade");
+    ANY_ARCADE(16, -1, ARCADE_GAMES.nm, ARCADE_GAMES.tipName, ARCADE_GAMES.scoreboardName, "Arcade", arrayOf("anyarcade", "any arcade"));
 
 
     companion object {
@@ -112,6 +112,13 @@ enum class GameType private constructor(val modID: Int, val databaseID: Int, val
         fun getTypeByName(name: String): GameType {
             for (type in GameType.values())
                 if (type.nm.equals(name, ignoreCase = true) || type.statsName.equals(name, ignoreCase = true))
+                    return type
+            return GameType.UNKNOWN
+        }
+
+        fun getTypeByInput(input: String): GameType {
+            for (type in GameType.values())
+                if (type.inputNames.contains(input.toLowerCase()))
                     return type
             return GameType.UNKNOWN
         }

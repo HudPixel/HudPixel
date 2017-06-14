@@ -12,17 +12,14 @@ import net.unaussprechlich.hudpixelextended.util.McColorHelper.GOLD
 
 object MegaWallsStats {
     fun getMegaWallsStats(pr: PlayerReply): String {
-        val megawallsClasses = arrayOf("skeleton", "pigman", "dreadlord", "herobrine", "spider", "zombie", "hunter")
+        val megawallsClasses = arrayOf("skeleton", "pigman", "dreadlord", "herobrine", "spider", "zombie", "hunter", "squid", "enderman", "creeper", "arcanist", "blaze", "golem", "pirate", "shaman", "werewolf", "moleman", "phoenix")
 
         val outText = StringBuilder()
         val megawallsStats = pr.player.get("stats").asJsonObject.get(GameType.MEGA_WALLS.statsName).asJsonObject
 
         var playerHasClasses = emptyArray<String>()
-        var mwPackages = megawallsStats.get("packages").asJsonArray
-        var jsonParser = JsonParser()
-//        megawallsClasses
-//                .filter { mwPackages.contains(jsonParser.parse("\"" + it + "_class\"").asJsonObject) }
-//                .forEach { playerHasClasses += it }
+
+        // If they have some kills in the class the command displays it.
         megawallsClasses
                 .filter { megawallsStats.has("kills_" + it.capitalize()) }
                 .forEach { playerHasClasses += it }
@@ -79,6 +76,7 @@ object MegaWallsStats {
             outText.append(GOLD + deaths)
             outText.append(GOLD + " ".repeat(spacesNum + 6 - deaths.length))
             outText.append(GOLD + kd)
+            outText.append("\n")
         }
 
 
