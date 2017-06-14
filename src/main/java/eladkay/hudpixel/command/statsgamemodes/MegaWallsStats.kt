@@ -36,20 +36,20 @@ object MegaWallsStats {
         // Regular kills.
         outText.append(McColorHelper.GOLD + "Kills: " + McColorHelper.BOLD + megawallsStats.get("kills") + McColorHelper.RESET + McColorHelper.GOLD +
                 " | Deaths: " + McColorHelper.BOLD + megawallsStats.get("deaths") + McColorHelper.RESET + McColorHelper.GOLD +
-                " | K/D " + McColorHelper.BOLD + StatsCommand.calculateKD(megawallsStats.get("kills").asInt, megawallsStats.get("deaths").asInt))
+                " | K/D " + McColorHelper.BOLD + StatsCommand.calculateKD(megawallsStats.get("kills").asInt, megawallsStats.get("deaths").asInt, 3))
         outText.append("\n")
         outText.append("\n")
 
         // Final kills.
         outText.append(McColorHelper.GOLD + "Final Kills: " + McColorHelper.BOLD + megawallsStats.get("finalKills") + McColorHelper.RESET + McColorHelper.GOLD +
                 " | Final Deaths: " + McColorHelper.BOLD + megawallsStats.get("finalDeaths") + McColorHelper.RESET + McColorHelper.GOLD +
-                " | Final K/D " + McColorHelper.BOLD + StatsCommand.calculateKD(megawallsStats.get("finalKills").asInt, megawallsStats.get("finalDeaths").asInt))
+                " | Final K/D " + McColorHelper.BOLD + StatsCommand.calculateKD(megawallsStats.get("finalKills").asInt, megawallsStats.get("finalDeaths").asInt, 3))
         outText.append("\n")
         outText.append("\n")
 
         // Wins.
         outText.append(McColorHelper.GOLD + "Wins: " + McColorHelper.BOLD + megawallsStats.get("wins") + McColorHelper.RESET + McColorHelper.GOLD +
-                " | W/L: " + McColorHelper.BOLD + StatsCommand.calculateKD(megawallsStats.get("wins").asInt, megawallsStats.get("losses").asInt))
+                " | W/L: " + McColorHelper.BOLD + StatsCommand.calculateKD(megawallsStats.get("wins").asInt, megawallsStats.get("losses").asInt, 3))
         outText.append("\n")
         outText.append("\n")
 
@@ -74,7 +74,7 @@ object MegaWallsStats {
                 deaths = megawallsStats.get("deaths_" + mwClass.capitalize()).asString
             var kd = kills
             if (deaths != "0")
-                kd = StatsCommand.calculateKD(kills.toInt(), deaths.toInt()).toString()
+                kd = StatsCommand.calculateKD(kills.toInt(), deaths.toInt(), 3).toString()
 
             outText.append(GOLD + mwClass.capitalize())
             // Magic number 5 is the "Class" in the header string.

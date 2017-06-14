@@ -62,7 +62,7 @@ object TNTGamesStats {
         outText.append("\n")
         outText.append(GOLD + "Kills: " + BOLD + tntgamesStats.get("kills_capture") + RESET + GOLD +
                 " | Deaths: " + BOLD + tntgamesStats.get("deaths_capture") + RESET + GOLD +
-                " | K/D: " + BOLD + StatsCommand.calculateKD(tntgamesStats.get("kills_capture").asInt, tntgamesStats.get("deaths_capture").asInt))
+                " | K/D: " + BOLD + StatsCommand.calculateKD(tntgamesStats.get("kills_capture").asInt, tntgamesStats.get("deaths_capture").asInt, 3))
         outText.append("\n")
         for (className in wizardsClasses) {
             // Sneaky. Prints name.

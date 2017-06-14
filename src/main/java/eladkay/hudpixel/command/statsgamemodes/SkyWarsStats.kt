@@ -23,38 +23,38 @@ object SkyWarsStats : McColorHelper {
         // Solo stats
         outText.append(GOLD + "Solo - K: " + BOLD + skywarsStats.get("kills_solo") + RESET + GOLD +
                 " | D: " + BOLD + skywarsStats.get("deaths_solo") + RESET + GOLD +
-                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_solo").asInt, skywarsStats.get("deaths_solo").asInt) + RESET + GOLD +
+                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_solo").asInt, skywarsStats.get("deaths_solo").asInt, 3) + RESET + GOLD +
                 " | W: " + BOLD + skywarsStats.get("wins_solo") + RESET + GOLD +
-                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_solo").asInt, skywarsStats.get("losses_solo").asInt))
+                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_solo").asInt, skywarsStats.get("losses_solo").asInt, 3))
         outText.append("\n")
         //Teams
         outText.append(GOLD + "Teams - K: " + BOLD + skywarsStats.get("kills_team") + RESET + GOLD +
                 " | D: " + BOLD + skywarsStats.get("deaths_team") + RESET + GOLD +
-                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_team").asInt, skywarsStats.get("deaths_team").asInt) + RESET + GOLD +
+                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_team").asInt, skywarsStats.get("deaths_team").asInt, 3) + RESET + GOLD +
                 " | W: " + BOLD + skywarsStats.get("wins_team") + RESET + GOLD +
-                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_team").asInt, skywarsStats.get("losses_team").asInt))
+                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_team").asInt, skywarsStats.get("losses_team").asInt, 3))
         outText.append("\n")
         // Mega
         outText.append(GOLD + "Mega - K: " + BOLD + skywarsStats.get("kills_mega") + RESET + GOLD +
                 " | D: " + BOLD + skywarsStats.get("deaths_mega") + RESET + GOLD +
-                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_mega").asInt, skywarsStats.get("deaths_mega").asInt) + RESET + GOLD +
+                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_mega").asInt, skywarsStats.get("deaths_mega").asInt, 3) + RESET + GOLD +
                 " | W: " + BOLD + skywarsStats.get("wins_mega") + RESET + GOLD +
-                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_mega").asInt, skywarsStats.get("losses_mega").asInt))
+                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_mega").asInt, skywarsStats.get("losses_mega").asInt, 3))
         outText.append("\n")
         // Ranked
         outText.append(GOLD + "Ranked - K: " + BOLD + skywarsStats.get("kills_ranked") + RESET + GOLD +
                 " | D: " + BOLD + skywarsStats.get("deaths_ranked") + RESET + GOLD +
-                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_ranked").asInt, skywarsStats.get("deaths_ranked").asInt) + RESET + GOLD +
+                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_ranked").asInt, skywarsStats.get("deaths_ranked").asInt, 3) + RESET + GOLD +
                 " | W: " + BOLD + skywarsStats.get("wins_ranked") + RESET + GOLD +
-                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_ranked").asInt, skywarsStats.get("losses_ranked").asInt))
+                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins_ranked").asInt, skywarsStats.get("losses_ranked").asInt, 3))
         outText.append("\n")
         outText.append("\n")
         // Total
         outText.append(GOLD + "Total - K: " + BOLD + skywarsStats.get("kills") + RESET + GOLD +
                 " | D: " + BOLD + skywarsStats.get("deaths") + RESET + GOLD +
-                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_ranked").asInt, skywarsStats.get("deaths").asInt) + RESET + GOLD +
+                " | K/D " + BOLD + StatsCommand.calculateKD(skywarsStats.get("kills_ranked").asInt, skywarsStats.get("deaths").asInt, 3) + RESET + GOLD +
                 " | W: " + BOLD + skywarsStats.get("wins") + RESET + GOLD +
-                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins").asInt, skywarsStats.get("losses").asInt))
+                " | W/L: " + BOLD + StatsCommand.calculateKD(skywarsStats.get("wins").asInt, skywarsStats.get("losses").asInt, 3))
         outText.append("\n")
         return outText.toString()
     }

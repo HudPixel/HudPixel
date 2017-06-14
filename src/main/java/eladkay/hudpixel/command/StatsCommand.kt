@@ -18,6 +18,7 @@ import net.unaussprechlich.hudpixelextended.hypixelapi.callbacks.PlayerResponseC
 import net.unaussprechlich.hudpixelextended.util.LoggerHelper
 import net.unaussprechlich.hudpixelextended.util.McColorHelper
 import net.unaussprechlich.hudpixelextended.util.McColorHelper.*
+import java.util.*
 
 object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
 
@@ -112,9 +113,9 @@ object StatsCommand : HpCommandBase(), PlayerResponseCallback, McColorHelper {
     }
 
     // Stole this from AbstractStatsViewer
-    fun calculateKD(kills: Int, deaths: Int): Double {
+    fun calculateKD(kills: Int, deaths: Int, precision: Byte): Double {
         if (deaths > 0)
-            return Math.round(kills.toDouble() / deaths.toDouble() * 1000).toDouble() / 1000
+            return Math.round(kills.toDouble() / deaths.toDouble() * (Math.pow(10.0, precision.toDouble()))).toDouble() / (Math.pow(10.0, precision.toDouble()))
         else
             return kills.toDouble()
     }
