@@ -92,6 +92,7 @@ public class PlayerReply extends AbstractReply {
 
     public double getLevel() {
         // Get the old level, convert that to exp. Add to current exp and calculate level.
-        return ILeveling.getExactLevel(getPlayer().get(ILeveling.EXP_FIELD).getAsDouble() + ILeveling.getTotalExpToLevel(getPlayer().get(ILeveling.LVL_FIELD).getAsDouble()));
+        // Tryin to fit a block of code into one line.
+        return (getPlayer() == null) ? 0.0 : ILeveling.getExactLevel((!getPlayer().has(ILeveling.LVL_FIELD)) ? getPlayer().get(ILeveling.EXP_FIELD).getAsDouble() : (!getPlayer().has(ILeveling.EXP_FIELD)) ? ILeveling.getTotalExpToLevel(getPlayer().get(ILeveling.LVL_FIELD).getAsDouble()) : getPlayer().get(ILeveling.EXP_FIELD).getAsDouble() + ILeveling.getTotalExpToLevel(getPlayer().get(ILeveling.LVL_FIELD).getAsDouble()));
     }
 }
