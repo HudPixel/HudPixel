@@ -47,6 +47,7 @@ package eladkay.hudpixel
 
 
 import com.google.common.collect.Lists
+import eladkay.hudpixel.asm.HudPixelLoadingPlugin
 import eladkay.hudpixel.chat.WarlordsDamageChatFilter
 import eladkay.hudpixel.command.*
 import eladkay.hudpixel.config.EasyConfigHandler
@@ -54,6 +55,7 @@ import eladkay.hudpixel.config.HudPixelConfigGui
 import eladkay.hudpixel.modulargui.ModularGuiHelper
 import eladkay.hudpixel.modulargui.modules.PlayGameModularGuiProvider
 import eladkay.hudpixel.util.*
+import eladkay.hudpixel.util.autotip.Autotip
 import eladkay.modulargui.lib.Renderer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.settings.GameSettings
@@ -66,6 +68,7 @@ import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.common.FMLLog
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventHandler
@@ -96,11 +99,14 @@ class HudPixelMod {
 
     @EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
+        if(!HudPixelLoadingPlugin.loaded) {
+            FMLLog.bigWarning("HudPixel Loading Plugin Failed To Load! Use -Dfml.coreMods.load=eladkay.hudpixel.asm.HudPixelLoadingPlugin as VM setting in dev env")
+            throw IllegalStateException()
+        }
         try {
             instance = this
             CONFIG = Configuration(event.suggestedConfigurationFile)
             HudPixelMod.CONFIG.load()
-
             ClientCommandHandler.instance.registerCommand(GameCommand())
             ClientCommandHandler.instance.registerCommand(ScoreboardCommand())
             ClientCommandHandler.instance.registerCommand(GameDetectorCommand())
@@ -144,7 +150,7 @@ class HudPixelMod {
 
     @EventHandler
     fun init(event: FMLInitializationEvent) {
-
+        Autotip.init(event)
         MinecraftForge.EVENT_BUS.register(this)
         FMLCommonHandler.instance().bus().register(this)
         MinecraftForge.EVENT_BUS.register(Renderer())

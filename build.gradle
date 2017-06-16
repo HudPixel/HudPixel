@@ -18,6 +18,15 @@ buildscript {
     }
 }
 
+// Repositories
+repositories {
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven/'
+    }
+    jcenter()
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'kotlin'
 
@@ -42,6 +51,7 @@ minecraft {
     version = "$mc_version-$forge_version-$mc_version"
     runDir = "run"
     mappings = forge_mappings
+    coreMod = "eladkay.hudpixel.asm.HudPixelLoadingPlugin"
 }
 
 
@@ -61,8 +71,13 @@ dependencies {
     required 'joda-time:joda-time:2.9.6'
     required 'io.socket:socket.io-client:0.8.3'
     required group: 'org.slick2d', name: 'slick2d-core', version: '1.0.2'
-    required "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    required ("org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version") {
+        exclude group: "org.jetbrains.annotations"
+    }
     required group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.14.1'
+    required files("./libs/mixin-0.6.4-SNAPSHOT.jar")
+    // Mixin is cross version. Don't update this unless you desperately need to because it works.
+    // compile 'org.spongepowered:mixin:0.6.8-SNAPSHOT'
 }
 
 // Copy kotlin runtimes and other required dependencies into the jar.
@@ -73,6 +88,24 @@ jar {
             it.isDirectory() ? it : zipTree(it)
         }
     }
+}
+
+// Mixin config
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'eladkay.hudpixel.asm.HudPixelLoadingPlugin'
+        attributes 'FMLCorePluginContainsMod': 'true'
+        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
+        attributes 'TweakOrder': 0
+        attributes 'MixinConfigs': 'eladkay/hudpixel/asm/mixins_config.json'
+    }
+    configurations.required.each { dep ->
+        from(project.zipTree(dep)) {
+            exclude 'META-INF', 'META-INF/**'
+            exclude 'org/jetbrains/annotations', 'org/jetbrains/annotations/**'
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.FAIL //to prevent problems
 }
 
 // From the Forge build script. (Without change)
