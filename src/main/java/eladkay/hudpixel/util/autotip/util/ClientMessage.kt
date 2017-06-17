@@ -1,25 +1,25 @@
 package eladkay.hudpixel.util.autotip.util
 
+import eladkay.hudpixel.util.ChatMessageComposer
+import net.minecraft.util.EnumChatFormatting
+
+// Simple aliases for ChatMessageComposer
 object ClientMessage {
 
-    private val prefix =
-            ChatColor.GOLD.toString() + "A" + ChatColor.YELLOW + "T" + ChatColor.DARK_GRAY + " > "+ ChatColor.GRAY
-
     fun send(msg: String) {
-        UniversalUtil.chatMessage(prefix + msg)
+        ChatMessageComposer(msg).send()
     }
 
     fun send(msg: String, url: String, hoverText: String) {
-        UniversalUtil.chatMessage(prefix + msg, url, hoverText)
+        ChatMessageComposer(msg).makeLink(url).makeHover(ChatMessageComposer(hoverText)).send()
     }
 
     fun sendRaw(msg: String) {
-        UniversalUtil.chatMessage(msg)
+        ChatMessageComposer(msg).send(false)
     }
 
     fun separator() {
-        UniversalUtil.chatMessage(
-                ChatColor.GOLD.toString() + "" + ChatColor.BOLD + "----------------------------------")
+        ChatMessageComposer.printSeparationMessage(EnumChatFormatting.GOLD)
     }
 
 }

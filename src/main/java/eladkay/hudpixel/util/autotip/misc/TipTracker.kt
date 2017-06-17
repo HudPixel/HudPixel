@@ -3,6 +3,7 @@ package eladkay.hudpixel.util.autotip.misc
 import eladkay.hudpixel.util.autotip.Autotip
 import java.util.*
 
+// Tracks tips
 object TipTracker {
 
     var tipsSentHistory: MutableMap<Long, String> = TreeMap(Collections.reverseOrder<Long>())
@@ -17,7 +18,6 @@ object TipTracker {
         tipsSent++
         Autotip.totalTipsSent++
         Autotip.alreadyTipped.add(username)
-        println("Tipped: " + username)
         Writer.execute()
     }
 

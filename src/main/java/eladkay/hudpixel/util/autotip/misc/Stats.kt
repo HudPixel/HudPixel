@@ -1,8 +1,8 @@
 package eladkay.hudpixel.util.autotip.misc
 
 import eladkay.hudpixel.util.autotip.Autotip
-import eladkay.hudpixel.util.autotip.util.ChatColor
 import eladkay.hudpixel.util.autotip.util.ClientMessage
+import net.minecraft.util.EnumChatFormatting
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -100,34 +100,34 @@ object Stats {
                 if (sentStats.containsKey(game) || receivedStats.containsKey(game)) {
                     ClientMessage.send(
                             String.format("%s%s: %s%s coins",
-                                    ChatColor.GREEN, game,
-                                    ChatColor.YELLOW, format((sentCoins!!.toString() + receivedCoins!!.toString()).toInt()),
+                                    EnumChatFormatting.GREEN, game,
+                                    EnumChatFormatting.YELLOW, format((sentCoins!!.toString() + receivedCoins!!.toString()).toInt()),
                             "",
                             String.format(
                                     "%s%s\n%sBy sending: %s%s coins\n%sBy receiving: %s%s coins",
-                                    ChatColor.GREEN, game,
-                                    ChatColor.RED,
-                                    ChatColor.YELLOW, format(sentCoins!!),
-                                    ChatColor.BLUE,
-                                    ChatColor.YELLOW, format(receivedCoins!!))
+                                    EnumChatFormatting.GREEN, game,
+                                    EnumChatFormatting.RED,
+                                    EnumChatFormatting.YELLOW, format(sentCoins!!),
+                                    EnumChatFormatting.BLUE,
+                                    EnumChatFormatting.YELLOW, format(receivedCoins!!))
                     ))
                 }
             }
             ClientMessage.send(
-                    String.format("%sTips: %s", ChatColor.GOLD, format(tips[0] + tips[1])), "",
+                    String.format("%sTips: %s", EnumChatFormatting.GOLD, format(tips[0] + tips[1])), "",
                     String.format("%sSent: %s%s tips\n%sReceived: %s%s tips",
-                            ChatColor.RED,
-                            ChatColor.GOLD, format(tips[0]),
-                            ChatColor.BLUE,
-                            ChatColor.GOLD, format(tips[1]))
+                            EnumChatFormatting.RED,
+                            EnumChatFormatting.GOLD, format(tips[0]),
+                            EnumChatFormatting.BLUE,
+                            EnumChatFormatting.GOLD, format(tips[1]))
             )
             ClientMessage.send(
-                    String.format("%sXP: %s", ChatColor.BLUE, format(xp[0] + xp[1]))
+                    String.format("%sXP: %s", EnumChatFormatting.BLUE, format(xp[0] + xp[1]))
             )
             ClientMessage.send(                    String.format("%sBy sending: %s%s XP\n%sBy receiving: %s XP",
-                    ChatColor.RED,
-                    ChatColor.BLUE, format(xp[0]),
-                    ChatColor.BLUE, format(xp[1])))
+                    EnumChatFormatting.RED,
+                    EnumChatFormatting.BLUE, format(xp[0]),
+                    EnumChatFormatting.BLUE, format(xp[1])))
 
             ClientMessage.send(String.format("Stats from %s%s",
                     days[0].replace("-", "/"),
@@ -135,7 +135,7 @@ object Stats {
             ))
             ClientMessage.separator()
         } else {
-            ClientMessage.send(ChatColor.RED.toString() + "You have never tipped someone in this period!")
+            ClientMessage.send(EnumChatFormatting.RED.toString() + "You have never tipped someone in this period!")
             ClientMessage.send(String.format("(%s%s)",
                     days[0].replace("-", "/"),
                     if (days.size > 1) " - " + days[days.size - 1].replace("-", "/") else ""

@@ -2,19 +2,16 @@ package eladkay.hudpixel.util.autotip.misc
 
 import eladkay.hudpixel.util.autotip.Autotip
 import eladkay.hudpixel.util.autotip.event.Tipper
-import eladkay.hudpixel.util.autotip.util.Host
 import eladkay.hudpixel.util.autotip.util.Hosts
 import org.apache.commons.lang3.StringUtils
-import org.apache.http.HttpResponse
-import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.util.EntityUtils
-
 import java.io.IOException
-import java.util.Collections
+import java.util.*
 
+// Gets boosters from the Autotip Network
 class FetchBoosters : Runnable {
 
     override fun run() {

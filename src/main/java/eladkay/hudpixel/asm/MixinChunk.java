@@ -15,6 +15,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+//Mixin that solves the occasional random error:
+// java.util.concurrent.ExecutionException: java.lang.ArrayIndexOutOfBoundsException
+//            at java.util.concurrent.FutureTask.report(FutureTask.java:122) ~[?:1.8.0_51]
+//            at java.util.concurrent.FutureTask.get(FutureTask.java:192) ~[?:1.8.0_51]
+//            at net.minecraft.util.Util.runTask(Util.java:23) [Util.class:?]
 @Mixin(Chunk.class)
 public abstract class MixinChunk {
     @Shadow
@@ -108,6 +113,8 @@ public abstract class MixinChunk {
     private int queuedLightChecks;
     @Shadow
     private ConcurrentLinkedQueue<BlockPos> tileEntityPosQueue;
+
+    // Will be restored if this becomes a real issue.
 
 //    @Overwrite(aliases = {"func_177439_a"})
 //    public void fillChunk(byte[] p_177439_1_, int p_177439_2_, boolean p_177439_3_) {

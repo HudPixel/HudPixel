@@ -5,7 +5,6 @@ import eladkay.hudpixel.util.autotip.misc.Stats
 import eladkay.hudpixel.util.autotip.misc.TipTracker
 import eladkay.hudpixel.util.autotip.misc.Writer
 import org.apache.commons.io.FileUtils
-
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -16,20 +15,19 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.Date
-import java.util.Objects
-import java.util.TimeZone
+import java.util.*
 import java.util.stream.Collectors
 
 object FileUtil {
 
     /*
-    mods/autotip/
+    Directory structure:
+    mods/hudpixelautotip/
     -- stats (dir)
     -- options.at
     -- tipped.at
 
-    mods/autotip/uuid/
+    mods/hudpixelautotip/uuid/
     -- stats (dir)
     -- options.at
     -- tipped.at
@@ -47,6 +45,7 @@ object FileUtil {
             if (exists(user_dir + "tipped.at")) Files.deleteIfExists(Paths.get(oldDir + "tipped.at"));
      */
 
+    // Defines stat files
     @Throws(IOException::class)
     fun getVars() {
         try {
@@ -57,7 +56,7 @@ object FileUtil {
             }
 
             if (exists(Autotip.USER_DIR + "upgrade-date.at")) {
-                val explainCode = "I had to write this crappy code because 2pi didn't learn about proper serialization."
+                // I had to write this crappy code because 2pi didn't learn about proper serialization.
                 val date = FileUtils
                         .readFileToString(Paths.get(Autotip.USER_DIR + "upgrade-date.at").toFile())
                 var parsed: LocalDate
@@ -183,13 +182,16 @@ object FileUtil {
 
     }
 
+    // Whether or not a file exists.
     private fun exists(path: String): Boolean {
         return Files.exists(Paths.get(path))
     }
 
+    // Local date
     val date: String
         get() = SimpleDateFormat("dd-MM-yyyy").format(Date())
 
+    // Server date
     val serverDate: String
         get() {
             val sdf = SimpleDateFormat("dd-MM-yyyy")

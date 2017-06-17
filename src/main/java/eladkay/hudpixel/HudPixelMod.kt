@@ -151,7 +151,7 @@ class HudPixelMod {
 
     @EventHandler
     fun init(event: FMLInitializationEvent) {
-        Autotip.init(event)
+        Autotip
         MinecraftForge.EVENT_BUS.register(this)
         FMLCommonHandler.instance().bus().register(this)
         MinecraftForge.EVENT_BUS.register(Renderer())

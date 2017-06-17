@@ -9,11 +9,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.File;
 
+// Crucial mixin - fixes crash on server RP load in dev env.
 @Mixin(ResourcePackRepository.class)
 public abstract class MixinRPR {
-
     @Shadow private File dirServerResourcepacks;
-    @Inject(method = "func_177439_a", at = @At("HEAD"), cancellable = true)
+    //func_177439_a
+    @Inject(method = "deleteOldServerResourcesPacks", at = @At("HEAD"), cancellable = true)
     private void deleteOldServerResourcesPacksMixin(CallbackInfo info) {
         if(!dirServerResourcepacks.isDirectory()) info.cancel();
     }

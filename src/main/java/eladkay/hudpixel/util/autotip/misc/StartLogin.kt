@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils
 import java.io.IOException
 import java.net.URL
 
+// Logins to the Autotip Network
 class StartLogin : Runnable {
 
     override fun run() {

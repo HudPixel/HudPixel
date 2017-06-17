@@ -4,14 +4,11 @@ import eladkay.hudpixel.util.autotip.Autotip
 import eladkay.hudpixel.util.autotip.command.LimboCommand
 import eladkay.hudpixel.util.autotip.misc.TipTracker
 import eladkay.hudpixel.util.autotip.misc.Writer
-import eladkay.hudpixel.util.autotip.util.ChatColor
 import eladkay.hudpixel.util.autotip.util.ClientMessage
 import eladkay.hudpixel.util.autotip.util.MessageOption
-import eladkay.hudpixel.util.autotip.util.UniversalUtil
+import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class ChatListener {
@@ -30,7 +27,7 @@ class ChatListener {
             return
         }
 
-        val msg = UniversalUtil.getUnformattedText(event)
+        val msg = event.message.unformattedText
         val mOption = Autotip.messageOption
 
         if (Autotip.toggle) {
@@ -62,7 +59,7 @@ class ChatListener {
                 val coins = Integer.parseInt(coinMatcher.group("coins"))
                 val game = coinMatcher.group("game")
 
-                (TipTracker.tipsSentEarnings as java.util.Map<String, Int>).merge(game, coins) { a, b -> a + b }
+                TipTracker.tipsSentEarnings.merge(game, coins) { a, b -> a + b }
                 event.isCanceled = mOption == MessageOption.COMPACT || mOption == MessageOption.HIDDEN
 
                 println("Earned $coins coins in $game")
@@ -75,16 +72,16 @@ class ChatListener {
                 val xp = Integer.parseInt(earnedMatcher.group("xp"))
                 val game = earnedMatcher.group("game")
 
-                (TipTracker.tipsReceivedEarnings as java.util.Map<String, Int>).merge(game, coins) { a, b -> a + b }
+                TipTracker.tipsReceivedEarnings.merge(game, coins) { a, b -> a + b }
                 TipTracker.tipsReceived += xp / 60
                 Writer.execute()
 
                 if (mOption == MessageOption.COMPACT) {
                     ClientMessage.sendRaw(
                             String.format("%sEarned %s%d coins%s and %s%d experience%s in %s.",
-                                    ChatColor.GREEN, ChatColor.YELLOW, coins,
-                                    ChatColor.GREEN, ChatColor.BLUE, xp,
-                                    ChatColor.GREEN, game
+                                    EnumChatFormatting.GREEN, EnumChatFormatting.YELLOW, coins,
+                                    EnumChatFormatting.GREEN, EnumChatFormatting.BLUE, xp,
+                                    EnumChatFormatting.GREEN, game
                             ))
                 }
                 event.isCanceled = mOption == MessageOption.COMPACT || mOption == MessageOption.HIDDEN
