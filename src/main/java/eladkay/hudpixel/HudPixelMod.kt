@@ -155,6 +155,7 @@ class HudPixelMod {
         FMLCommonHandler.instance().bus().register(this)
         MinecraftForge.EVENT_BUS.register(Renderer())
         MinecraftForge.EVENT_BUS.register(ModularGuiHelper())
+        MinecraftForge.EVENT_BUS.register(PartyUtil)
         ModularGuiHelper.init()
         ContributorFancinessHandler.init()
         BansHandler.init()
