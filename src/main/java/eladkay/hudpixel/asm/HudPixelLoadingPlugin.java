@@ -7,15 +7,20 @@ import org.spongepowered.asm.mixin.Mixins;
 
 import java.util.Map;
 
+//Put this in your dev env VM options:
 //-Dfml.coreMods.load=eladkay.hudpixel.asm.HudPixelLoadingPlugin
 
+// Loads Mixin, may do some regular ASM too in the future.
 @IFMLLoadingPlugin.MCVersion("1.8.9")
 public class HudPixelLoadingPlugin implements IFMLLoadingPlugin {
+    // Tracks whether or not there's some sort of horrible thing going on
     public static boolean loaded = false;
     public HudPixelLoadingPlugin() {
         loaded = true;
         MixinBootstrap.init();
+        // Makes Mixin work with Java 8. Deprecated in favor of config, which we do not need right now.
         MixinEnvironment.setCompatibilityLevel(MixinEnvironment.CompatibilityLevel.JAVA_8);
+        // Add new mixins to this file too:
         Mixins.addConfiguration("eladkay/hudpixel/asm/mixins_config.json");
     }
     /**

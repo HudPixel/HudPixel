@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Queue;
 import java.util.concurrent.FutureTask;
 
+// Currently unused. Useful for the future.
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
     @Shadow private Profiler mcProfiler;
