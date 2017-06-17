@@ -2,13 +2,10 @@ package eladkay.hudpixel.util.autotip.command
 
 import eladkay.hudpixel.command.HpCommandBase
 import eladkay.hudpixel.util.autotip.misc.TipTracker
-import eladkay.hudpixel.util.autotip.util.ChatColor
 import eladkay.hudpixel.util.autotip.util.ClientMessage
-import eladkay.hudpixel.util.autotip.util.TimeUtil
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.BlockPos
-
-import java.util.Collections
+import net.minecraft.util.EnumChatFormatting
 
 class TipHistoryCommand : HpCommandBase() {
 
@@ -43,29 +40,64 @@ class TipHistoryCommand : HpCommandBase() {
             }
 
             if (page < 1 || page > pages) {
-                ClientMessage.send(ChatColor.RED.toString() + "Invalid page number.")
+                ClientMessage.send(EnumChatFormatting.RED.toString() + "Invalid page number.")
             } else {
                 ClientMessage.separator()
-                ClientMessage.send(ChatColor.GOLD.toString() + "Tip History " + ChatColor.GRAY
-                        + "[Page " + page + " of " + pages + "]" + ChatColor.GOLD + ":")
+                ClientMessage.send(EnumChatFormatting.GOLD.toString() + "Tip History " + EnumChatFormatting.GRAY
+                        + "[Page " + page + " of " + pages + "]" + EnumChatFormatting.GOLD + ":")
 
                 TipTracker.tipsSentHistory.entries.stream()
                         .skip(((page - 1) * 7).toLong())
                         .limit(7)
                         .forEach { tip ->
-                            ClientMessage.send(tip.value + ": " + ChatColor.GOLD
-                                    + TimeUtil.formatMillis(
+                            ClientMessage.send(tip.value + ": " + EnumChatFormatting.GOLD
+                                    + formatMillis(
                                     System.currentTimeMillis() - tip.key) + ".")
                         }
 
                 ClientMessage.separator()
             }
         } else {
-            ClientMessage.send(ChatColor.RED.toString() + "You haven't tipped anyone yet!")
+            ClientMessage.send(EnumChatFormatting.RED.toString() + "You haven't tipped anyone yet!")
         }
     }
 
     override fun addTabCompletionOptions(sender: ICommandSender?, args: Array<String>?, pos: BlockPos?): List<String> {
         return emptyList()
     }
+    fun formatMillis(duration: Long): String {
+        val sb = StringBuilder()
+        var temp: Long
+        if (duration >= ONE_SECOND) {
+            temp = duration / ONE_DAY
+            if (temp > 0) {
+                sb.append(temp).append(" day").append(if (temp > 1) "s" else "")
+                return sb.toString() + " ago"
+            }
+
+            temp = duration / ONE_HOUR
+            if (temp > 0) {
+                sb.append(temp).append(" hour").append(if (temp > 1) "s" else "")
+                return sb.toString() + " ago"
+            }
+
+            temp = duration / ONE_MINUTE
+            if (temp > 0) {
+                sb.append(temp).append(" minute").append(if (temp > 1) "s" else "")
+                return sb.toString() + " ago"
+            }
+
+            temp = duration / ONE_SECOND
+            if (temp > 0) {
+                sb.append(temp).append(" second").append(if (temp > 1) "s" else "")
+            }
+            return sb.toString() + " ago"
+        } else {
+            return "just now"
+        }
+    }
+    private val ONE_SECOND: Long = 1000
+    private val ONE_MINUTE = ONE_SECOND * 60
+    private val ONE_HOUR = ONE_MINUTE * 60
+    private val ONE_DAY = ONE_HOUR * 24
 }

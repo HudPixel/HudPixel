@@ -3,18 +3,17 @@ package eladkay.hudpixel.util.autotip.command
 import com.google.common.collect.Lists
 import eladkay.hudpixel.command.HpCommandBase
 import eladkay.hudpixel.util.autotip.Autotip
-import eladkay.hudpixel.util.autotip.event.HypixelListener
 import eladkay.hudpixel.util.autotip.event.Tipper
 import eladkay.hudpixel.util.autotip.misc.StartLogin
 import eladkay.hudpixel.util.autotip.misc.Stats
 import eladkay.hudpixel.util.autotip.misc.TipTracker
-import eladkay.hudpixel.util.autotip.util.ChatColor
 import eladkay.hudpixel.util.autotip.util.ClientMessage
 import eladkay.hudpixel.util.autotip.util.FileUtil
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.BlockPos
+import net.minecraft.util.EnumChatFormatting
 import org.apache.commons.lang3.StringUtils
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -52,16 +51,16 @@ class AutotipCommand : HpCommandBase() {
                     ClientMessage.separator()
                     ClientMessage.send(
                             "Autotipper: " + (if (Autotip.toggle)
-                                ChatColor.GREEN.toString() + "En"
+                                EnumChatFormatting.GREEN.toString() + "En"
                             else
-                                ChatColor.RED.toString() + "Dis") + "abled")
+                                EnumChatFormatting.RED.toString() + "Dis") + "abled")
                     ClientMessage.send("Tip Messages: " + Autotip.messageOption)
-                    ClientMessage.send("Tips sent today: " + ChatColor.GOLD + TipTracker.tipsSent)
-                    ClientMessage.send("Tips received today: " + ChatColor.GOLD
+                    ClientMessage.send("Tips sent today: " + EnumChatFormatting.GOLD + TipTracker.tipsSent)
+                    ClientMessage.send("Tips received today: " + EnumChatFormatting.GOLD
                             + TipTracker.tipsReceived)
                     ClientMessage
-                            .send("Lifetime tips sent: " + ChatColor.GOLD + Autotip.totalTipsSent)
-                    ClientMessage.send(ChatColor.GOLD.toString() + "Type /hudpixelautotip stats to see what has been earned.")
+                            .send("Lifetime tips sent: " + EnumChatFormatting.GOLD + Autotip.totalTipsSent)
+                    ClientMessage.send(EnumChatFormatting.GOLD.toString() + "Type /hudpixelautotip stats to see what has been earned.")
                     ClientMessage.separator()
                 }
                 "s", "stats" -> {
@@ -79,7 +78,7 @@ class AutotipCommand : HpCommandBase() {
                             "year", "yearly" -> Stats.printBetween("01-01-" + Year.now().value,
                                     "31-12-" + Year.now().value)
                             "all", "total", "life", "lifetime" -> Stats.printBetween("25-06-2016", FileUtil.date)
-                            else -> ClientMessage.send(ChatColor.RED.toString() + "Usage: /hudpixelautotip stats <day, week, month, year, lifetime>")
+                            else -> ClientMessage.send(EnumChatFormatting.RED.toString() + "Usage: /hudpixelautotip stats <day, week, month, year, lifetime>")
                         }
                     } else {
                         Stats.printStats(FileUtil.date)
@@ -89,18 +88,18 @@ class AutotipCommand : HpCommandBase() {
                     Autotip.toggle = !Autotip.toggle
                     ClientMessage.send(
                             "Autotipper: " + (if (Autotip.toggle)
-                                ChatColor.GREEN.toString() + "En"
+                                EnumChatFormatting.GREEN.toString() + "En"
                             else
-                                ChatColor.RED.toString() + "Dis") + "abled")
+                                EnumChatFormatting.RED.toString() + "Dis") + "abled")
                 }
                 "wave", "time" -> if (Autotip.toggle) {
                     if (Autotip.onHypixel) {
                         ClientMessage.separator()
                         ClientMessage.send("Last wave: " +
-                                ChatColor.GOLD + LocalTime.MIN.plusSeconds(Tipper.waveCounter.toLong())
+                                EnumChatFormatting.GOLD + LocalTime.MIN.plusSeconds(Tipper.waveCounter.toLong())
                                 .toString())
                         ClientMessage.send("Next wave: " +
-                                ChatColor.GOLD + LocalTime.MIN.plusSeconds(
+                                EnumChatFormatting.GOLD + LocalTime.MIN.plusSeconds(
                                 (Tipper.waveLength - Tipper.waveCounter).toLong()).toString())
                         ClientMessage.separator()
                     } else {
@@ -108,22 +107,21 @@ class AutotipCommand : HpCommandBase() {
                                 .send("Autotip is disabled as you are not playing on Hypixel.")
                     }
                 } else {
-                    ClientMessage.send("Autotip is disabled. Use " + ChatColor.GOLD
+                    ClientMessage.send("Autotip is disabled. Use " + EnumChatFormatting.GOLD
                             + "/hudpixelautotip toggle"
-                            + ChatColor.GRAY + " to enable it.")
+                            + EnumChatFormatting.GRAY + " to enable it.")
                 }
                 "update" -> StartLogin.login()
                 "info+" -> {
                     ClientMessage.separator()
-                    ClientMessage.send("Last IP joined: " + HypixelListener.lastIp)
                     ClientMessage
                             .send("Current tipqueue: " + StringUtils.join(Tipper.tipQueue, ", "))
                     ClientMessage.separator()
                 }
-                else -> ClientMessage.send(ChatColor.RED.toString() + "Usage: " + getCommandUsage(sender))
+                else -> ClientMessage.send(EnumChatFormatting.RED.toString() + "Usage: " + getCommandUsage(sender))
             }
         } else {
-            ClientMessage.send(ChatColor.RED.toString() + "Usage: " + getCommandUsage(sender))
+            ClientMessage.send(EnumChatFormatting.RED.toString() + "Usage: " + getCommandUsage(sender))
         }
     }
 

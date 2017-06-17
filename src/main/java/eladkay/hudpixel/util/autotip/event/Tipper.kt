@@ -4,9 +4,9 @@ import eladkay.hudpixel.util.autotip.Autotip
 import eladkay.hudpixel.util.autotip.misc.FetchBoosters
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
+import java.util.*
 
-import java.util.ArrayList
-
+// Handles tipping and waves
 class Tipper {
     private var unixTime: Long = 0
 

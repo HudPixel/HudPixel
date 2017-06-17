@@ -8,6 +8,7 @@ import java.util.*
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
+// Writes to autotip file
 class Writer : Runnable {
 
     override fun run() {

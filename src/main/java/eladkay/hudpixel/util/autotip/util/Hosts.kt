@@ -5,6 +5,8 @@ import org.apache.commons.io.IOUtils
 import java.io.IOException
 import java.net.URL
 
+// Simple data class to keep track of host info
+class Host(val id: String, val url: String, val isEnabled: Boolean)
 class Hosts private constructor() {
 
     private val hosts: List<Host>? = null
