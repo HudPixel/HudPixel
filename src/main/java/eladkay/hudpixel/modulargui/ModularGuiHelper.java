@@ -88,7 +88,7 @@ public class ModularGuiHelper implements McColorHelper {
     public static final ModularGuiRegistry.Element WALLS3_AFKILLCOUNTER = new ModularGuiRegistry.Element("simp8", new MWFinalAssistCounterModularGuiProvider());
     public static final ModularGuiRegistry.Element WALLS3_FKILLCOUNTER = new ModularGuiRegistry.Element("simp9", new MWFinalKillCounterModularGuiProvider());
     public static final ModularGuiRegistry.Element DEATH = new ModularGuiRegistry.Element(DeathCounterModularGuiProvider.DEATH_TEXT, new DeathCounterModularGuiProvider());
-    public static final ModularGuiRegistry.Element AUTOTIP = new ModularGuiRegistry.Element("Next Autotip wave:", AutotipWaveModularGuiProvider.INSTANCE);
+    public static final ModularGuiRegistry.Element AUTOTIP = new ModularGuiRegistry.Element("Next Autotip wave", AutotipWaveModularGuiProvider.INSTANCE);
     public static List<IHudPixelModularGuiProviderBase> providers = Lists.newArrayList();
 
     public static void init() {
