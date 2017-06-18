@@ -1,4 +1,5 @@
-# HudPixelReloaded
+# HudPixelReloaded 
+![alt text](https://travis-ci.org/HudPixel/HudPixel.svg?branch=master "TarvisCI")
 ### An unofficial client-side Minecraft modification designed for the Hypixel Network.
 
  1. Check out the original version by  [palechip](https://github.com/palechip/HudPixel).
