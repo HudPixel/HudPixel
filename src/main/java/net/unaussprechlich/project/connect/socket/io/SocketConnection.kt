@@ -37,7 +37,7 @@ object SocketConnection{
     init {
         println("Setting up Socket.io")
         try {
-            socket.on(Socket.EVENT_CONNECT) { args ->
+            socket.on(Socket.EVENT_CONNECT) { _ ->
                 try {
                     val obj = JSONObject()
 
@@ -61,15 +61,13 @@ object SocketConnection{
                 }
             }
 
-            socket.on(Socket.EVENT_DISCONNECT) { args -> }
+            socket.on(Socket.EVENT_DISCONNECT) { _ -> }
 
             // Receiving an object
             socket.on("users_new_broadcast_message") { args ->
                 val obj = args[0] as JSONObject
-                var message: String? = null
                 try {
-                    message = obj.getString("msg")
-                    NotificationGUI.addNotification(DefNotificationContainer(message, "[Hud" + ChatFormatting.GOLD + "Pixel" + ChatFormatting.WHITE + "]", RGBA.RED.get(), 20))
+                    NotificationGUI.addNotification(DefNotificationContainer(obj.getString("msg"), "[Hud" + ChatFormatting.GOLD + "Pixel" + ChatFormatting.WHITE + "]", RGBA.RED.get(), 20))
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }

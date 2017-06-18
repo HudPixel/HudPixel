@@ -1,5 +1,7 @@
 package eladkay.hudpixel.asm;
 
+import eladkay.hudpixel.HudPixelMod;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -13,10 +15,15 @@ import java.util.Map;
 public class HudPixelLoadingPlugin implements IFMLLoadingPlugin {
     public static boolean loaded = false;
     public HudPixelLoadingPlugin() {
-        loaded = true;
-        MixinBootstrap.init();
-        MixinEnvironment.setCompatibilityLevel(MixinEnvironment.CompatibilityLevel.JAVA_8);
-        Mixins.addConfiguration("eladkay/hudpixel/asm/mixins_config.json");
+        try {
+            loaded = true;
+            MixinBootstrap.init();
+            MixinEnvironment.setCompatibilityLevel(MixinEnvironment.CompatibilityLevel.JAVA_8);
+            Mixins.addConfiguration(new ResourceLocation(HudPixelMod.MODID, "mixins_config.json").getResourcePath());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
     /**
      * Return a list of classes that implements the IClassTransformer interface

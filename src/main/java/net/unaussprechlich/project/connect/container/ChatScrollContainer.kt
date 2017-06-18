@@ -3,8 +3,8 @@ package net.unaussprechlich.project.connect.container
 import net.unaussprechlich.managedgui.lib.ConstantsMG
 import net.unaussprechlich.managedgui.lib.databases.player.PlayerDatabaseMG
 import net.unaussprechlich.managedgui.lib.databases.player.data.Rank
+import net.unaussprechlich.managedgui.lib.helper.DateHelper
 import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefChatMessageContainer
-import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefPictureContainer
 import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefScrollableContainer
 import net.unaussprechlich.project.connect.gui.ChatGUI
 
@@ -29,7 +29,7 @@ open class ChatScrollContainer : DefScrollableContainer(ConstantsMG.DEF_BACKGROU
                     DefChatMessageContainer(
                             player,
                             message,
-                            DefPictureContainer(),
+                            DateHelper(),
                             ChatGUI.WIDTH
                     )
             )

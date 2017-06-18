@@ -37,7 +37,7 @@ open class DefPasswordFieldContainer(val hint : String = "", widthBox : Int = 10
         width = widthBox
         height = 17
         minHeight = 17
-        registerClickedListener { clickType, container ->
+        clickedCallback.registerListener{ clickType, _ ->
             if(clickType == MouseHandler.ClickType.SINGLE) hasFocus = !hasFocus
         }
         cursorPos = text.length
@@ -126,11 +126,11 @@ open class DefPasswordFieldContainer(val hint : String = "", widthBox : Int = 10
         return true
     }
 
-    override fun doChatMessageLocal(e: ClientChatReceivedEvent?): Boolean {
+    override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean {
         return true
     }
 
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean {
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean {
         return true
     }
 
@@ -142,7 +142,7 @@ open class DefPasswordFieldContainer(val hint : String = "", widthBox : Int = 10
         return true
     }
 
-    override fun doOpenGUILocal(e: GuiOpenEvent?): Boolean {
+    override fun doOpenGUILocal(e: GuiOpenEvent): Boolean {
         return true
     }
 

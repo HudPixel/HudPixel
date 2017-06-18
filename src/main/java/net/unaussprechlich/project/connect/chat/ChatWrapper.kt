@@ -3,7 +3,6 @@ package net.unaussprechlich.project.connect.chat
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
-import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefBackgroundContainer
 import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefCustomRenderContainer
 import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefWrapperContainer
 import net.unaussprechlich.managedgui.lib.util.DisplayUtil
@@ -26,6 +25,9 @@ object ChatWrapper : DefWrapperContainer(){
     private var isSetup = false
 
 
+    /**
+     * Button that makes the Chat resizeable
+     */
     val resizeCon = DefCustomRenderContainer { xStart, yStart , _ , _, con, _ ->
         if(con.isHover || resize)   RenderUtils.iconRender_resize(xStart + con.width, yStart + con.height, RGBA.WHITE.get())
         else                        RenderUtils.iconRender_resize(xStart + con.width, yStart + con.height, RGBA.P1B1_596068.get())
@@ -34,7 +36,9 @@ object ChatWrapper : DefWrapperContainer(){
         height = 10
     }
 
-
+    /**
+     * The control menu of the chat con
+     */
     val controllerCon = newChatWindowControllerContainer(stdWidth).apply {
         width = stdWidth
     }
@@ -49,15 +53,13 @@ object ChatWrapper : DefWrapperContainer(){
         resizeCon.yOffset =  height - tabCon.chatInputField.height - resizeCon.height
     }
 
-    val chatList = DefBackgroundContainer(RGBA.P1B1_596068.get(), stdChatListWidth, stdHeight - controllerCon.height).apply {
-        yOffset = controllerCon.height
-    }
+    val chatList = newChatListContainer
 
     init {
         width = stdWidth
         height = stdHeight
 
-        resizeCon.registerClickedListener { clickType, _ ->
+        resizeCon.clickedCallback.registerListener { clickType, _ ->
             if(clickType == MouseHandler.ClickType.DRAG) resize = true
         }
 
@@ -68,6 +70,8 @@ object ChatWrapper : DefWrapperContainer(){
 
         minWidth  = 400
         minHeight = 200
+
+        chatList.yOffset = controllerCon.height
 
         resizeCon.xOffset =  width - resizeCon.width - 2
         resizeCon.yOffset =  height - tabCon.chatInputField.height - resizeCon.height
@@ -108,7 +112,7 @@ object ChatWrapper : DefWrapperContainer(){
         return true
     }
 
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean {
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean {
         if (clickType == MouseHandler.ClickType.DROP && move)   move = false
         if (clickType == MouseHandler.ClickType.DROP && resize) resize = false
         return true

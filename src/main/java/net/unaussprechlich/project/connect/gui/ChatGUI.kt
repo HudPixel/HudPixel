@@ -101,7 +101,7 @@ object ChatGUI : GUI() {
         privateChatCons[user] = chatCon
 
         chatCon.tabListElement.registerButton((DefButtonContainer(7, 7,
-            { click, con ->
+            { click, _ ->
                 if(click == MouseHandler.ClickType.SINGLE)
                     closePrivateChatCon(chatCon.tabListElement.title)
             },{ xStart, yStart, width, height ->

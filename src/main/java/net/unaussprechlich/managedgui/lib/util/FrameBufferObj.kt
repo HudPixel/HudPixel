@@ -49,8 +49,6 @@ class FrameBufferObj(width: Int, height: Int, p_i45078_3_: Boolean) : Framebuffe
         val tessellator = Tessellator.getInstance()
         val worldrenderer = tessellator.worldRenderer
 
-        val f1 = 1f / width.toFloat()
-        val f2 = 1f / height.toFloat()
 
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
         worldrenderer.pos(x.toDouble(), (height + y).toDouble(), 0.0).tex(0.0, 0.0).color(255, 255, 255, 255).endVertex()

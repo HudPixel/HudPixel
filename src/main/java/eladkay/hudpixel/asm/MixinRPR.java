@@ -13,7 +13,7 @@ import java.io.File;
 public abstract class MixinRPR {
 
     @Shadow private File dirServerResourcepacks;
-    @Inject(method = "func_177439_a", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "deleteOldServerResourcesPacks", at = @At("HEAD"), cancellable = true)
     private void deleteOldServerResourcesPacksMixin(CallbackInfo info) {
         if(!dirServerResourcepacks.isDirectory()) info.cancel();
     }

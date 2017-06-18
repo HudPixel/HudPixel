@@ -54,7 +54,7 @@ class ChatTextFieldContainer(text: String = "", width: Int = 400, val sizeCallba
 
         backgroundRGBA = RGBA.P1B1_DEF.get()
 
-        sendButton.registerClickedListener { clickType, _ ->
+        sendButton.clickedCallback.registerListener { clickType, _ ->
             if(clickType == MouseHandler.ClickType.SINGLE) send()
         }
 
@@ -106,11 +106,11 @@ class ChatTextFieldContainer(text: String = "", width: Int = 400, val sizeCallba
     }
 
     override fun doClientTickLocal(): Boolean {return true }
-    override fun doChatMessageLocal(e: ClientChatReceivedEvent?): Boolean { return true }
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean { return true }
+    override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean { return true }
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean { return true }
     override fun doScrollLocal(i: Int, isThisContainer: Boolean): Boolean { return true }
     override fun doMouseMoveLocal(mX: Int, mY: Int): Boolean { return true }
-    override fun doOpenGUILocal(e: GuiOpenEvent?): Boolean { return true }
+    override fun doOpenGUILocal(e: GuiOpenEvent): Boolean { return true }
 
 
 }

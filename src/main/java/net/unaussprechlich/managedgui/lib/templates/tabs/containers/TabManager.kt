@@ -157,18 +157,18 @@ class TabManager : Container() {
         registerChild(maxCon)
         registerChild(minCon)
 
-        moveCon.registerClickedListener { clickType, container ->
+        moveCon.clickedCallback.registerListener { clickType, _ ->
             if (clickType == MouseHandler.ClickType.DRAG && !isMax)
                 move = true
         }
 
-        minCon.registerClickedListener { clickType, container ->
+        minCon.clickedCallback.registerListener { clickType, _ ->
             if (clickType == MouseHandler.ClickType.SINGLE)
                 isVisible = false
                 GuiManagerMG.unbindScreen()
         }
 
-        maxCon.registerClickedListener { clickType, container ->
+        maxCon.clickedCallback.registerListener { clickType, _ ->
             if(clickType == MouseHandler.ClickType.SINGLE){
                 if(isMax){
                     isMax = false

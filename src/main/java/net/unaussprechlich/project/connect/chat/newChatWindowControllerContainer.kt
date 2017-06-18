@@ -37,7 +37,7 @@ class newChatWindowControllerContainer(width: Int) : Container(){
             var color = RGBA.P1B1_596068.get()
             if(con.isHover) color = RGBA.WHITE.get()
 
-            RenderUtils.renderRectWithInlineShadow_s1_d1(xStart + s +1 , yStart + s +1, width - s2 - 2, height - s2 -2, RGBA.BLACK_LIGHT.get(), RGBA.P1B1_0A1D31.get(), 2)
+            RenderUtils.renderRectWithInlineShadow_s1_d1(xStart + s +1 , yStart + s +1, width - s2 - 2, height - s2 -2, RGBA.BLACK_LIGHT.get(), RGBA.C_161b21.get(), 2)
 
             RenderUtils.renderBoxWithColorBlend_s1_d1(xStart + s, yStart + s, width - s2, 1, color)
             RenderUtils.renderBoxWithColorBlend_s1_d1(xStart + s, yStart + s + 1, 1, height - 2 - s2, color)
@@ -59,7 +59,7 @@ class newChatWindowControllerContainer(width: Int) : Container(){
             var color = RGBA.P1B1_596068.get()
             if(con.isHover) color = RGBA.WHITE.get()
 
-            RenderUtils.renderRectWithInlineShadow_s1_d1(xStart + s +1 , yStart + s +1, width - s2 - 2, height - s2 -2, RGBA.BLACK_LIGHT.get(), RGBA.P1B1_0A1D31.get(), 2)
+            RenderUtils.renderRectWithInlineShadow_s1_d1(xStart + s +1 , yStart + s +1, width - s2 - 2, height - s2 -2, RGBA.BLACK_LIGHT.get(), RGBA.C_161b21.get(), 2)
 
             RenderUtils.renderBoxWithColorBlend_s1_d1(xStart + s, yStart + s, width - s2, 1, color)
             RenderUtils.renderBoxWithColorBlend_s1_d1(xStart + s, yStart + s + 1, 1, height - 2 - s2, color)
@@ -96,7 +96,7 @@ class newChatWindowControllerContainer(width: Int) : Container(){
             var color = RGBA.P1B1_596068.get()
             if(con.isHover) color = RGBA.WHITE.get()
 
-            RenderUtils.renderRectWithInlineShadow_s1_d1(xStart + s +1 , yStart + s +1, width - s2 - 2, height - s2 -2, RGBA.BLACK_LIGHT.get(), RGBA.P1B1_0A1D31.get(), 2)
+            RenderUtils.renderRectWithInlineShadow_s1_d1(xStart + s +1 , yStart + s +1, width - s2 - 2, height - s2 -2, RGBA.BLACK_LIGHT.get(), RGBA.C_161b21.get(), 2)
 
             RenderUtils.renderBoxWithColorBlend_s1_d1(xStart + s, yStart + s, width - s2, 1, color)
             RenderUtils.renderBoxWithColorBlend_s1_d1(xStart + s, yStart + s + 1, 1, height - 2 - s2, color)
@@ -154,20 +154,20 @@ class newChatWindowControllerContainer(width: Int) : Container(){
         registerChild(logoCon)
 
         height = BS
-        backgroundRGBA = RGBA.P1B1_0A1D31.get()
+        backgroundRGBA = RGBA.C_161b21.get()
 
-        moveCon.registerClickedListener { clickType, _ ->
+        moveCon.clickedCallback.registerListener{ clickType, _ ->
             if (clickType == MouseHandler.ClickType.DRAG && !isMax)
                 move = true
         }
 
-        minCon.registerClickedListener { clickType, _ ->
+        minCon.clickedCallback.registerListener { clickType, _ ->
             if (clickType == MouseHandler.ClickType.SINGLE)
                 isVisible = false
             GuiManagerMG.unbindScreen()
         }
 
-        maxCon.registerClickedListener { clickType, _ ->
+        maxCon.clickedCallback.registerListener { clickType, _ ->
             if(clickType == MouseHandler.ClickType.SINGLE){
                 if(isMax){
                     isMax = false
@@ -186,13 +186,13 @@ class newChatWindowControllerContainer(width: Int) : Container(){
     }
 
     override fun doClientTickLocal(): Boolean { return true }
-    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState?): Boolean { return true }
-    override fun doChatMessageLocal(e: ClientChatReceivedEvent?): Boolean { return true }
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean { return true }
+    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState): Boolean { return true }
+    override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean { return true }
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean { return true }
     override fun doScrollLocal(i: Int, isThisContainer: Boolean): Boolean { return true }
     override fun doMouseMoveLocal(mX: Int, mY: Int): Boolean { return true }
     override fun <T : Event<*>> doEventBusLocal(iEvent : T): Boolean { return true }
-    override fun doOpenGUILocal(e: GuiOpenEvent?): Boolean { return true }
+    override fun doOpenGUILocal(e: GuiOpenEvent): Boolean { return true }
 
     override fun doResizeLocal(width: Int, height: Int): Boolean {
         maxCon.xOffset  = width - BS * 3 + 2

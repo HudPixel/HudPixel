@@ -12,7 +12,6 @@ import com.mojang.realmsclient.gui.ChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.managedgui.lib.container.Container
-import net.unaussprechlich.managedgui.lib.container.callback.ICallbackUpdateHeight
 import net.unaussprechlich.managedgui.lib.databases.player.PlayerModel
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.util.EnumTime
@@ -26,28 +25,25 @@ import net.unaussprechlich.managedgui.lib.util.storage.ContainerSide
  * DefChatMessageContainer Created by Alexander on 27.02.2017.
  * Description:
  */
-class DefChatMessageContainer(private val player: PlayerModel, message: String, private val avatar_con: DefPictureContainer, width: Int) : Container() {
+class DefChatMessageContainer(private val player: PlayerModel, message: String , private val date: DateHelper = DateHelper(), width: Int = 100) : Container() {
 
     private companion object {
         val SPACE = 4
     }
 
     private var message_con: DefTextListAutoLineBreakContainer? = null
-    private val username_con: DefTextContainer
+    private val username_con: DefTextContainer = DefTextContainer(player.rankName + ChatFormatting.GRAY + ChatFormatting.ITALIC + "  " + date.dateTimeTextPassed)
+    private val avatar_con = DefPictureContainer(player.playerHead)
 
-    private var callback: ICallbackUpdateHeight? = null
-    private val date: DateHelper = DateHelper()
+
+
 
     init {
-        this.username_con = DefTextContainer(player.rankName + ChatFormatting.GRAY + ChatFormatting.ITALIC + "  " + date.dateTimeTextPassed)
         setWidth(width)
         setup(message)
-        player.getPlayerHeadLoc {avatar_con.backgroundImage = it}
+        player.loadPlayerHead {avatar_con.setBackgroundImage(it)}
     }
 
-    fun setHeightCallback(callback: ICallbackUpdateHeight) {
-        this.callback = callback
-    }
 
     val playername: String
         get() = player.name
@@ -61,10 +57,10 @@ class DefChatMessageContainer(private val player: PlayerModel, message: String, 
         }
         username_con.margin = ContainerSide().BOTTOM(4).TOP(4)
         username_con.xOffset = avatar_con.widthMargin
-        message_con = DefTextListAutoLineBreakContainer(message, width - avatar_con.widthMargin - SPACE - 14) { data -> update() }
+        message_con = DefTextListAutoLineBreakContainer(message, width - avatar_con.widthMargin - SPACE - 14) { update() }
         message_con!!.setXYOffset(avatar_con.widthMargin, username_con.heightMargin + 2)
 
-        registerChild<DefTextListAutoLineBreakContainer>(message_con)
+        registerChild(message_con!!)
         registerChild(avatar_con)
         registerChild(username_con)
 
@@ -79,9 +75,7 @@ class DefChatMessageContainer(private val player: PlayerModel, message: String, 
     private fun update() {
         super.setHeight(SPACE * 2 + username_con.heightMargin + message_con!!.heightMargin)
         message_con!!.width = width - avatar_con.widthMargin - SPACE - 14
-        if (callback != null) {
-            callback!!.call(height)
-        }
+        heightChangedCallback.broadcast(this)
     }
 
     override fun setHeight(height: Int) {
