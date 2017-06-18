@@ -75,7 +75,7 @@ class TabListElementContainer(internal val title: String, private val color: Col
         if (ees == EnumEventState.PRE) return true
 
         if (isHover && !isOpen)
-            RenderUtils.renderRectWithColorBlendFade_s1_d0(xStart, yStart, getWidth(), ELEMENT_HEIGHT, ConstantsMG.DEF_BACKGROUND_RGBA, RGBA.BLACK_LIGHT3.get(), RGBA.BLACK_LIGHT3.get(), RGBA.BLACK_LIGHT3.get())
+            RenderUtils.renderRectWithColorBlendFade_s1_d0(xStart, yStart, this.width, ELEMENT_HEIGHT, ConstantsMG.DEF_BACKGROUND_RGBA, RGBA.BLACK_LIGHT3.get(), RGBA.BLACK_LIGHT3.get(), RGBA.BLACK_LIGHT3.get())
 
         if (!isOpen && !isHover)
             RenderUtils.renderRectWithColorBlendFade_s1_d0(xStart + this.width - 8, yStart, 8, ELEMENT_HEIGHT, ConstantsMG.DEF_BACKGROUND_RGBA, RGBA.BLACK_LIGHT2.get(), RGBA.BLACK_LIGHT2.get(), RGBA.P1B1_DEF.get())

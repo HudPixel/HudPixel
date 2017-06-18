@@ -22,7 +22,7 @@ object Connect {
             }
         })
         //TODO set to false if you want the ManagedGUI lib
-        ManagedGui.isIsDisabled = true
+        ManagedGui.isIsDisabled = false
 
         GuiManagerMG.addGUI("ConnectGUI", ConnectGUI)
 

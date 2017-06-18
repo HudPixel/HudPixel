@@ -25,14 +25,14 @@ import net.unaussprechlich.managedgui.lib.util.RenderUtils
 class DefPictureContainer : Container {
 
     constructor(width: Int, height: Int, resourceLocation: ResourceLocation) {
-        backgroundImage = resourceLocation
+        setBackgroundImage(resourceLocation)
         setWidth(width)
         setHeight(height)
         backgroundRGBA = RGBA.NULL.get()
     }
 
     constructor(resourceLocation: ResourceLocation) {
-        backgroundImage = resourceLocation
+        setBackgroundImage(resourceLocation)
     }
 
     constructor()

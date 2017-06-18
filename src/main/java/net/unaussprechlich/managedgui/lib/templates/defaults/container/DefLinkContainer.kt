@@ -33,7 +33,7 @@ class DefLinkContainer(text : String, var link : String, var color : ColorRGBA =
         height = 9
     }
 
-    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState?): Boolean {
+    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState): Boolean {
         if(ees == EnumEventState.PRE) return true
 
         if(!isHover) FontUtil.drawWithColor(text, xStart, yStart, color)
@@ -42,18 +42,18 @@ class DefLinkContainer(text : String, var link : String, var color : ColorRGBA =
         return true
     }
 
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean {
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean {
         if(isHover && clickType == MouseHandler.ClickType.SINGLE) openWebLink(link)
         return true
     }
 
 
     override fun doClientTickLocal(): Boolean { return true }
-    override fun doChatMessageLocal(e: ClientChatReceivedEvent?): Boolean { return true }
+    override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean { return true }
     override fun doScrollLocal(i: Int, isThisContainer: Boolean): Boolean { return true }
     override fun doMouseMoveLocal(mX: Int, mY: Int): Boolean { return true }
-    override fun <T : Event<*>?> doEventBusLocal(iEvent: T): Boolean { return true }
-    override fun doOpenGUILocal(e: GuiOpenEvent?): Boolean { return true }
+    override fun <T : Event<*>> doEventBusLocal(iEvent: T): Boolean { return true }
+    override fun doOpenGUILocal(e: GuiOpenEvent): Boolean { return true }
     override fun doResizeLocal(width: Int, height: Int): Boolean { return true }
 
 

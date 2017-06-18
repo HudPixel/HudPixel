@@ -65,7 +65,7 @@ open class DefTextAutoLineBreakContainer(var text: String, width: Int, val sizeC
         }
     }
 
-    override fun setHeight(width: Int) {
+    override fun setHeight(height: Int) {
         throw UnsupportedOperationException("[ManagedGuiLib][DefTextAutoLineBreakContainer] setHeight() is handled automatically use setPadding() instead!")
     }
 

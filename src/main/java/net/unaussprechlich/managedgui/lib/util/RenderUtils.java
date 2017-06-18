@@ -333,6 +333,7 @@ public class RenderUtils {
             Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
 
         GlStateManager.color(1f, 1f, 1f, alpha);
+        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 0, 1);
 
         float f = 1.0F / height;
         float f1 = 1.0F / width;

@@ -29,15 +29,15 @@ open class DefWrapperContainer : Container(){
         return true
     }
 
-    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState?): Boolean {
+    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState): Boolean {
         return true
     }
 
-    override fun doChatMessageLocal(e: ClientChatReceivedEvent?): Boolean {
+    override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean {
         return true
     }
 
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean {
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean {
         return true
     }
 
@@ -53,7 +53,7 @@ open class DefWrapperContainer : Container(){
         return true
     }
 
-    override fun doOpenGUILocal(e: GuiOpenEvent?): Boolean {
+    override fun doOpenGUILocal(e: GuiOpenEvent): Boolean {
         return true
     }
 

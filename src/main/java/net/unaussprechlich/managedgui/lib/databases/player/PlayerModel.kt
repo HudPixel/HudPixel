@@ -25,7 +25,8 @@ class PlayerModel(val nameHistory : NameResolver.NameHistory, val uuid: UUID) {
 
     var rank : Rank? = null
 
-    private var playerHead : ResourceLocation? = null
+    var playerHead : ResourceLocation = ResourceHandler.STEVE_HEAD.res
+        private set
 
 
     var rankName: String = ""
@@ -34,13 +35,14 @@ class PlayerModel(val nameHistory : NameResolver.NameHistory, val uuid: UUID) {
             return rank!!.rankFormatted + " " + nameHistory.currentName
         }
 
-    fun getPlayerHeadLoc(callback: (ResourceLocation) -> Unit){
-        if(playerHead != null)
-            callback.invoke(playerHead!!)
-        else
-            PlayerHeadResolver(name){ res ->
-                playerHead = res ?: ResourceHandler.STEVE_HEAD.res
-                callback.invoke(playerHead!!)
-            }
+    fun loadPlayerHead(callback: (ResourceLocation) -> Unit){
+        if(playerHead == ResourceHandler.STEVE_HEAD.res)
+            callback.invoke(playerHead)
+        else PlayerHeadResolver(name){ res ->
+            playerHead = res ?: ResourceHandler.STEVE_HEAD.res
+            callback.invoke(playerHead)
+        }
     }
+
+
 }

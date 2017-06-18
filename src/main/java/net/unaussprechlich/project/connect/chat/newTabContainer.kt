@@ -5,10 +5,7 @@ import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.managedgui.lib.container.Container
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
-import net.unaussprechlich.managedgui.lib.templates.defaults.container.IScrollSpacerRenderer
 import net.unaussprechlich.managedgui.lib.util.EnumEventState
-import net.unaussprechlich.managedgui.lib.util.RGBA
-import net.unaussprechlich.managedgui.lib.util.RenderUtils
 import net.unaussprechlich.project.connect.container.ChatTextFieldContainer
 
 
@@ -21,21 +18,10 @@ import net.unaussprechlich.project.connect.container.ChatTextFieldContainer
  */
 
 
-/**
- * TabContainer Created by Alexander on 24.02.2017.
- * Description:
- */
 class newTabContainer(width: Int, height: Int, val sizeCallback: () -> Unit) : Container() {
 
-    val chatConSpacerRenderer = object : IScrollSpacerRenderer {
-        override fun render(xStart: Int, yStart: Int, width: Int) {
-            RenderUtils.renderBoxWithColorBlend_s1_d0(xStart + 25, yStart, width - 42, 1, RGBA.P1B1_596068.get())
-        }
-        override val spacerHeight: Int
-            get() = 1
-    }
 
-    val scrollCon = newChatScrollListContainer(chatConSpacerRenderer)
+    val scrollCon = newChatActualChatContainer
     val chatInputField = ChatTextFieldContainer("", width, { _ ->
         update()
         sizeCallback.invoke()
@@ -61,18 +47,6 @@ class newTabContainer(width: Int, height: Int, val sizeCallback: () -> Unit) : C
         scrollCon.width = width
         scrollCon.height = height - chatInputField.height
     }
-
-    /*
-
-    fun loadChat(chat : Chat){
-
-    }
-
-    fun unloadChat(): Chat{
-
-    }
-
-    */
 
     override fun doClientTickLocal(): Boolean {
         return true

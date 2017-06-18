@@ -41,7 +41,7 @@ class DefCheckboxContainer (val text : String, var textColor : ColorRGBA = RGBA.
             width = 9
             height = 9
         }
-        checkBox.registerClickedListener( { clickType, _ ->
+        checkBox.clickedCallback.registerListener( { clickType, _ ->
             if(clickType == MouseHandler.ClickType.SINGLE){
                 isChecked = !isChecked
                 System.out.println("" + clickType.name + "  " + isChecked)
@@ -54,7 +54,7 @@ class DefCheckboxContainer (val text : String, var textColor : ColorRGBA = RGBA.
         return true
     }
 
-    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState?): Boolean {
+    override fun doRenderTickLocal(xStart: Int, yStart: Int, width: Int, height: Int, ees: EnumEventState): Boolean {
         if(ees == EnumEventState.POST) return true
 
         if(textColor == RGBA.NULL.get())
@@ -65,11 +65,11 @@ class DefCheckboxContainer (val text : String, var textColor : ColorRGBA = RGBA.
         return true
     }
 
-    override fun doChatMessageLocal(e: ClientChatReceivedEvent?): Boolean {
+    override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean {
         return true
     }
 
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean {
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean {
         return true
     }
 
@@ -81,11 +81,11 @@ class DefCheckboxContainer (val text : String, var textColor : ColorRGBA = RGBA.
         return true
     }
 
-    override fun <T : Event<*>?> doEventBusLocal(iEvent: T): Boolean {
+    override fun <T : Event<*>> doEventBusLocal(iEvent: T): Boolean {
         return true
     }
 
-    override fun doOpenGUILocal(e: GuiOpenEvent?): Boolean {
+    override fun doOpenGUILocal(e: GuiOpenEvent): Boolean {
         return true
     }
 

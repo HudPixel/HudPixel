@@ -62,8 +62,8 @@ open class DefTextListContainer(textList: ArrayList<String>) : Container() {
         updateSize()
     }
 
-    private fun render(xStart: Int, yStart: Int) {
-        var yStart = yStart
+    private fun render(xStart: Int, yStart2: Int) {
+        var yStart = yStart2
         for (s in textList) {
             FontUtil.draw(s, xStart, yStart)
             yStart += ConstantsMG.TEXT_Y_OFFSET

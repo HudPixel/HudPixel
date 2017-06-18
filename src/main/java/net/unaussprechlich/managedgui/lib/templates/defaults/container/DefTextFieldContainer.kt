@@ -29,9 +29,7 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
 
     override fun doResizeLocal(width: Int, height: Int): Boolean { return true }
 
-    val textCon =  DefTextAutoLineBreakContainer(text, width - 20, { h ->
-        update()
-    }).apply {
+    val textCon =  DefTextAutoLineBreakContainer(text, width - 20, {update()}).apply {
         yOffset = 5
         xOffset = 5
     }
@@ -47,7 +45,7 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
 
         this.width = width
 
-        textCon.registerClickedListener { clickType, _ ->
+        textCon.clickedCallback.registerListener { clickType, _ ->
             if(clickType == MouseHandler.ClickType.SINGLE) hasFocus = !hasFocus
         }
 
@@ -135,11 +133,11 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
     }
 
     override fun doClientTickLocal(): Boolean { return true }
-    override fun doChatMessageLocal(e: ClientChatReceivedEvent?): Boolean { return true }
-    override fun doClickLocal(clickType: MouseHandler.ClickType?, isThisContainer: Boolean): Boolean { return true }
+    override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean { return true }
+    override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean { return true }
     override fun doScrollLocal(i: Int, isThisContainer: Boolean): Boolean { return true }
     override fun doMouseMoveLocal(mX: Int, mY: Int): Boolean { return true }
-    override fun doOpenGUILocal(e: GuiOpenEvent?): Boolean { return true }
+    override fun doOpenGUILocal(e: GuiOpenEvent): Boolean { return true }
 
 
 }

@@ -44,7 +44,7 @@ object LoginGUI : GUI() {
         }
 
     private var isBlocked = false
-    private val buttonClickedListener : (MouseHandler.ClickType, Container) -> Unit = { clickType, container ->
+    private val buttonClickedListener : (MouseHandler.ClickType, Container) -> Unit = { clickType, _ ->
         if(clickType == MouseHandler.ClickType.SINGLE && !isBlocked){
             if(!tofCheckBoxCon.isChecked && !userExists){
                 tofCheckBoxCon.textColor = RGBA.RED_MC.get()
@@ -155,7 +155,7 @@ object LoginGUI : GUI() {
         wrapperCon.registerChild(error)
         wrapperCon.registerChild(discordLogo)
 
-        discordLogo.registerClickedListener({ clickType, _ ->
+        discordLogo.clickedCallback.registerListener({ clickType, _ ->
             if(clickType != MouseHandler.ClickType.SINGLE){
                 Utils.openWebLink("https://discord.gg/v8bUFYg")
             }

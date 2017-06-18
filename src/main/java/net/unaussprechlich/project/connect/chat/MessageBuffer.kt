@@ -1,17 +1,17 @@
 package net.unaussprechlich.project.connect.chat
 
+import net.unaussprechlich.managedgui.lib.databases.player.PlayerDatabaseMG
 import net.unaussprechlich.managedgui.lib.helper.DateHelper
+import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefChatMessageContainer
 
-data class Message(val username : String, val msg : String, val time : DateHelper){
+data class Message(val name : String, val msg : String, val time : DateHelper){
     override fun toString(): String {
-        return "$username§$msg§" + time.date.toString()
+        return "$name§$msg§" + time.date.toString()
     }
 
-    /*
-    fun toContainer(callback : (DefChatMessageContainer) -> Unit){
-
-        return DefChatMessageContainer()
-    }*/
+    fun toContainer() : (DefChatMessageContainer){
+        return DefChatMessageContainer(PlayerDatabaseMG.get(name), msg, time)
+    }
 }
 
 /**
@@ -29,8 +29,6 @@ class MessageBuffer {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-
     }
 
     fun getEncodedMessages(): Array<Message?>{

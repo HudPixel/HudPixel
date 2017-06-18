@@ -8,6 +8,7 @@
 
 package net.unaussprechlich.managedgui.lib.util
 
+import eladkay.hudpixel.util.autotip.Autotip.mc
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.unaussprechlich.managedgui.lib.GuiManagerMG
@@ -26,15 +27,10 @@ object DisplayUtil {
 
     val mcScale: Int
         get() {
-            val mc = Minecraft.getMinecraft()
-            var scale = 1
-            if (mc.gameSettings.guiScale == 0) {
-                val res = ScaledResolution(mc)
-                scale = res.scaleFactor
-            } else {
-                scale = mc.gameSettings.guiScale
-            }
-            return scale
+            val scale = Minecraft.getMinecraft().gameSettings.guiScale
+
+            if (scale == 0) return ScaledResolution(mc).scaleFactor
+            else            return scale
         }
 
     val scaledMcWidth: Int

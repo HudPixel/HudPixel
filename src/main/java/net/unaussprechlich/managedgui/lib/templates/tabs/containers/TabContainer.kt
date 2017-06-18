@@ -23,7 +23,7 @@ open class TabContainer(val tabListElement: TabListElementContainer, val contain
 
     init {
         container.yOffset = TabListElementContainer.ELEMENT_HEIGHT
-        tabListElement.registerClickedListener { clickType, container -> if (clickType == MouseHandler.ClickType.SINGLE) setActive() }
+        tabListElement.clickedCallback.registerListener { clickType, _ -> if (clickType == MouseHandler.ClickType.SINGLE) setActive() }
         setup()
     }
 

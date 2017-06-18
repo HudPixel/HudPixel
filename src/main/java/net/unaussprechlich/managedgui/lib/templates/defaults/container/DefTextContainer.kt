@@ -44,7 +44,7 @@ open class DefTextContainer(text: String) : Container() {
         throw UnsupportedOperationException("[ManagedGuiLib][DefTextContainer] setWidth() is handled automatically use setPadding() instead!")
     }
 
-    override fun setHeight(width: Int) {
+    override fun setHeight(height: Int) {
         throw UnsupportedOperationException("[ManagedGuiLib][DefTextContainer] setHeight() is handled automatically use setPadding() instead!")
     }
 
@@ -75,7 +75,7 @@ open class DefTextContainer(text: String) : Container() {
         return true
     }
 
-    override fun <T : Event<*>> doEventBusLocal(e: T): Boolean {
+    override fun <T : Event<*>> doEventBusLocal(iEvent: T): Boolean {
         return true
     }
 
