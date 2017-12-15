@@ -68,7 +68,7 @@ object GuiManagerMG : GuiScreen() {
         eventBusCallbacks.remove(callback)
     }
 
-    var isBinded = false
+    private var isBinded = false
     fun bindScreen() {
         isBinded = true
         Minecraft.getMinecraft().displayGuiScreen(this)
@@ -78,7 +78,6 @@ object GuiManagerMG : GuiScreen() {
 
         onGuiClosed()
 
-        isBinded = false
         Minecraft.getMinecraft().displayGuiScreen(null)
         if (Minecraft.getMinecraft().currentScreen == null)
             Minecraft.getMinecraft().setIngameFocus()
@@ -90,8 +89,6 @@ object GuiManagerMG : GuiScreen() {
 
         if(isBinded && this.mc.currentScreen != this){
             bindScreen()
-        } else if(this.mc != null && !isBinded){
-            this.mc.setIngameFocus()
         }
 
         if (prevWidth != DisplayUtil.scaledMcWidth || prevHeight != DisplayUtil.scaledMcHeight) {
@@ -121,12 +118,14 @@ object GuiManagerMG : GuiScreen() {
     }
 
     override fun handleMouseInput() {
+        if (ManagedGui.isIsDisabled) return
         MouseHandler.handleMouseClick()
     }
 
     var lastKeyAction = System.currentTimeMillis()
     val delay = 20
     override fun keyTyped(typedChar: Char, keyCode: Int) {
+        if (ManagedGui.isIsDisabled) return
         if(System.currentTimeMillis() < lastKeyAction + delay) return
         lastKeyAction = System.currentTimeMillis()
         super.keyTyped(typedChar, keyCode)
@@ -137,6 +136,7 @@ object GuiManagerMG : GuiScreen() {
 
     @SubscribeEvent
     fun onKeyInput(event: InputEvent.KeyInputEvent){
+        if (ManagedGui.isIsDisabled) return
         if(System.currentTimeMillis() < lastKeyAction + delay) return
         lastKeyAction = System.currentTimeMillis()
         val c = (if (Keyboard.getEventKey() == 0) Keyboard.getEventCharacter() + 256 else Keyboard.getEventCharacter())
