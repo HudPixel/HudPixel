@@ -1,10 +1,8 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 
 package net.unaussprechlich.managedgui.lib.handler
 
@@ -28,7 +26,12 @@ object MouseHandler {
 
 
     enum class ClickType {
-        SINGLE, DOUBLE, DRAG, DROP
+        SINGLE, DOUBLE, DRAG, DROP;
+
+        fun isSingle() : Boolean = this == ClickType.SINGLE
+        fun isDouble() : Boolean = this == ClickType.DOUBLE
+        fun isDrag() : Boolean = this == ClickType.DRAG
+        fun isDrop() : Boolean = this == ClickType.DROP
     }
 
     fun onClientTick() {

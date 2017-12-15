@@ -1,3 +1,8 @@
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 package net.unaussprechlich.project.connect.socket.io
 
 import com.mojang.realmsclient.gui.ChatFormatting
@@ -26,6 +31,8 @@ object SocketConnection{
     private val SERVER_URL = "http://localhost:3000/HudPixel"
     var socket : Socket = IO.socket(SERVER_URL)
 
+    fun isConnected() = SESSION_TOKEN != ""
+
     fun emit(event : EnumSocketEvents, args : Any){
         socket.emit(event.toString(), args)
     }
@@ -49,8 +56,8 @@ object SocketConnection{
                         try {
                             val json = args[0] as JSONObject
                             if(!json.getBoolean("success")) throw Exception("Internal server error!")
-                            LoginGUI.userExists = json.getBoolean("userExists")
                             ConnectAPI.showLogin()
+                            LoginGUI.userExists = json.getBoolean("userExists")
                         } catch (e : Exception){
                             e.printStackTrace()
                         }

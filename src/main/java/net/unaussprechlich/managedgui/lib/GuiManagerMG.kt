@@ -1,10 +1,8 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 
 package net.unaussprechlich.managedgui.lib
 
@@ -56,6 +54,11 @@ object GuiManagerMG : GuiScreen() {
         return ArrayList(eventBusCallbacks)
     }
 
+    override fun onGuiClosed() {
+        super.onGuiClosed()
+        isBinded = false
+    }
+
 
     fun registerEventBusCallback(callback : (T : Event<*>) -> Unit){
         eventBusCallbacks.add(callback)
@@ -72,6 +75,9 @@ object GuiManagerMG : GuiScreen() {
     }
 
     fun unbindScreen(){
+
+        onGuiClosed()
+
         isBinded = false
         Minecraft.getMinecraft().displayGuiScreen(null)
         if (Minecraft.getMinecraft().currentScreen == null)
@@ -84,7 +90,7 @@ object GuiManagerMG : GuiScreen() {
 
         if(isBinded && this.mc.currentScreen != this){
             bindScreen()
-        } else if(this.mc != null){
+        } else if(this.mc != null && !isBinded){
             this.mc.setIngameFocus()
         }
 
@@ -112,9 +118,6 @@ object GuiManagerMG : GuiScreen() {
 
     init {
         LoggerHelperMG.logInfo("Setting up GuiManager!")
-        for (type in EnumGUITypes.values()) {
-            GUIs.put(type, ManagedGui.iSetupHelper!!.loadDefaultGUI(type))
-        }
     }
 
     override fun handleMouseInput() {

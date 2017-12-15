@@ -1,10 +1,8 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 package net.unaussprechlich.managedgui.lib.container
 
 import net.minecraft.util.ResourceLocation
@@ -21,6 +19,11 @@ import net.unaussprechlich.managedgui.lib.util.EnumEventState
 import net.unaussprechlich.managedgui.lib.util.RGBA
 import net.unaussprechlich.managedgui.lib.util.RenderHelper
 import net.unaussprechlich.managedgui.lib.util.storage.ContainerSide
+
+
+
+infix fun Container.register(con : Container) = this.registerChild(con)
+infix fun Container.unregister(con : Container) = this.unregisterChild(con)
 
 abstract class Container : ChildRegistry(), IContainer, IChild {
 
@@ -41,7 +44,6 @@ abstract class Container : ChildRegistry(), IContainer, IChild {
 
     var parent: Container? = null
         private set
-
 
 
     private var border = ContainerSide()

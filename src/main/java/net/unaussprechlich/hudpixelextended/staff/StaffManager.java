@@ -138,7 +138,7 @@ public class StaffManager implements IEventHandler, McColorHelper {
     /**
      * buts the admin/helper tag infront of a message a admin/helper has written
      *
-     * @param e chat event
+     * @param e chatgui event
      * @throws Throwable
      */
     private final String default_tag = "§r§7";
@@ -150,7 +150,7 @@ public class StaffManager implements IEventHandler, McColorHelper {
     
     @Override
     public void onChatReceived(ClientChatReceivedEvent e) throws Throwable {
-        if (e.type != 0) return; //return if it isn't a normal chat message
+        if (e.type != 0) return; //return if it isn't a normal chatgui message
         if (e.message.getUnformattedText().contains("http://") || e.message.getUnformattedText().contains("https://"))
             return; //return if the message contains a link .... so you can still click it :)
 

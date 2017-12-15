@@ -1,10 +1,8 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 
 package net.unaussprechlich.managedgui.lib.templates.defaults.container
 
@@ -12,11 +10,13 @@ import com.mojang.realmsclient.gui.ChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.managedgui.lib.container.Container
+import net.unaussprechlich.managedgui.lib.databases.player.PlayerDatabaseMG
 import net.unaussprechlich.managedgui.lib.databases.player.PlayerModel
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.util.EnumTime
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
+import net.unaussprechlich.managedgui.lib.handler.ResourceHandler
 import net.unaussprechlich.managedgui.lib.helper.DateHelper
 import net.unaussprechlich.managedgui.lib.util.EnumEventState
 import net.unaussprechlich.managedgui.lib.util.storage.ContainerSide
@@ -25,28 +25,25 @@ import net.unaussprechlich.managedgui.lib.util.storage.ContainerSide
  * DefChatMessageContainer Created by Alexander on 27.02.2017.
  * Description:
  */
-class DefChatMessageContainer(private val player: PlayerModel, message: String , private val date: DateHelper = DateHelper(), width: Int = 100) : Container() {
+class DefChatMessageContainer(val playerName: String, message: String , val date: DateHelper = DateHelper(), width: Int = 100) : Container() {
 
-    private companion object {
-        val SPACE = 4
-    }
+    private companion object { val SPACE = 4 }
+
+    var player : PlayerModel? = null
+        private set
 
     private var message_con: DefTextListAutoLineBreakContainer? = null
-    private val username_con: DefTextContainer = DefTextContainer(player.rankName + ChatFormatting.GRAY + ChatFormatting.ITALIC + "  " + date.dateTimeTextPassed)
-    private val avatar_con = DefPictureContainer(player.playerHead)
-
-
-
+    private val username_con: DefTextContainer = DefTextContainer(playerName + ChatFormatting.GRAY + ChatFormatting.ITALIC + "  " + date.dateTimeTextPassed)
+    private val avatar_con = DefPictureContainer(ResourceHandler.STEVE_HEAD.res)
 
     init {
         setWidth(width)
         setup(message)
-        player.loadPlayerHead {avatar_con.setBackgroundImage(it)}
+        PlayerDatabaseMG.get(playerName){ playerModel ->
+            player = playerModel
+            playerModel.loadPlayerHead {avatar_con.setBackgroundImage(it)}
+        }
     }
-
-
-    val playername: String
-        get() = player.name
 
     private fun setup(message: String) {
         avatar_con.apply {
@@ -109,7 +106,7 @@ class DefChatMessageContainer(private val player: PlayerModel, message: String ,
     override fun <T : Event<*>> doEventBusLocal(iEvent: T): Boolean {
         if (iEvent.id != EnumDefaultEvents.TIME.get()) return true
         if (iEvent.data == EnumTime.SEC_5) {
-            username_con.text = player.rankName + ChatFormatting.GRAY + ChatFormatting.ITALIC + "  " + date.dateTimeTextPassed
+            username_con.text = playerName + ChatFormatting.GRAY + ChatFormatting.ITALIC + "  " + date.dateTimeTextPassed
         }
         return true
     }

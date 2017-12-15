@@ -1,12 +1,10 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
 
-package net.unaussprechlich.managedgui.lib.handler
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
+
+package net.unaussprechlich.project.connect.handlers
 
 import net.minecraft.util.ResourceLocation
 import net.unaussprechlich.managedgui.lib.ManagedGui

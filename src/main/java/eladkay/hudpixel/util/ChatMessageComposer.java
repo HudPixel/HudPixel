@@ -60,7 +60,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import java.util.ArrayList;
 
 /**
- * A mighty chat message manager. His nickname is Skype. ;)
+ * A mighty chatgui message manager. His nickname is Skype. ;)
  *
  * @author palechip
  */
@@ -68,7 +68,7 @@ public class ChatMessageComposer {
     public static String SEPARATION_MESSAGE = "\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC";
     private static IChatComponent CHAT_PREFIX;
 
-    // Builds the chat prefix
+    // Builds the chatgui prefix
     static {
         IChatComponent name1 = new ChatComponentText("Hud");
         IChatComponent name2 = new ChatComponentText("Pixel");
@@ -84,7 +84,7 @@ public class ChatMessageComposer {
     /**
      * Creates a new ChatMessageComposer.
      *
-     * @param text Text of the chat message.
+     * @param text Text of the chatgui message.
      */
     public ChatMessageComposer(String text) {
         this.chatComponent = new ChatComponentText(text);
@@ -93,8 +93,8 @@ public class ChatMessageComposer {
     /**
      * Creates a new ChatMessageComposer.
      *
-     * @param text  Text of the chat message.
-     * @param color Color of the chat message.
+     * @param text  Text of the chatgui message.
+     * @param color Color of the chatgui message.
      */
     public ChatMessageComposer(String text, EnumChatFormatting color) {
         this(text);
@@ -162,11 +162,11 @@ public class ChatMessageComposer {
     }
 
     /**
-     * Makes the chat message clickable.
+     * Makes the chatgui message clickable.
      *
      * @param action      Action performed by clicking
      * @param execute     URL or command to execute
-     * @param description Shown message when hovering over the clickable chat.
+     * @param description Shown message when hovering over the clickable chatgui.
      * @return The ChatMessageComposer instance in order to make code more compact.
      */
     public ChatMessageComposer makeClickable(Action action, String execute, ChatMessageComposer description) {
@@ -181,7 +181,7 @@ public class ChatMessageComposer {
     }
 
     /**
-     * Makes the chat message link to a given url.
+     * Makes the chatgui message link to a given url.
      *
      * @param url The linked URL. MAKE SURE IT STARTS WITH HTTP:// or HTTPS://!
      * @return The ChatMessageComposer instance in order to make code more compact.
@@ -229,7 +229,7 @@ public class ChatMessageComposer {
             // send the assebled message to the player
             FMLClientHandler.instance().getClientPlayerEntity().addChatMessage(this.assembleMessage(prefix));
         } catch (Exception e) {
-            HudPixelMod.Companion.instance().logError("Failed to send chat message");
+            HudPixelMod.Companion.instance().logError("Failed to send chatgui message");
             if (!(e instanceof NullPointerException))
                 e.printStackTrace();
 
@@ -239,7 +239,7 @@ public class ChatMessageComposer {
     /**
      * Builds an IChatComponent including all appended messages.
      *
-     * @param prefix should [HudPixel] be added as chat prefix?
+     * @param prefix should [HudPixel] be added as chatgui prefix?
      * @return the IChatComponent containing all appended messages
      */
     protected IChatComponent assembleMessage(boolean prefix) {

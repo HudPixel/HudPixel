@@ -1,10 +1,8 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 package net.unaussprechlich.managedgui.lib.child
 
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -33,11 +31,12 @@ abstract class ChildRegistry : IDoEventMethods {
         }
     }
 
-    open fun <T : IChild> registerChild(child: T) {
+    infix open fun <T : IChild> registerChild(child: T) {
         childs.add(child)
     }
 
-    open fun unregisterChild(child: IChild) {
+
+    infix open fun unregisterChild(child: IChild) {
         childs.remove(child)
     }
 

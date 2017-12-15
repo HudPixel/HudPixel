@@ -71,9 +71,9 @@ public abstract class MultiLineCommandParser {
     }
 
     /**
-     * Has to be called with every chat message.
+     * Has to be called with every chatgui message.
      *
-     * @param message The chat message without formatting.
+     * @param message The chatgui message without formatting.
      */
     public void onChat(String message) {
         // if there is no command output in progress
@@ -101,7 +101,7 @@ public abstract class MultiLineCommandParser {
     }
 
     /**
-     * Gets called when a chat message arrives which belongs to the the listened command.
+     * Gets called when a chatgui message arrives which belongs to the the listened command.
      *
      * @param commandMessage The message which matches the messagePattern.
      */

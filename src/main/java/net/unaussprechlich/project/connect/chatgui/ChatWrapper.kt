@@ -1,5 +1,11 @@
-package net.unaussprechlich.project.connect.chat
+/*##############################################################################
 
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
+package net.unaussprechlich.project.connect.chatgui
+
+import net.unaussprechlich.managedgui.lib.container.register
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
@@ -8,7 +14,7 @@ import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefWrappe
 import net.unaussprechlich.managedgui.lib.util.DisplayUtil
 import net.unaussprechlich.managedgui.lib.util.RGBA
 import net.unaussprechlich.managedgui.lib.util.RenderUtils
-
+import net.unaussprechlich.project.connect.chatgui.list.ChatListContainer
 
 object ChatWrapper : DefWrapperContainer(){
 
@@ -24,10 +30,9 @@ object ChatWrapper : DefWrapperContainer(){
     private var resize = false
     private var isSetup = false
 
-
-    /**
-     * Button that makes the Chat resizeable
-     */
+    val chatController = ChatController
+    val chatListCon = ChatListContainer
+    val controllerCon = ChatWindowControllerContainer
     val resizeCon = DefCustomRenderContainer { xStart, yStart , _ , _, con, _ ->
         if(con.isHover || resize)   RenderUtils.iconRender_resize(xStart + con.width, yStart + con.height, RGBA.WHITE.get())
         else                        RenderUtils.iconRender_resize(xStart + con.width, yStart + con.height, RGBA.P1B1_596068.get())
@@ -36,48 +41,36 @@ object ChatWrapper : DefWrapperContainer(){
         height = 10
     }
 
-    /**
-     * The control menu of the chat con
-     */
-    val controllerCon = newChatWindowControllerContainer(stdWidth).apply {
-        width = stdWidth
-    }
-
-    val tabCon = newTabContainer(stdWidth - stdChatListWidth, stdHeight - controllerCon.height, { updateResizeIconPosition()}).apply {
-        xOffset = stdChatListWidth
-        yOffset = controllerCon.height
-    }
+    fun getChatWidth(): Int = width - chatListCon.width
+    fun getChatHeight(): Int = height - controllerCon.height
 
     fun updateResizeIconPosition (){
         resizeCon.xOffset =  width - resizeCon.width - 2
-        resizeCon.yOffset =  height - tabCon.chatInputField.height - resizeCon.height
+        resizeCon.yOffset =  height - ChatController.getChatInputFieldHeight()  - resizeCon.height
     }
 
-    val chatList = newChatListContainer
-
     init {
+        isVisible = false
+
         width = stdWidth
         height = stdHeight
 
         resizeCon.clickedCallback.registerListener { clickType, _ ->
-            if(clickType == MouseHandler.ClickType.DRAG) resize = true
+            if(clickType.isDrag()) resize = true
         }
 
-        registerChild(tabCon)
-        registerChild(controllerCon)
-        registerChild(chatList)
-        registerChild(resizeCon)
+        this register controllerCon
+        this register chatListCon
+        this register resizeCon
 
         minWidth  = 400
         minHeight = 200
 
-        chatList.yOffset = controllerCon.height
+        chatListCon.yOffset = controllerCon.height
 
-        resizeCon.xOffset =  width - resizeCon.width - 2
-        resizeCon.yOffset =  height - tabCon.chatInputField.height - resizeCon.height
+        updateResizeIconPosition()
 
         setXYOffset(20, 20)
-
     }
 
     fun resizeThatThing(width : Int, height : Int){
@@ -87,15 +80,12 @@ object ChatWrapper : DefWrapperContainer(){
         this.width = w
         this.height = h
 
+        chatController.resize()
+
         controllerCon.width = w
+        chatListCon.height = h - controllerCon.height
 
-        tabCon.width = w - stdChatListWidth
-        tabCon.height = h - controllerCon.height
-
-        chatList.height = h - controllerCon.height
-
-        resizeCon.xOffset =  w - resizeCon.width - 2
-        resizeCon.yOffset =  h - tabCon.chatInputField.height - resizeCon.height
+        updateResizeIconPosition()
 
         onResize()
     }
@@ -107,7 +97,6 @@ object ChatWrapper : DefWrapperContainer(){
         }
         if (move)   ChatWrapper.setXYOffset(MouseHandler.mX - controllerCon.getMoveConXoffset() - 7, MouseHandler.mY - controllerCon.getMoveConYoffset() - 7)
         if (resize) resizeThatThing(MouseHandler.mX - xStart , MouseHandler.mY - yStart)
-
 
         return true
     }
@@ -125,7 +114,6 @@ object ChatWrapper : DefWrapperContainer(){
             else
                 resizeThatThing(stdWidth, stdHeight)
             setXYOffset(5, 5)
-
         }
         if (!isVisible && iEvent.id == EnumDefaultEvents.KEY_PRESSED.get()) return false
         if (!isVisible && iEvent.id == EnumDefaultEvents.KEY_PRESSED_CODE.get()) return false

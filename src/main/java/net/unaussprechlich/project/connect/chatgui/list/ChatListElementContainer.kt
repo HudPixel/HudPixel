@@ -1,9 +1,15 @@
-package net.unaussprechlich.project.connect.chat
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
+package net.unaussprechlich.project.connect.chatgui.list
 
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.managedgui.lib.container.Container
 import net.unaussprechlich.managedgui.lib.event.Callback
+import net.unaussprechlich.managedgui.lib.event.broadcast
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
 import net.unaussprechlich.managedgui.lib.handler.ResourceHandler
@@ -12,16 +18,13 @@ import net.unaussprechlich.managedgui.lib.util.EnumEventState
 import net.unaussprechlich.managedgui.lib.util.FontUtil
 import net.unaussprechlich.managedgui.lib.util.RGBA
 import net.unaussprechlich.managedgui.lib.util.RenderUtils
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper
 
 
-class newChatListElementContainer : Container() {
+class ChatListElementContainer : Container() {
 
     val activateCallback = Callback()
     var isActive = false
-        set(value) {
-            field = value
-            if(isActive) activateCallback.broadcast(this)
-        }
 
     var title = "NULL"
     var text = "NULL"
@@ -60,7 +63,6 @@ class newChatListElementContainer : Container() {
         if(isHover) RenderUtils.renderBoxWithColor(xStart, yStart, 3, height, color)
         else        RenderUtils.renderBoxWithColor(xStart, yStart, 2, height, color)
 
-
         FontUtil.drawWithColor(title, xStart + 26, yStart + 4, color)
         FontUtil.drawWithColor(renderText, xStart + 26, yStart + 13, RGBA.C_9e9e9e.get())
 
@@ -80,8 +82,8 @@ class newChatListElementContainer : Container() {
 
     override fun doChatMessageLocal(e: ClientChatReceivedEvent): Boolean { return true }
     override fun doClickLocal(clickType: MouseHandler.ClickType, isThisContainer: Boolean): Boolean {
-        if(clickType == MouseHandler.ClickType.SINGLE && isThisContainer)
-            isActive = true
+        if(clickType == MouseHandler.ClickType.SINGLE && isThisContainer && !isActive)
+            activateCallback broadcast this
         return true
     }
     override fun doScrollLocal(i: Int, isThisContainer: Boolean): Boolean { return true }

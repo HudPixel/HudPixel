@@ -1,4 +1,10 @@
-package net.unaussprechlich.project.connect.chat
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
+
+package net.unaussprechlich.project.connect.chatgui.list
 
 import net.unaussprechlich.managedgui.lib.container.Container
 import net.unaussprechlich.managedgui.lib.event.Callback
@@ -8,8 +14,9 @@ import net.unaussprechlich.managedgui.lib.util.ColorRGBA
 import net.unaussprechlich.managedgui.lib.util.EnumEventState
 import net.unaussprechlich.managedgui.lib.util.RGBA
 import net.unaussprechlich.managedgui.lib.util.RenderUtils
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper
 
-class newChatListCategoryContainer(title : String, val colorRGBA: ColorRGBA) : DefWrapperContainer(){
+class ChatListCategoryContainer(title : String, val colorRGBA: ColorRGBA) : DefWrapperContainer(){
 
     private val elements = ArrayList<Container>()
 
@@ -76,7 +83,7 @@ class newChatListCategoryContainer(title : String, val colorRGBA: ColorRGBA) : D
 
     val activateCallback = Callback()
 
-    fun registerElement(con : newChatListElementContainer){
+    fun registerElement(con : ChatListElementContainer){
         con.color = colorRGBA
         con.activateCallback.registerListener {activateCallback.broadcast(it)}
         elements.add(con)
@@ -84,7 +91,7 @@ class newChatListCategoryContainer(title : String, val colorRGBA: ColorRGBA) : D
         updateHeight()
     }
 
-    fun unregisterElement(con : newChatListElementContainer){
+    fun unregisterElement(con : ChatListElementContainer){
         elements.remove(con)
         elementWrapperCon.unregisterChild(con)
         updateHeight()

@@ -1,10 +1,8 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 
 package net.unaussprechlich.managedgui.lib.templates.defaults.container
 
@@ -22,14 +20,15 @@ import java.util.*
  * DefTextAutoLineBreakContainer Created by unaussprechlich on 21.12.2016.
  * Description:
  */
-open class DefTextAutoLineBreakContainer(var text: String, width: Int, val sizeCallback : (height : Int) -> Unit = {}) : Container() {
+open class DefTextAutoLineBreakContainer(text : String, width: Int, val sizeCallback : (height : Int) -> Unit = {}) : Container() {
+
+    var text : String = ""
 
     var renderList: MutableList<String> = ArrayList()
         private set
 
     private var prevText = ""
     private var prevWidth = 0
-
 
     fun update() {
         if (text == prevText && prevWidth == width) return
@@ -55,6 +54,8 @@ open class DefTextAutoLineBreakContainer(var text: String, width: Int, val sizeC
     init {
         super.setWidth(width)
         super.setHeight(ConstantsMG.TEXT_Y_OFFSET)
+
+        this.text = text
     }
 
     private fun render(xStart: Int, yStart: Int) {

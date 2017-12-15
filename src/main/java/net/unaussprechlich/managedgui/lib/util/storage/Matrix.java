@@ -1,17 +1,11 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 
 package net.unaussprechlich.managedgui.lib.util.storage;
 
-/**
- * Copyright © 2000–2011, Robert Sedgewick and Kevin Wayne.
- * Last updated: Tue Aug 30 09:58:33 EDT 2016.
- **/
 final public class Matrix {
     private final int M;             // number of rows
     private final int N;             // number of columns

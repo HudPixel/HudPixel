@@ -1,10 +1,8 @@
-/*
- * ***************************************************************************
- *
- *         Copyright © 2016 unaussprechlich - ALL RIGHTS RESERVED
- *
- * ***************************************************************************
- */
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 
 package net.unaussprechlich.managedgui.lib.templates.defaults.container
 
@@ -13,6 +11,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.managedgui.lib.ConstantsMG
 import net.unaussprechlich.managedgui.lib.container.Container
+import net.unaussprechlich.managedgui.lib.container.register
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.events.KeyPressedCodeEvent
 import net.unaussprechlich.managedgui.lib.event.events.KeyPressedEvent
@@ -25,14 +24,23 @@ import net.unaussprechlich.managedgui.lib.util.FontUtil
 import net.unaussprechlich.managedgui.lib.util.RGBA
 import net.unaussprechlich.managedgui.lib.util.RenderUtils
 
-class DefTextFieldContainer(text: String, width: Int, var hint : String = "", val sizeCallback : (height : Int) -> Unit) : Container() {
+class DefTextFieldContainer(width: Int, var hint : String = "", val sizeCallback : (height : Int) -> Unit) : Container() {
 
     override fun doResizeLocal(width: Int, height: Int): Boolean { return true }
 
-    val textCon =  DefTextAutoLineBreakContainer(text, width - 20, {update()}).apply {
+    val textCon =  DefTextAutoLineBreakContainer("", width - 20, {update()}).apply {
         yOffset = 5
         xOffset = 5
     }
+
+    var text
+        get() = textCon.text
+        set(value) {
+            textCon.text = value
+            updateCursor()
+        }
+
+    fun clear(){text = ""}
 
     var hasFocus = false
     var cursorBlink = false
@@ -41,7 +49,7 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
     var cursorY = 0
 
     init {
-        registerChild(textCon)
+        this register textCon
 
         this.width = width
 
@@ -78,7 +86,7 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
 
         RenderUtils.drawBorderInlineShadowBox(xStart + 2 , yStart + 2, width - 4, height - 4, RGBA.P1B1_596068.get(), RGBA.P1B1_DEF.get())
 
-        if(textCon.text == "" && hint != "") FontUtil.draw("" + EnumChatFormatting.GRAY + EnumChatFormatting.ITALIC + hint, xStart+5, yStart+5)
+        if(text == "" && hint != "") FontUtil.draw("" + EnumChatFormatting.GRAY + EnumChatFormatting.ITALIC + hint, xStart+5, yStart+5)
         if(cursorBlink)                      RenderUtils.renderBoxWithColorBlend_s1_d0(xStart + 5 + cursorX, yStart + 5 + cursorY, 1, 9, RGBA.P1B1_596068.get())
 
         return true
@@ -96,17 +104,17 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
         if(iEvent.id == EnumDefaultEvents.KEY_PRESSED_CODE.get()){
             when((iEvent as KeyPressedCodeEvent).data){
                 14 -> {
-                    if(textCon.text.isNotEmpty())
-                        if(cursorPos == textCon.text.length){
-                            textCon.text = textCon.text.substring(0, textCon.text.length -1)
+                    if(text.isNotEmpty())
+                        if(cursorPos == text.length){
+                           text = text.substring(0, text.length -1)
                             cursorPos--
                         } else{
-                            textCon.text = textCon.text.substring(0, cursorPos - 1) + textCon.text.substring(cursorPos, textCon.text.length)
+                            text = text.substring(0, cursorPos - 1) + text.substring(cursorPos, text.length)
                             if(cursorPos > 0) cursorPos--
                         }
                 }
                 205 -> {
-                    if(cursorPos + 1 <= textCon.text.length) cursorPos++
+                    if(cursorPos + 1 <= text.length) cursorPos++
                 }
                 203 -> {
                     if(cursorPos > 0) cursorPos--
@@ -114,19 +122,19 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
                 //else -> println("data: ${iEvent.data.toInt()}")
             }
             updateCursor()
+
             return true
         }
 
         if (iEvent.id != EnumDefaultEvents.KEY_PRESSED.get()) return true
         val c = (iEvent as KeyPressedEvent).data.toCharArray()[0]
 
-
-        if(cursorPos == textCon.text.length){
-            textCon.text += c
+        if(cursorPos == text.length){
             cursorPos++
+            text += c
         } else {
-            textCon.text = textCon.text.substring(0, cursorPos) + c + textCon.text.substring(cursorPos, textCon.text.length)
             cursorPos++
+            text = text.substring(0, --cursorPos) + c + text.substring(--cursorPos, text.length)
         }
 
         return true
@@ -138,6 +146,5 @@ class DefTextFieldContainer(text: String, width: Int, var hint : String = "", va
     override fun doScrollLocal(i: Int, isThisContainer: Boolean): Boolean { return true }
     override fun doMouseMoveLocal(mX: Int, mY: Int): Boolean { return true }
     override fun doOpenGUILocal(e: GuiOpenEvent): Boolean { return true }
-
 
 }

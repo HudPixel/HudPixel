@@ -1,3 +1,8 @@
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
 package net.unaussprechlich.project.connect.gui
 
 import net.minecraft.client.Minecraft
@@ -12,7 +17,7 @@ import net.unaussprechlich.managedgui.lib.event.util.EnumTime
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.gui.GUI
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
-import net.unaussprechlich.managedgui.lib.handler.ResourceHandlerConnect
+import net.unaussprechlich.project.connect.handlers.ResourceHandlerConnect
 import net.unaussprechlich.managedgui.lib.templates.defaults.container.*
 import net.unaussprechlich.managedgui.lib.util.DisplayUtil
 import net.unaussprechlich.managedgui.lib.util.RGBA

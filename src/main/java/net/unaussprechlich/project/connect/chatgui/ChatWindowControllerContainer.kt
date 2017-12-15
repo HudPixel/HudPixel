@@ -1,10 +1,16 @@
-package net.unaussprechlich.project.connect.chat
+/*##############################################################################
+
+           Copyright © 2016-2017 unaussprechlich - ALL RIGHTS RESERVED
+
+ #############################################################################*/
+package net.unaussprechlich.project.connect.chatgui
 
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.managedgui.lib.GuiManagerMG
 import net.unaussprechlich.managedgui.lib.container.Container
+import net.unaussprechlich.managedgui.lib.container.register
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
 import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefCustomRenderContainer
@@ -14,15 +20,15 @@ import net.unaussprechlich.managedgui.lib.util.DisplayUtil
 import net.unaussprechlich.managedgui.lib.util.EnumEventState
 import net.unaussprechlich.managedgui.lib.util.RGBA
 import net.unaussprechlich.managedgui.lib.util.RenderUtils
-import net.unaussprechlich.project.connect.chat.ChatWrapper.isMax
-import net.unaussprechlich.project.connect.chat.ChatWrapper.move
-import net.unaussprechlich.project.connect.chat.ChatWrapper.prevX
-import net.unaussprechlich.project.connect.chat.ChatWrapper.prevY
-import net.unaussprechlich.project.connect.chat.ChatWrapper.stdHeight
-import net.unaussprechlich.project.connect.chat.ChatWrapper.stdWidth
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper.isMax
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper.move
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper.prevX
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper.prevY
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper.stdHeight
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper.stdWidth
 
 
-class newChatWindowControllerContainer(width: Int) : Container(){
+object ChatWindowControllerContainer : Container(){
 
     private val BS = 17
 
@@ -142,16 +148,16 @@ class newChatWindowControllerContainer(width: Int) : Container(){
     }
 
     init {
-        this.width = width
+        this.width = ChatWrapper.stdWidth
 
         maxCon.width = BS
         minCon.width = BS
         moveCon.width = BS
 
-        registerChild(moveCon)
-        registerChild(maxCon)
-        registerChild(minCon)
-        registerChild(logoCon)
+        this register moveCon
+        this register maxCon
+        this register minCon
+        this register logoCon
 
         height = BS
         backgroundRGBA = RGBA.C_161b21.get()
@@ -162,9 +168,10 @@ class newChatWindowControllerContainer(width: Int) : Container(){
         }
 
         minCon.clickedCallback.registerListener { clickType, _ ->
-            if (clickType == MouseHandler.ClickType.SINGLE)
-                isVisible = false
-            GuiManagerMG.unbindScreen()
+            if (clickType == MouseHandler.ClickType.SINGLE){
+                ChatWrapper.isVisible = false
+                GuiManagerMG.unbindScreen()
+            }
         }
 
         maxCon.clickedCallback.registerListener { clickType, _ ->

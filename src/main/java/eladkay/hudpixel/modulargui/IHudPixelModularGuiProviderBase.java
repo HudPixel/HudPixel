@@ -73,7 +73,7 @@ public interface IHudPixelModularGuiProviderBase extends IModularGuiProvider {
     void onTickUpdate();
 
     /**
-     * If the game is running, it'll receive the chat messages which the client receives.
+     * If the game is running, it'll receive the chatgui messages which the client receives.
      */
     void onChatMessage(String textMessage, String formattedMessage);
 }

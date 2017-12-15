@@ -102,7 +102,7 @@ public class BlitzStarTrackerModularGuiProvider extends HudPixelModularGuiProvid
 
     @Override
     public void onChatMessage(String textMessage, String formattedMessage) {
-        // filter chat tag
+        // filter chatgui tag
         textMessage = textMessage.replace("[" + GameDetector.getCurrentGameType().getNm() + "]: ", "");
         // hide message
         if (textMessage.contains("The Blitz Star has been hidden in a random chest!")) {
