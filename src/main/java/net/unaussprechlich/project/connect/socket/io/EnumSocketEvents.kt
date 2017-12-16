@@ -7,17 +7,15 @@ package net.unaussprechlich.project.connect.socket.io
 
 
 enum class EnumSocketEvents (val eventName : String, val isServerEvent : Boolean){
-    PRELOGIN("prelogin", false),
-    CHATEVENT("chatevent", false),
-    LOADCHATINFOS("loadchatinfos", false),
 
-    //message
-    LOADMESSAGE("loadmessage", false),
-    SENDMESSAGE("sendmessage", false),
+    NULL("NULL", false),
 
+    CREATE_CHAT("CREATE_CHAT", false),
+    MESSAGE("MESSAGE", false),
 
-
-    LOGIN("login", false);
+    PRELOGIN("PRELOGIN", false),
+    REGISTER("REGISTER", false),
+    LOGIN("LOGIN", false);
 
     override fun toString() : String{
         return this.eventName

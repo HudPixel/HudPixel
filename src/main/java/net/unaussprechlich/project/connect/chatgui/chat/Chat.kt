@@ -93,7 +93,7 @@ class Chat(val _id : UUID, val name : String, val color : ColorRGBA, val chatLis
             field = value
             chatTabContainer.isVisible = isActive
             chatListElement.isActive = isActive
-            if(value)ChatWrapper register chatTabContainer
+            if(value)ChatWrapper register   chatTabContainer
             else     ChatWrapper unregister chatTabContainer
 
         }

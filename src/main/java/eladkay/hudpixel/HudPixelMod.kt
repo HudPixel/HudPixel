@@ -213,8 +213,8 @@ class HudPixelMod {
     }
 
     fun setupOncePlayerNotNull(){
-        Connect.setup()
         ApiManager.getINSTANCE().setup()
+        Connect.setup()
     }
 
     @EventHandler
@@ -248,7 +248,7 @@ class HudPixelMod {
 
                 //Send info to remote server
                 //NOTE: THIS DOES NOT SEND ANY SESSION KEYS OR PERSONALLY IDENTIFIER INFORMATION!
-                if (!didTheThings && Minecraft.getMinecraft().thePlayer != null) {
+                if (!didTheThings && Minecraft.getMinecraft().thePlayer != null && isHypixelNetwork) {
                     didTheThings = true
                     setupOncePlayerNotNull()
                 }

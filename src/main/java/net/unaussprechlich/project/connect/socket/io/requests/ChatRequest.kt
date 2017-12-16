@@ -21,7 +21,8 @@ class ChatRequest (ack : ((responseObject: ChatResponseObject , success : Boolea
     }
 
     override fun getEventName(): EnumSocketEvents {
-        return EnumSocketEvents.CHATEVENT
+        //TODO
+        return EnumSocketEvents.NULL
     }
 }
 

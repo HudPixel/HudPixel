@@ -24,7 +24,8 @@ class LoadMessageRequest (ack : ((responseObject: Message , success : Boolean) -
     }
 
     override fun getEventName(): EnumSocketEvents {
-        return EnumSocketEvents.LOADMESSAGE
+        //TODO
+        return EnumSocketEvents.NULL
     }
 }
 
@@ -41,7 +42,7 @@ class SendMessageRequest (ack : ((success : Boolean) -> (Unit))?) : AbstractRequ
     }
 
     override fun getEventName(): EnumSocketEvents {
-        return EnumSocketEvents.SENDMESSAGE
+        return EnumSocketEvents.MESSAGE
     }
 }
 

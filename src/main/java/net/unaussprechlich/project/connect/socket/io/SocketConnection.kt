@@ -26,10 +26,12 @@ import java.net.URISyntaxException
  */
 object SocketConnection{
 
+    val CONNECT_IO_VERSION = "0.1"
+
     var SESSION_TOKEN = ""
 
-    private val SERVER_URL = "http://localhost:3000/HudPixel"
-    var socket : Socket = IO.socket(SERVER_URL)
+    private val SERVER_URL = "http://localhost:3000/connectio"
+    val socket : Socket = IO.socket(SERVER_URL)
 
     fun isConnected() = SESSION_TOKEN != ""
 
@@ -49,15 +51,18 @@ object SocketConnection{
                     val obj = JSONObject()
 
                     obj.put("NAME", Minecraft.getMinecraft().thePlayer.name)
-                    obj.put("UUID", Minecraft.getMinecraft().thePlayer.gameProfile.id.toString())
-                    obj.put("VERSION", HudPixelMod.DEFAULT_VERSION.replace(" ", ""))
+                    obj.put("USER_ID", "")
+                    obj.put("VERSION", CONNECT_IO_VERSION)
+                    obj.put("UUID", Minecraft.getMinecraft().thePlayer.uniqueID.toString())
 
-                    emit(EnumSocketEvents.PRELOGIN, obj, Ack { args ->
+                    socket.emit(EnumSocketEvents.PRELOGIN.toString(), obj, Ack { args ->
                         try {
+                            println("PRELOGIN")
                             val json = args[0] as JSONObject
                             if(!json.getBoolean("success")) throw Exception("Internal server error!")
                             ConnectAPI.showLogin()
-                            LoginGUI.userExists = json.getBoolean("userExists")
+                            if( json.has("userExists") && json.get("userExists") != null)
+                                LoginGUI.userExists = true
                         } catch (e : Exception){
                             e.printStackTrace()
                         }
@@ -68,17 +73,7 @@ object SocketConnection{
                 }
             }
 
-            socket.on(Socket.EVENT_DISCONNECT) { _ -> }
-
-            // Receiving an object
-            socket.on("users_new_broadcast_message") { args ->
-                val obj = args[0] as JSONObject
-                try {
-                    NotificationGUI.addNotification(DefNotificationContainer(obj.getString("msg"), "[Hud" + ChatFormatting.GOLD + "Pixel" + ChatFormatting.WHITE + "]", RGBA.RED.get(), 20))
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            }
+            socket.on(Socket.EVENT_DISCONNECT) { _ -> println("DISCONNECTED")}
 
             socket.connect()
 

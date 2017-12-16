@@ -12,10 +12,13 @@ import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.hudpixelextended.hypixelapi.ApiKeyHandler
 import net.unaussprechlich.managedgui.lib.GuiManagerMG
 import net.unaussprechlich.managedgui.lib.container.Container
+import net.unaussprechlich.managedgui.lib.container.register
+import net.unaussprechlich.managedgui.lib.container.unregister
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.util.EnumTime
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.gui.GUI
+import net.unaussprechlich.managedgui.lib.gui.register
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
 import net.unaussprechlich.project.connect.handlers.ResourceHandlerConnect
 import net.unaussprechlich.managedgui.lib.templates.defaults.container.*
@@ -36,14 +39,12 @@ import java.security.MessageDigest
  */
 object LoginGUI : GUI() {
 
-    private var login = false
-
     var userExists = false
         set(value) {
             if(value){
-                wrapperCon.unregisterChild(tofCheckBoxCon)
-                wrapperCon.unregisterChild(signUpButtonCon)
-                wrapperCon.registerChild(loginButtonCon)
+                wrapperCon unregister tofCheckBoxCon
+                wrapperCon unregister signUpButtonCon
+                wrapperCon register   loginButtonCon
             }
             field = value
         }
@@ -148,17 +149,17 @@ object LoginGUI : GUI() {
     }
 
     init {
-        this.registerChild(net.unaussprechlich.project.connect.gui.LoginGUI.backgroundCon)
-        backgroundCon.registerChild(wrapperCon)
+        this register backgroundCon
+        backgroundCon register wrapperCon
 
-        wrapperCon.registerChild(logoCon)
-        wrapperCon.registerChild(textCon)
-        wrapperCon.registerChild(passwordFieldCon)
-        wrapperCon.registerChild(signUpButtonCon)
-        wrapperCon.registerChild(rememberMeCheckBoxCon)
-        wrapperCon.registerChild(tofCheckBoxCon)
-        wrapperCon.registerChild(error)
-        wrapperCon.registerChild(discordLogo)
+        wrapperCon register logoCon
+        wrapperCon register textCon
+        wrapperCon register passwordFieldCon
+        wrapperCon register signUpButtonCon
+        wrapperCon register rememberMeCheckBoxCon
+        wrapperCon register tofCheckBoxCon
+        wrapperCon register error
+        wrapperCon register discordLogo
 
         discordLogo.clickedCallback.registerListener({ clickType, _ ->
             if(clickType != MouseHandler.ClickType.SINGLE){
@@ -170,7 +171,6 @@ object LoginGUI : GUI() {
         textCon.addEntry("")
         textCon.addEntry("Welcome to HudPixel! HudPixel is a client-side mod especially designed for Hypixel players and officially allowed by the Hypixel Team. You can disable or enable features in the config by pressing <config key>.")
         textCon.addEntry("We hope you enjoy the mod and if you have any feedback, contact us on our discord server!")
-
 
     }
 
@@ -201,7 +201,6 @@ object LoginGUI : GUI() {
     }
 
     override fun doRender(xStart: Int, yStart: Int): Boolean {
-
         return true
     }
 
@@ -222,7 +221,6 @@ object LoginGUI : GUI() {
     }
 
     override fun <T : Event<*>> doEventBus(event: T): Boolean {
-        if (!(event.id == EnumDefaultEvents.TIME.get() && event.data === EnumTime.SEC_15)) return true
         return true
     }
 
