@@ -23,7 +23,7 @@ val chatConSpacerRenderer = object : IScrollSpacerRenderer {
  * DefScrollableContainer Created by Alexander on 26.02.2017.
  * Description:
  */
-class newChatActualChatContainer : DefScrollableContainer(RGBA.P1B1_DEF.get(), 500, 300, chatConSpacerRenderer){
+class ChatActualChatContainer(width : Int, height : Int) : DefScrollableContainer(RGBA.P1B1_DEF.get(), width, height, chatConSpacerRenderer){
 
     init {
         isResizeable = false

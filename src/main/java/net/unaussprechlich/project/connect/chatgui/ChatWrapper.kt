@@ -27,7 +27,8 @@ object ChatWrapper : DefWrapperContainer(){
     val stdHeight = 300
     val stdChatListWidth = 130
 
-    private var resize = false
+    var resize = false
+    private set
     private var isSetup = false
 
     val chatController = ChatController

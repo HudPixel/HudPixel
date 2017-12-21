@@ -40,7 +40,10 @@ class DefTextFieldContainer(width: Int, var hint : String = "", val sizeCallback
             updateCursor()
         }
 
-    fun clear(){text = ""}
+    fun clear(){
+        cursorPos = 0
+        text = ""
+    }
 
     var hasFocus = false
     var cursorBlink = false

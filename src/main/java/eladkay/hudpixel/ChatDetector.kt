@@ -40,7 +40,7 @@ import net.unaussprechlich.hypixel.helper.HypixelRank
  * Created by Elad on 3/2/2017.
  */
 object ChatDetector {
-    fun <T : ChatEventBase<T>> registerEventHandler(event: ChatEventBase<T>, lambda: ChatDetector.(EventInfo<*>) -> Unit) = eventHandlers.put(event, lambda)
+    fun <T : ChatEventBase<T>> registerEventHandler(event: ChatEventBase<T>, lambda: (ChatDetector.EventInfo<*>) -> Unit) = eventHandlers.put(event, lambda)
     inline fun <reified T> cast(any: Any) = any as T
 
     abstract class ChatEventBase<T : ChatEventBase<T>> {
@@ -57,10 +57,25 @@ object ChatDetector {
     }
 
     @SubscribeEvent
-    fun chat(chat: ClientChatReceivedEvent) = events.filter { it.pattern.matches(chat.message.unformattedText) }.map { it.handle(chat.message.unformattedText) }.forEach { eventHandlers.filter { a -> it.type == a.key.javaClass }.forEach { a -> val lambda = a.value; this.lambda(it) } }
+    fun chat(chat: ClientChatReceivedEvent) {
+        println(chat.message.unformattedText)
+        events
+            .filter {
+                it.pattern.matches(chat.message.unformattedText)
+            }
+            .map {
+                it.handle(chat.message.unformattedText)
+            }
+            .forEach { msg ->
+                println(eventHandlers.toString())
+                eventHandlers.filter { a ->
+                    msg.type == a.key.javaClass
+                }.forEach { a -> a.value.invoke(msg) }
+            }
+    }
 
     val events = mutableListOf<ChatEventBase<*>>()
-    val eventHandlers = mutableMapOf<ChatEventBase<*>, ChatDetector.(EventInfo<*>) -> Unit>()
+    val eventHandlers = mutableMapOf<ChatEventBase<*>, (ChatDetector.EventInfo<*>) -> Unit>()
     private fun registerEventBase(chatEventBase: ChatEventBase<*>) = events.add(chatEventBase)
 
     /**
@@ -107,7 +122,7 @@ object ChatDetector {
         }
 
         override val pattern: Regex
-            get() = "Guild\\s+>\\s+.*:\\s.*".toRegex()
+            get() = "§2Guild\\s+>\\s+.*:\\s.*".toRegex()
     }
 
     /**
@@ -132,19 +147,21 @@ object ChatDetector {
             get() = "Party\\s+>\\s+.*:\\s.*".toRegex()
     }
 
-    class CustomChatEventHandler(override val pattern: Regex, val id: String, val onTrigger: (String)->Unit) : ChatEventBase<CustomChatEventHandler>() {
+    class CustomChatEventHandler(override val pattern: Regex, val id: String, val onTrigger: (String) -> Unit) : ChatEventBase<CustomChatEventHandler>() {
         override fun handle(message: String): EventInfo<CustomChatEventHandler> {
             return pattern.toPattern().matcher(message).toMatchResult().group(0).let { EventInfo(javaClass, mapOf("message" to it, "id" to id)) }
         }
+
         init {
             registerEventHandler(this) {
                 val msg = it.data["message"]
-                if(it.data["id"] == id && msg != null)
+                if (it.data["id"] == id && msg != null)
                     onTrigger(msg)
             }
         }
+
         companion object {
-            val PRINT_TO_CHAT: (String)->Unit = { ChatMessageComposer(it).send() }
+            val PRINT_TO_CHAT: (String) -> Unit = { ChatMessageComposer(it).send() }
         }
     }
 

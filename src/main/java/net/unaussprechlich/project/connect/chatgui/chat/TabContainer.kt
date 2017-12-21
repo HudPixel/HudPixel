@@ -12,23 +12,39 @@ import net.unaussprechlich.managedgui.lib.container.Container
 import net.unaussprechlich.managedgui.lib.container.register
 import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
+import net.unaussprechlich.managedgui.lib.templates.defaults.container.DefCustomRenderContainer
 import net.unaussprechlich.managedgui.lib.util.EnumEventState
+import net.unaussprechlich.managedgui.lib.util.RGBA
+import net.unaussprechlich.managedgui.lib.util.RenderUtils
+import net.unaussprechlich.project.connect.chatgui.ChatWrapper
 import net.unaussprechlich.project.connect.container.ChatTextFieldContainer
 
 class TabContainer(width: Int, height: Int, val sizeCallback: (Int) -> Unit, sendCallback : (msg : String) -> Unit) : Container() {
 
-    val scrollCon = newChatActualChatContainer()
     val chatInputField = ChatTextFieldContainer( width, {sizeCallback.invoke(it); update()}, sendCallback)
+    val scrollCon = ChatActualChatContainer(width, height - chatInputField.height)
+
+    val resizeCon = DefCustomRenderContainer { xStart, yStart , _ , _, con, _ ->
+        if(con.isHover || ChatWrapper.resize)   RenderUtils.iconRender_resize(xStart + this.width - 2, yStart + this.height - chatInputField.height - 2, RGBA.WHITE.get())
+        else                        RenderUtils.iconRender_resize(xStart + this.width - 2, yStart + this.height - chatInputField.height - 2, RGBA.P1B1_596068.get())
+    }
 
     init {
         this.width = width
         this.height = height
 
+        resizeCon.width = 10
+        resizeCon.height = 10
+
         this register scrollCon
         this register chatInputField
+        this register resizeCon
 
         update()
     }
+
+
+
 
     fun update(){
         chatInputField.width = width

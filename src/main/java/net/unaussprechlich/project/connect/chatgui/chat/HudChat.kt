@@ -5,7 +5,6 @@
  #############################################################################*/
 package net.unaussprechlich.project.connect.chatgui.chat
 
-import net.minecraft.client.Minecraft
 import net.unaussprechlich.managedgui.lib.container.register
 import net.unaussprechlich.managedgui.lib.container.unregister
 import net.unaussprechlich.managedgui.lib.helper.DateHelper
@@ -21,53 +20,27 @@ import net.unaussprechlich.project.connect.socket.io.subscriptions.ChatMessageSu
 import net.unaussprechlich.project.connect.socket.io.subscriptions.subscribe
 import java.util.*
 
-data class Message(val _id : Long, val name : String, val msg : String, val time : DateHelper){
 
-    override fun toString(): String {
-        return "$_id§$name§$msg§" + time.date.toString()
-    }
 
-    fun toContainer() : (DefChatMessageContainer){
-        return DefChatMessageContainer(name, msg, time)
-    }
-}
-
-open class Chat(val name : String, val color : ColorRGBA, val chatListCategoryContainer: ChatListCategoryContainer? = null, val sendCallback :  (msg : String) -> Unit) {
+class HudChat(val _id : UUID, val name : String, val color : ColorRGBA, val chatListCategoryContainer: ChatListCategoryContainer? = null) {
 
     val chatListElement = ChatListElementContainer()
 
     val chatTabContainer = TabContainer(ChatWrapper.width - ChatWrapper.stdChatListWidth, ChatWrapper.height - ChatWrapper.controllerCon.height,
             sizeCallback = { ChatWrapper.updateResizeIconPosition() },
-            sendCallback = sendCallback
+            sendCallback = { queueMessage(it) }
     ).apply {
         xOffset = ChatWrapper.stdChatListWidth
         yOffset = ChatWrapper.controllerCon.height
         isVisible = false
     }
 
-    protected fun addMessage(msg : Message) {
-        currentID = msg._id
-        messageBuffer[msg._id] to msg
-        if (getLatestCon() != null && doesLatestConSenderMatchSender(msg.name) && getLatestCon()?.date!!.minutesPassed < 5) {
-            containerBuffer[msg._id] to getLatestCon()!!
-            getLatestCon()?.addMessage(msg.msg)
-        } else {
-            msg.toContainer().let {
-                containerBuffer[msg._id] to it
-                chatTabContainer.scrollCon.registerScrollElement(it)
-            }
-        }
-    }
-
-    private var currentID = 0L
-
-    protected fun getNextID() : Long{
-        return currentID + 1
-    }
-
     private val messageBuffer = mapOf<Long, Message>()
     private val containerBuffer = mapOf<Long, DefChatMessageContainer>()
 
+    private data class UnprocessedMessage(val message : String, var failed : Boolean? = null)
+    private val unprocessedMessages : ArrayList<UnprocessedMessage> = arrayListOf()
+    private var isBlocked = false
 
     fun getLatestCon() : DefChatMessageContainer? =
         containerBuffer[containerBuffer.keys.max()]
@@ -78,9 +51,9 @@ open class Chat(val name : String, val color : ColorRGBA, val chatListCategoryCo
     init {
         chatListElement.color = color
         chatListElement.title = name
-        chatListElement.activateCallback.registerListener { ChatController.setActive(this) }
+        //chatListElement.activateCallback.registerListener { ChatController.setActive(this) }
 
-        ChatController.registerChat(this)
+        //ChatController.registerChat(this)
 
         if(chatListCategoryContainer != null)
             ChatListContainer.addChatListElement(chatListElement, chatListCategoryContainer)
@@ -88,7 +61,19 @@ open class Chat(val name : String, val color : ColorRGBA, val chatListCategoryCo
             ChatListContainer.addChatListElement(chatListElement)
 
         ChatMessageSubscribtion subscribe fun(channelID : UUID, msg : Message){
-            addMessage(msg)
+
+            if (channelID != _id) return
+
+            messageBuffer[msg._id] to msg
+            if(getLatestCon() != null && doesLatestConSenderMatchSender(msg.name) && getLatestCon()?.date!!.minutesPassed < 5){
+                containerBuffer[msg._id] to getLatestCon()!!
+                getLatestCon()?.addMessage(msg.msg)
+            } else {
+                msg.toContainer().let {
+                    containerBuffer[msg._id] to it
+                    chatTabContainer.scrollCon register it
+                }
+            }
         }
     }
 
@@ -100,6 +85,26 @@ open class Chat(val name : String, val color : ColorRGBA, val chatListCategoryCo
             chatListElement.isActive = isActive
             if(value)ChatWrapper register   chatTabContainer
             else     ChatWrapper unregister chatTabContainer
+
         }
 
+    private fun queueMessage(msg : String){
+        UnprocessedMessage(msg).let {
+            unprocessedMessages.add(it)
+            sendMessage(it)
+        }
+    }
+
+    private fun sendMessage(msg : UnprocessedMessage){
+        isBlocked = true
+        SendMessageRequest{ success ->
+            if(success) unprocessedMessages.remove(msg)
+            else        msg.failed = true
+
+            isBlocked = false
+        }.apply {
+            CHAT_ID = _id.toString()
+            MESSAGE = msg.message
+        }
+    }
 }
