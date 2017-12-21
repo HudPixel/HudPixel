@@ -34,7 +34,7 @@ import eladkay.hudpixel.util.ChatMessageComposer
 import eladkay.hudpixel.util.plus
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.EnumChatFormatting
-import net.unaussprechlich.managedgui.lib.ManagedGui
+import net.unaussprechlich.managedgui.lib.ManagedGuiLib
 
 /**
  * Created by Elad on 3/2/2017.
@@ -46,12 +46,12 @@ object ManagedGuiDisableCommand : HpCommandBase() {
     }
 
     override fun processCommand(sender: ICommandSender?, args: Array<out String>?) {
-        if (ManagedGui.isIsDisabled) {
+        if (ManagedGuiLib.isIsDisabled) {
             ChatMessageComposer(EnumChatFormatting.GREEN + "Disabled managed GUI")
-            ManagedGui.isIsDisabled = false
+            ManagedGuiLib.isIsDisabled = false
         } else {
             ChatMessageComposer(EnumChatFormatting.RED + "Disabled managed GUI")
-            ManagedGui.isIsDisabled = true
+            ManagedGuiLib.isIsDisabled = true
         }
     }
 

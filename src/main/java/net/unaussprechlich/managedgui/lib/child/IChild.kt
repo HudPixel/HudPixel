@@ -26,8 +26,6 @@ interface IChild {
 
     fun <T : Event<*>> onEventBus(event: T)
 
-    fun onOpenGui(event: GuiOpenEvent)
-
     fun onResize()
 
 }

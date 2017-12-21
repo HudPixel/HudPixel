@@ -28,12 +28,21 @@ object SocketConnection{
 
     val CONNECT_IO_VERSION = "0.1"
 
-    var SESSION_TOKEN = ""
+    var sessionToken = ""
+        get() {
+            if(field == "" && isSucessfullPrelogin)
+                ConnectAPI.showLogin()
+            return field
+        }
+
+    var userID : Long = 0
+
+    private var isSucessfullPrelogin = false
 
     private val SERVER_URL = "http://localhost:3000/connectio"
     val socket : Socket = IO.socket(SERVER_URL)
 
-    fun isConnected() = SESSION_TOKEN != ""
+    fun isConnected() = userID != 0L && sessionToken != ""
 
     fun emit(event : EnumSocketEvents, args : Any){
         socket.emit(event.toString(), args)
@@ -44,7 +53,6 @@ object SocketConnection{
     }
 
     init {
-        println("Setting up Socket.io")
         try {
             socket.on(Socket.EVENT_CONNECT) { _ ->
                 try {
@@ -57,12 +65,16 @@ object SocketConnection{
 
                     socket.emit(EnumSocketEvents.PRELOGIN.toString(), obj, Ack { args ->
                         try {
-                            println("PRELOGIN")
+                            NotificationGUI.addNotification(DefNotificationContainer("You can now Login.", "Connected to HudPixel", RGBA.GOLD_MC.get(), 10))
                             val json = args[0] as JSONObject
                             if(!json.getBoolean("success")) throw Exception("Internal server error!")
+                            isSucessfullPrelogin = true
                             ConnectAPI.showLogin()
-                            if( json.has("userExists") && json.get("userExists") != null)
+
+                            if( json.has("userExists") && json.get("userExists") != null){
                                 LoginGUI.userExists = true
+                            }
+
                         } catch (e : Exception){
                             e.printStackTrace()
                         }

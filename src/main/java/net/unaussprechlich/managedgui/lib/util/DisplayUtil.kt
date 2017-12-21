@@ -9,7 +9,7 @@ package net.unaussprechlich.managedgui.lib.util
 import eladkay.hudpixel.util.autotip.Autotip.mc
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.unaussprechlich.managedgui.lib.GuiManagerMG
+import net.unaussprechlich.managedgui.lib.ManagedGui
 import net.unaussprechlich.managedgui.lib.event.events.ScaleChangedEvent
 
 object DisplayUtil {
@@ -19,7 +19,7 @@ object DisplayUtil {
     fun onClientTick() {
         if (prevScale != mcScale) {
             prevScale = mcScale
-            GuiManagerMG.postEvent(ScaleChangedEvent(mcScale))
+            ManagedGui.postEvent(ScaleChangedEvent(mcScale))
         }
     }
 

@@ -21,7 +21,7 @@ import net.unaussprechlich.managedgui.lib.util.RenderUtils
  * DefNotificationContainer Created by unaussprechlich on 30.12.2016.
  * Description:
  */
-class DefNotificationContainer(private val message: String, private val title: String, private val color: ColorRGBA, var showtime_sec: Int) : DefBackgroundContainer(ConstantsMG.DEF_BACKGROUND_RGBA, 400, 100) {
+class DefNotificationContainer(private val message: String, private val title: String, private val color: ColorRGBA, var showtime_sec: Int) : DefBackgroundContainer(ConstantsMG.DEF_BACKGROUND_RGBA, 200, 100) {
 
     private val titleContainer = DefTextContainer(this.title)
     private val messageContainer = DefTextAutoLineBreakContainer(this.message, width - 10)

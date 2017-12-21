@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft.getMinecraft
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.util.ResourceLocation
 import net.unaussprechlich.hudpixelextended.util.LoggerHelper.logInfo
-import net.unaussprechlich.managedgui.lib.GuiManagerMG
+import net.unaussprechlich.managedgui.lib.ManagedGui
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.util.EnumTime
 import net.unaussprechlich.managedgui.lib.event.util.Event
@@ -37,7 +37,7 @@ class PlayerHeadResolver(val username: String, private val callback: (ResourceLo
     }
 
     init {
-        GuiManagerMG.registerEventBusCallback(busCallback)
+        ManagedGui.registerEventBusCallback(busCallback)
         loadImage()
     }
 
@@ -55,7 +55,7 @@ class PlayerHeadResolver(val username: String, private val callback: (ResourceLo
     }
 
     fun setup(){
-        GuiManagerMG.unregisterEventBusCallback(busCallback)
+        ManagedGui.unregisterEventBusCallback(busCallback)
         if (image == null)
             callback.invoke(null)
 

@@ -95,12 +95,6 @@ abstract class ChildRegistry : IDoEventMethods {
         childs.forEach { child -> child.onEventBus(event) }
     }
 
-    fun onOpenGui(e: GuiOpenEvent) {
-        if (!doOpenGUI(e)) return
-        if (childs.isEmpty()) return
-        childs.forEach { child -> child.onOpenGui(e) }
-    }
-
     fun onResize() {
         if (!doResize()) return
         if (childs.isEmpty()) return

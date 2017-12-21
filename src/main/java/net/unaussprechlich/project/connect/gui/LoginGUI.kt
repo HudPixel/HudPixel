@@ -7,16 +7,11 @@ package net.unaussprechlich.project.connect.gui
 
 import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumChatFormatting
-import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.hudpixelextended.hypixelapi.ApiKeyHandler
-import net.unaussprechlich.managedgui.lib.GuiManagerMG
+import net.unaussprechlich.managedgui.lib.ManagedGui
 import net.unaussprechlich.managedgui.lib.container.Container
 import net.unaussprechlich.managedgui.lib.container.register
 import net.unaussprechlich.managedgui.lib.container.unregister
-import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
-import net.unaussprechlich.managedgui.lib.event.util.EnumTime
-import net.unaussprechlich.managedgui.lib.event.util.Event
 import net.unaussprechlich.managedgui.lib.gui.GUI
 import net.unaussprechlich.managedgui.lib.gui.register
 import net.unaussprechlich.managedgui.lib.handler.MouseHandler
@@ -30,14 +25,15 @@ import net.unaussprechlich.project.connect.socket.io.requests.LoginRequest
 import org.json.JSONObject
 import java.security.MessageDigest
 
-
-
-
 /**
  * ConnectGUI Created by unaussprechlich on 20.12.2016.
  * Description:
  */
 object LoginGUI : GUI() {
+
+    override fun getMode(): Mode {
+        return Mode.NULL
+    }
 
     var userExists = false
         set(value) {
@@ -59,9 +55,8 @@ object LoginGUI : GUI() {
                 LoginRequest({ args: JSONObject, success : Boolean ->
                     try {
                         if(success){
-                            SocketConnection.SESSION_TOKEN = args.getString("TOKEN")
-                            GuiManagerMG.unbindScreen()
-                            GuiManagerMG.removeGUI("LoginGui")
+                            SocketConnection.sessionToken = args.getString("TOKEN")
+                            ManagedGui.closeCurrentGUI()
                             isBlocked = false
                         } else {
                             when(args.getInt("errorcode")){
@@ -197,38 +192,6 @@ object LoginGUI : GUI() {
             xOffset = (DisplayUtil.scaledMcWidth - 300) / 2
             yOffset = (DisplayUtil.scaledMcHeight - 200) / 2
         }
-        return true
-    }
-
-    override fun doRender(xStart: Int, yStart: Int): Boolean {
-        return true
-    }
-
-    override fun doChatMessage(e: ClientChatReceivedEvent): Boolean {
-        return true
-    }
-
-    override fun doMouseMove(mX: Int, mY: Int): Boolean {
-        return true
-    }
-
-    override fun doScroll(i: Int): Boolean {
-        return true
-    }
-
-    override fun doClick(clickType: MouseHandler.ClickType): Boolean {
-        return true
-    }
-
-    override fun <T : Event<*>> doEventBus(event: T): Boolean {
-        return true
-    }
-
-    override fun doOpenGUI(e: GuiOpenEvent): Boolean {
-        return true
-    }
-
-    override fun doResize(): Boolean {
         return true
     }
 }

@@ -12,7 +12,7 @@ import net.minecraft.client.gui.GuiIngameMenu
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.unaussprechlich.hudpixelextended.HudPixelExtendedEventHandler
-import net.unaussprechlich.managedgui.lib.GuiManagerMG
+import net.unaussprechlich.managedgui.lib.ManagedGui
 import org.lwjgl.input.Mouse
 
 object MouseHandler {
@@ -47,7 +47,7 @@ object MouseHandler {
         if (newmX != mX || newmY != mY) {
             mX = newmX
             mY = newmY
-            GuiManagerMG.onMouseMove(mX, mY)
+            ManagedGui.onMouseMove(mX, mY)
         }
 
         if (!(mc.currentScreen is GuiIngameMenu || mc.currentScreen is GuiChat || mc.currentScreen is GuiInventory))
@@ -65,25 +65,25 @@ object MouseHandler {
         val isDown = Mouse.isButtonDown(0)
 
         if (!mouseButtonDown && isDown) {
-            GuiManagerMG.onClick(ClickType.DRAG)
+            ManagedGui.onClick(ClickType.DRAG)
         }
 
         if (mouseButtonDown && !isDown) {
             mouseButtonDown = false
             doubleClick = false
-            GuiManagerMG.onClick(ClickType.DROP)
+            ManagedGui.onClick(ClickType.DROP)
         }
 
         if (System.currentTimeMillis() + clickDelay < lastTimeClicked) {
             if (!mouseButtonDown && isDown) {
                 mouseButtonDown = true
-                GuiManagerMG.onClick(ClickType.DOUBLE)
+                ManagedGui.onClick(ClickType.DOUBLE)
             }
         }
 
         if (!mouseButtonDown && isDown && !doubleClick) {
             mouseButtonDown = true
-            GuiManagerMG.onClick(ClickType.SINGLE)
+            ManagedGui.onClick(ClickType.SINGLE)
             lastTimeClicked = System.currentTimeMillis()
         }
 
@@ -97,7 +97,7 @@ object MouseHandler {
         val i = Mouse.getDWheel()
 
         if (i != 0) {
-            GuiManagerMG.onScroll(i)
+            ManagedGui.onScroll(i)
 
             //TODO: FIX THAT
             HudPixelExtendedEventHandler.handleMouseScroll(i)

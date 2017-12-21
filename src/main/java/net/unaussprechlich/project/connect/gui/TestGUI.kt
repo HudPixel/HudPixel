@@ -13,6 +13,9 @@ import net.unaussprechlich.managedgui.lib.handler.MouseHandler
 
 object TestGUI : GUI(){
 
+    override fun getMode(): Mode {
+        return Mode.ALWAYS
+    }
 
     init {
 
@@ -23,14 +26,6 @@ object TestGUI : GUI(){
     }
 
     override fun doClientTick(): Boolean { update() ; return true }
-    override fun doRender(xStart: Int, yStart: Int): Boolean { return true }
-    override fun doChatMessage(e: ClientChatReceivedEvent): Boolean { return true }
-    override fun doMouseMove(mX: Int, mY: Int): Boolean { return true }
-    override fun doScroll(i: Int): Boolean { return true }
-    override fun doClick(clickType: MouseHandler.ClickType): Boolean { return true }
-    override fun <T : Event<*>> doEventBus(event: T): Boolean { return true }
-    override fun doOpenGUI(e: GuiOpenEvent): Boolean { return true }
-    override fun doResize(): Boolean { return true }
 
 }
 

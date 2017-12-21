@@ -18,7 +18,7 @@ abstract class AbstractRequest(val ack : ((args : JSONObject , success : Boolean
 
     private fun getArgs() : JSONObject{
         val args = assembleArgs()
-        args.put("SESSION_TOKEN", SocketConnection.SESSION_TOKEN)
+        args.put("SESSION_TOKEN", SocketConnection.sessionToken)
         return args
     }
 

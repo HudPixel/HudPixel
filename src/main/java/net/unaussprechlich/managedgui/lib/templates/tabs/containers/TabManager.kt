@@ -9,7 +9,7 @@ package net.unaussprechlich.managedgui.lib.templates.tabs.containers
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.unaussprechlich.managedgui.lib.ConstantsMG
-import net.unaussprechlich.managedgui.lib.GuiManagerMG
+import net.unaussprechlich.managedgui.lib.ManagedGui
 import net.unaussprechlich.managedgui.lib.container.Container
 import net.unaussprechlich.managedgui.lib.event.EnumDefaultEvents
 import net.unaussprechlich.managedgui.lib.event.util.Event
@@ -163,7 +163,7 @@ class TabManager : Container() {
         minCon.clickedCallback.registerListener { clickType, _ ->
             if (clickType == MouseHandler.ClickType.SINGLE)
                 isVisible = false
-                GuiManagerMG.unbindScreen()
+                ManagedGui.closeCurrentGUI()
         }
 
         maxCon.clickedCallback.registerListener { clickType, _ ->

@@ -177,9 +177,6 @@ abstract class Container : ChildRegistry(), IContainer, IChild {
         return doEventBusLocal(event)
     }
 
-    override fun doOpenGUI(e: GuiOpenEvent): Boolean {
-        return doOpenGUILocal(e)
-    }
 
     override fun doResize(): Boolean {
         return doResizeLocal(width, height)

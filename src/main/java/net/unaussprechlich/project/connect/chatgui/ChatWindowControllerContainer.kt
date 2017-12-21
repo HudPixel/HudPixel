@@ -8,7 +8,7 @@ package net.unaussprechlich.project.connect.chatgui
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.GuiOpenEvent
-import net.unaussprechlich.managedgui.lib.GuiManagerMG
+import net.unaussprechlich.managedgui.lib.ManagedGui
 import net.unaussprechlich.managedgui.lib.container.Container
 import net.unaussprechlich.managedgui.lib.container.register
 import net.unaussprechlich.managedgui.lib.event.util.Event
@@ -170,7 +170,7 @@ object ChatWindowControllerContainer : Container(){
         minCon.clickedCallback.registerListener { clickType, _ ->
             if (clickType == MouseHandler.ClickType.SINGLE){
                 ChatWrapper.isVisible = false
-                GuiManagerMG.unbindScreen()
+                ManagedGui.closeCurrentGUI()
             }
         }
 

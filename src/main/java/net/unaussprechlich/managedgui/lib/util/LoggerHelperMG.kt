@@ -14,19 +14,19 @@ object LoggerHelperMG {
     private val LOGGER = HudPixelMod.instance().logger!!
 
     fun logInfo(s: String) {
-        LOGGER.info("[ManagedGui]" + s)
+        LOGGER.info("[ManagedGuiLib]" + s)
     }
 
     fun logWarn(s: String) {
-        LOGGER.warn("[ManagedGui]" + s)
+        LOGGER.warn("[ManagedGuiLib]" + s)
     }
 
     fun logError(s: String) {
-        LOGGER.error("[ManagedGui]" + s)
+        LOGGER.error("[ManagedGuiLib]" + s)
     }
 
     fun logDebug(s: String) {
-        LOGGER.debug("[ManagedGui]" + s)
+        LOGGER.debug("[ManagedGuiLib]" + s)
     }
 
 }

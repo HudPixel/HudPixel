@@ -50,7 +50,7 @@ object ChatWrapper : DefWrapperContainer(){
     }
 
     init {
-        isVisible = false
+        isVisible = true
 
         width = stdWidth
         height = stdHeight

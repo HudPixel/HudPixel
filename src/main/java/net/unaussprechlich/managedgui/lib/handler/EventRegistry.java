@@ -55,11 +55,6 @@ public final class EventRegistry extends ChildRegistry{
     }
 
     @Override
-    public boolean doOpenGUI(GuiOpenEvent e) {
-        return true;
-    }
-
-    @Override
     public boolean doResize() {
         return true;
     }
